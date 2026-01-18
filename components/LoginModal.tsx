@@ -7,7 +7,9 @@ interface LoginModalProps {
    onClose: () => void;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+// En producción, vercel.json redirige /api a Render backend
+// En desarrollo, vite.config.ts hace proxy a localhost:5000
+const API_URL = '/api';
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
    const [password, setPassword] = useState('');
