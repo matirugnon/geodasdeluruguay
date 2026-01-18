@@ -20,22 +20,30 @@ export const Home: React.FC = () => {
 
   return (
     <main className="flex-grow">
-      {/* Hero */}
-      <section className="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+      {/* Hero - Fullscreen */}
+      <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuvaexz6cWFeoEIiXrrxl3Vf5fSz09A5H_FY55F6YX6F0WO_MBIOZSN26HHID4lM-Tq5stQChs5dOI3eTXAfY90_3KJJO1BVhQm9l0iYJdviHPb0Q1B9w9PVA6ziKm9FnJFGHLBqmqjkqm7XjKupK_i9tiuvhsp3Krmk2iy-74Y4C3mkAB1B2Vfwtyx7u66iplwTxV_6BB-d7TzFi2Yp-fEgnSJFER4m8VtQGQXBsSIYRWVX6LOhWz4Ed8OXp3fyxElgRcuI7iOwjm")'}}>
            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/40 to-transparent"></div>
         </div>
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
-           <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-md">
-                Conecta con la <br/><span className="italic text-primary">energía</span> de la tierra
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-tight drop-shadow-md leading-tight">
+                Conecta con la <br className="hidden sm:block"/><span className="italic text-primary">energía</span> de la tierra
             </h1>
-            <p className="text-stone-200 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-stone-200 text-base sm:text-lg md:text-xl lg:text-2xl font-medium max-w-3xl mx-auto mb-8 sm:mb-10 leading-relaxed px-4">
                 Descubre la magia y el misticismo de los cristales uruguayos seleccionados a mano.
             </p>
-            <Link to="/tienda" className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-200 bg-primary rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-lg shadow-primary/30 transform hover:-translate-y-1">
+            <Link to="/tienda" className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-white transition-all duration-200 bg-primary rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-lg shadow-primary/30 transform hover:-translate-y-1">
                 Explorar Colección
-                <span className="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform text-sm">arrow_forward</span>
+                <span className="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform text-sm sm:text-base">arrow_forward</span>
             </Link>
+        </div>
+        
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce hidden md:block">
+          <div className="flex flex-col items-center gap-2 text-white/70">
+            <span className="text-xs uppercase tracking-wider">Scroll</span>
+            <span className="material-symbols-outlined text-2xl">keyboard_arrow_down</span>
+          </div>
         </div>
       </section>
 

@@ -7,6 +7,8 @@ interface LoginModalProps {
    onClose: () => void;
 }
 
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
    const [password, setPassword] = useState('');
    const [username, setUsername] = useState('');
@@ -20,7 +22,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       setError('');
 
       try {
-         const response = await fetch('/api/admin/login', {
+         const response = await fetch(`${API_URL}/admin/login`, {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json'
