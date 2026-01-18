@@ -39,76 +39,78 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto bg-pattern">
-        <div className="text-center mb-16">
-           <span className="text-primary font-bold text-sm tracking-widest uppercase mb-2 block">Nuestras Colecciones</span>
-           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Categorías Destacadas</h2>
-        </div>
-        
-        {/* Grid Layout for 5 Items: 3 Top, 2 Bottom */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-8">
-           
-           {/* Row 1: Collares */}
-           <Link to="/tienda/collares" className="lg:col-span-2 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDcm0KWIwELayMnFdk7DB7GRMQM_66UW97KdiJp3_gCOhI6g-TNxupr5Rct7JYNeMEEn0hnBjGKHfN3e2Mrov3X5cB5WOKsR3uTKtviWcgsyDKIUCe1dJXz-QHqpf3j1vY2nDHyvVP5U0M_vzhlWTAGUos7mvuine_6PDuuMUfHXctGkB08Yuly-hkRT5_DL4RlWki-IQEJeXYFc4Oi_T1qxM9MEmys1CcFR6OoLPCFBy6Z7i0KKVJKcGw88zKeEPpMNewbWFKO-H8g")'}}></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                 <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Collares</h3>
-                 <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
-                        Piezas únicas cerca de tu corazón.
-                 </p>
-              </div>
-           </Link>
+      {/* Categories - Full Width Background */}
+      <section className="w-full py-24 bg-pattern">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+            <span className="text-primary font-bold text-sm tracking-widest uppercase mb-2 block">Nuestras Colecciones</span>
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Categorías Destacadas</h2>
+            </div>
+            
+            {/* Grid Layout for 5 Items: 3 Top, 2 Bottom */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-8">
+            
+            {/* Row 1: Collares */}
+            <Link to="/tienda/collares" className="lg:col-span-2 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDcm0KWIwELayMnFdk7DB7GRMQM_66UW97KdiJp3_gCOhI6g-TNxupr5Rct7JYNeMEEn0hnBjGKHfN3e2Mrov3X5cB5WOKsR3uTKtviWcgsyDKIUCe1dJXz-QHqpf3j1vY2nDHyvVP5U0M_vzhlWTAGUos7mvuine_6PDuuMUfHXctGkB08Yuly-hkRT5_DL4RlWki-IQEJeXYFc4Oi_T1qxM9MEmys1CcFR6OoLPCFBy6Z7i0KKVJKcGw88zKeEPpMNewbWFKO-H8g")'}}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Collares</h3>
+                    <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                            Piezas únicas cerca de tu corazón.
+                    </p>
+                </div>
+            </Link>
 
-           {/* Row 1: Anillos */}
-           <Link to="/tienda/anillos" className="lg:col-span-2 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEftD6U86_aHd85S4nLRDM3MaX8t8TXpzInkDJpr5OvF4K0iifelTx4gcSDX7IyVSX3FPI20IkA2IZ-3xKOPh9r9x8Jm8bFcEQsQGxIAdFZ1AqghRk-iE5HydGmpBR5vs0Eg6DTcBemE_odFFPoO6DD7G1x4-AL4fIVd_M1yI57dWLUrFeazOfUhs4vKCQFsTicW7rRcbmu9x4SAA0ekv2PWg0fcTt_8I87895TlRcpAjfGBn79-0BqI_dvHYsZVMcv9ucu9BrpmaF")'}}></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                 <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Anillos</h3>
-                 <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
-                        Detalles de energía en tus manos.
-                 </p>
-              </div>
-           </Link>
+            {/* Row 1: Anillos */}
+            <Link to="/tienda/anillos" className="lg:col-span-2 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEftD6U86_aHd85S4nLRDM3MaX8t8TXpzInkDJpr5OvF4K0iifelTx4gcSDX7IyVSX3FPI20IkA2IZ-3xKOPh9r9x8Jm8bFcEQsQGxIAdFZ1AqghRk-iE5HydGmpBR5vs0Eg6DTcBemE_odFFPoO6DD7G1x4-AL4fIVd_M1yI57dWLUrFeazOfUhs4vKCQFsTicW7rRcbmu9x4SAA0ekv2PWg0fcTt_8I87895TlRcpAjfGBn79-0BqI_dvHYsZVMcv9ucu9BrpmaF")'}}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Anillos</h3>
+                    <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                            Detalles de energía en tus manos.
+                    </p>
+                </div>
+            </Link>
 
-           {/* Row 1: Brazaletes */}
-           <Link to="/tienda/brazaletes" className="lg:col-span-2 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8k-UuWG8UhZqQEWRbYzP48OurLczlOiS1DapOY560Q_t2AIGbvb_q9-9G-zVF4XEUdtIKhCiHOLjlxZhX9eadXRjk5G09AStGME75qXVWwh91eYG-zzVn0VdgI73oTSTfihfml_rbMo8TlN_73LcWQOs-YfAYxIr16nDW1I-C5ugeqsJEcyRhC7YG2yU3CRSqIm41qbuFLFSVHmmMRmnkDRUgplm7TiWPP1bEWo4N9JmBEKQp8fNUBBfG76S0-Gem6628WNZD3GOl")'}}></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                 <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Brazaletes</h3>
-                 <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
-                        Protección para tu día a día.
-                 </p>
-              </div>
-           </Link>
+            {/* Row 1: Brazaletes */}
+            <Link to="/tienda/brazaletes" className="lg:col-span-2 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8k-UuWG8UhZqQEWRbYzP48OurLczlOiS1DapOY560Q_t2AIGbvb_q9-9G-zVF4XEUdtIKhCiHOLjlxZhX9eadXRjk5G09AStGME75qXVWwh91eYG-zzVn0VdgI73oTSTfihfml_rbMo8TlN_73LcWQOs-YfAYxIr16nDW1I-C5ugeqsJEcyRhC7YG2yU3CRSqIm41qbuFLFSVHmmMRmnkDRUgplm7TiWPP1bEWo4N9JmBEKQp8fNUBBfG76S0-Gem6628WNZD3GOl")'}}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Brazaletes</h3>
+                    <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                            Protección para tu día a día.
+                    </p>
+                </div>
+            </Link>
 
-           {/* Row 2: Piedras */}
-           <Link to="/tienda/piedras" className="lg:col-span-3 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD6t1h4XVu53CHw4bna8AJvWF9JBRuloU_PxqHKSk5FZj7jRcBnXQWY6lNT8WsakYscY-rYtJRkvGGvaxKMxFYRbMQgtnzFt8pzSiVlRp77fK33u_pTPr9wTtQm6qz03cmv3d5GBQGiL9-UDCYIAHavNj7IEqCL_f0_0FFdEXVWreI03kEBO5ZnRtjEF-hRMLSa_m7FJyYyzyldpFw0jw-GOBxegH0vAtOqigag4LX8bHlbOVVWKKansALRFpyilJVNBOekZhvVf7jd")'}}></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                 <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Piedras</h3>
-                 <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
-                        La naturaleza en su estado más puro.
-                 </p>
-              </div>
-           </Link>
+            {/* Row 2: Piedras */}
+            <Link to="/tienda/piedras" className="lg:col-span-3 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD6t1h4XVu53CHw4bna8AJvWF9JBRuloU_PxqHKSk5FZj7jRcBnXQWY6lNT8WsakYscY-rYtJRkvGGvaxKMxFYRbMQgtnzFt8pzSiVlRp77fK33u_pTPr9wTtQm6qz03cmv3d5GBQGiL9-UDCYIAHavNj7IEqCL_f0_0FFdEXVWreI03kEBO5ZnRtjEF-hRMLSa_m7FJyYyzyldpFw0jw-GOBxegH0vAtOqigag4LX8bHlbOVVWKKansALRFpyilJVNBOekZhvVf7jd")'}}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Piedras</h3>
+                    <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                            La naturaleza en su estado más puro.
+                    </p>
+                </div>
+            </Link>
 
-           {/* Row 2: Otros Accesorios */}
-           <Link to="/tienda/otros-accesorios" className="lg:col-span-3 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQST63bp2GPEW4CsaIMd-b9dLrv1CDr6BiFvGqGmm4o_gTtBfIq3ME20W0Nh2qKh2gxs578vIYg9zUg4YvgvOCjvQLR0y5Wr2ZHJlLyQRFWBLEQDk5PVzVbGPZWPI6Y5RKtD-iweKRW6YQTehxksx9lKI26LG_0RBkA1UdK3f7hN_GRzuqLecf7cDnX72iQB1KhvckZHqtlojEaGWXO69PuupgPSqetNCvbN3qhfR31hK2Ew_G3BQtbLliyh0psrPQ1fUQ78SoWrjm")'}}></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                 <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Otros Accesorios</h3>
-                 <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
-                        Complementos para tu santuario.
-                 </p>
-              </div>
-           </Link>
+            {/* Row 2: Otros Accesorios */}
+            <Link to="/tienda/otros-accesorios" className="lg:col-span-3 group relative block h-[400px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQST63bp2GPEW4CsaIMd-b9dLrv1CDr6BiFvGqGmm4o_gTtBfIq3ME20W0Nh2qKh2gxs578vIYg9zUg4YvgvOCjvQLR0y5Wr2ZHJlLyQRFWBLEQDk5PVzVbGPZWPI6Y5RKtD-iweKRW6YQTehxksx9lKI26LG_0RBkA1UdK3f7hN_GRzuqLecf7cDnX72iQB1KhvckZHqtlojEaGWXO69PuupgPSqetNCvbN3qhfR31hK2Ew_G3BQtbLliyh0psrPQ1fUQ78SoWrjm")'}}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div className="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="font-serif text-3xl font-medium text-white mb-2 italic">Otros Accesorios</h3>
+                    <p className="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                            Complementos para tu santuario.
+                    </p>
+                </div>
+            </Link>
 
+            </div>
         </div>
       </section>
 
