@@ -17,10 +17,29 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || '*',
+    credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const path = require('path');
+
+// Root route
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Geodas del Uruguay API',
+        status: 'running',
+        endpoints: {
+            products: '/api/products',
+            categories: '/api/categories',
+            tips: '/api/tips',
+            admin: '/api/admin',
+            health: '/api/health'
+        }
+    });
+});
 
 // Routes
 app.use('/api/products', productRoutes);

@@ -15,13 +15,11 @@ const productSchema = mongoose.Schema({
         default: 0
     },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Category'
+        type: String,
+        required: true
     },
     images: [{
-        type: String, // Cloudinary URLs
-        required: true
+        type: String // Cloudinary URLs
     }],
     specs: {
         weight: { type: Number, default: 0 },

@@ -28,6 +28,8 @@ const upload = multer({
 });
 
 router.post('/', protect, admin, upload.single('image'), async (req, res) => {
+    console.log('--- Upload Request ---');
+    console.log('req.file:', req.file);
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No se proporcionó ninguna imagen' });

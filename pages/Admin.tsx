@@ -78,7 +78,7 @@ export const Admin: React.FC = () => {
                 const formData = new FormData();
                 formData.append('image', file);
 
-                const response = await fetch('http://localhost:5000/api/upload', {
+                const response = await fetch('/api/upload', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('geodas_auth')}`
@@ -134,7 +134,7 @@ export const Admin: React.FC = () => {
     const handleSubmitProduct = async (e: React.FormEvent) => {
         e.preventDefault();
         const newProduct: Product = {
-            id: formData.id || Date.now().toString(),
+            id: formData.id || `temp-${Date.now()}`,
             title: formData.title || 'Sin Título',
             description: formData.description || '',
             price: Number(formData.price) || 0,
