@@ -20,12 +20,16 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+const path = require('path');
+
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/tips', tipRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Health Check (UptimeRobot)
 app.get('/api/health', (req, res) => {
