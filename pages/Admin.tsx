@@ -7,6 +7,7 @@ export const Admin: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [tips, setTips] = useState<Tip[]>([]);
     const [view, setView] = useState<'list' | 'add' | 'tips-list' | 'tips-edit'>('list');
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
     // Product Form State
     const [formData, setFormData] = useState<Partial<Product>>({
@@ -17,6 +18,12 @@ export const Admin: React.FC = () => {
     const [tipData, setTipData] = useState<Partial<Tip> & { category?: string }>({
         title: '', excerpt: '', content: '', image: '', tags: [], category: 'Propiedades Energéticas'
     });
+
+    // Toast helper
+    const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3000);
+    };
 
     useEffect(() => {
         if (dataService.isAdmin()) {
@@ -133,25 +140,49 @@ export const Admin: React.FC = () => {
 
     const handleSubmitProduct = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newProduct: Product = {
-            id: formData.id || `temp-${Date.now()}`,
-            title: formData.title || 'Sin Título',
-            description: formData.description || '',
-            price: Number(formData.price) || 0,
-            category: formData.category || PRODUCT_CATEGORIES[0],
-            images: formData.images?.length ? formData.images : ['https://picsum.photos/400/500'],
-            specs: formData.specs || {},
-            tags: typeof formData.tags === 'string' ? (formData.tags as string).split(',').map((t: string) => t.trim()) : formData.tags || [],
-            stock: 1,
-            visible: true,
-            ...formData
-        } as Product;
+        try {
+            const newProduct: Product = {
+                id: formData.id || `temp-${Date.now()}`,
+                title: formData.title || 'Sin Título',
+                description: formData.description || '',
+                price: Number(formData.price) || 0,
+                category: formData.category || PRODUCT_CATEGORIES[0],
+                images: formData.images?.length ? formData.images : ['https://picsum.photos/400/500'],
+                specs: formData.specs || {},
+                tags: typeof formData.tags === 'string' ? (formData.tags as string).split(',').map((t: string) => t.trim()) : formData.tags || [],
+                stock: 1,
+                visible: true,
+                ...formData
+            } as Product;
 
-        await dataService.saveProduct(newProduct);
-        alert('Producto guardado correctamente');
-        setView('list');
-        loadProducts();
-        setFormData({ category: PRODUCT_CATEGORIES[0], specs: { weight: 0, origin: 'Artigas, Uruguay', dimensions: '' }, images: [], tags: [] }); // Reset
+            await dataService.saveProduct(newProduct);
+            showToast(formData.id ? '✨ Pieza actualizada con éxito' : '✨ Nueva pieza añadida al inventario', 'success');
+            setView('list');
+            loadProducts();
+            setFormData({ category: PRODUCT_CATEGORIES[0], specs: { weight: 0, origin: 'Artigas, Uruguay', dimensions: '' }, images: [], tags: [] });
+        } catch (error) {
+            showToast('❌ Error al guardar el producto', 'error');
+            console.error('Error:', error);
+        }
+    };
+
+    const handleEditProduct = async (product: Product) => {
+        setFormData({ ...product });
+        setView('add');
+    };
+
+    const handleDeleteProduct = async (id: string) => {
+        const confirmed = window.confirm('¿Estás seguro de que esta pieza debe volver a la tierra? Esta acción es irreversible.');
+        if (!confirmed) return;
+
+        try {
+            await dataService.deleteProduct(id);
+            showToast('🌍 Pieza devuelta a la tierra', 'success');
+            loadProducts();
+        } catch (error) {
+            showToast('❌ Error al eliminar el producto', 'error');
+            console.error('Error:', error);
+        }
     };
 
     const handleSubmitTip = async () => {
@@ -475,7 +506,20 @@ export const Admin: React.FC = () => {
                                                 </button>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <button className="text-gray-400 hover:text-primary mr-2"><span className="material-symbols-outlined">edit</span></button>
+                                                <button 
+                                                    onClick={() => handleEditProduct(p)}
+                                                    className="text-gray-400 hover:text-primary mr-3 transition-colors"
+                                                    title="Editar producto"
+                                                >
+                                                    <span className="material-symbols-outlined">edit</span>
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDeleteProduct(p.id)}
+                                                    className="text-gray-400 hover:text-red-500 transition-colors"
+                                                    title="Eliminar producto"
+                                                >
+                                                    <span className="material-symbols-outlined">delete</span>
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
@@ -491,7 +535,9 @@ export const Admin: React.FC = () => {
                             <button onClick={() => setView('list')} className="p-2 rounded-full hover:bg-stone-200 dark:hover:bg-white/10 transition-colors">
                                 <span className="material-symbols-outlined">arrow_back</span>
                             </button>
-                            <h2 className="text-3xl font-bold font-display text-[#181611] dark:text-white">Alta de Nueva Pieza</h2>
+                            <h2 className="text-3xl font-bold font-display text-[#181611] dark:text-white">
+                                {formData.id && formData.id !== `temp-${Date.now()}` ? 'Editar Pieza' : 'Alta de Nueva Pieza'}
+                            </h2>
                         </div>
 
                         <div className="bg-white dark:bg-white/5 rounded-2xl shadow-sm border border-stone-200 dark:border-white/10 overflow-hidden">
@@ -578,13 +624,29 @@ export const Admin: React.FC = () => {
 
                                 <div className="flex justify-end gap-4 pt-4 border-t border-stone-100 dark:border-white/10">
                                     <button type="button" onClick={() => setView('list')} className="px-6 py-2 rounded-lg border border-stone-300 text-stone-600 font-bold hover:bg-stone-50 transition-colors">Cancelar</button>
-                                    <button type="submit" className="px-6 py-2 rounded-lg bg-primary text-[#181611] font-bold hover:bg-primary-dark transition-colors shadow-sm">Guardar Producto</button>
+                                    <button type="submit" className="px-6 py-2 rounded-lg bg-primary text-[#181611] font-bold hover:bg-primary-dark transition-colors shadow-sm">
+                                        {formData.id ? 'Actualizar Producto' : 'Guardar Producto'}
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 )}
             </main>
+
+            {/* Toast Notification */}
+            {toast && (
+                <div className={`fixed bottom-8 right-8 z-50 px-6 py-4 rounded-xl shadow-2xl border-2 flex items-center gap-3 transition-all transform ${
+                    toast.type === 'success' 
+                        ? 'bg-green-50 border-green-500 text-green-900 dark:bg-green-900/20 dark:border-green-500 dark:text-green-100' 
+                        : 'bg-red-50 border-red-500 text-red-900 dark:bg-red-900/20 dark:border-red-500 dark:text-red-100'
+                }`}>
+                    <span className="material-symbols-outlined text-xl">
+                        {toast.type === 'success' ? 'check_circle' : 'error'}
+                    </span>
+                    <span className="font-medium font-noto-sans">{toast.message}</span>
+                </div>
+            )}
         </div>
     );
 };
