@@ -187,23 +187,34 @@ export const Admin: React.FC = () => {
 
     const handleSubmitTip = async () => {
         if (!tipData.title) {
-            alert('Título requerido');
+            showToast('Título requerido', 'error');
             return;
         }
 
-        const newTip: Tip = {
-            id: tipData.id || Date.now().toString(),
-            title: tipData.title,
-            excerpt: tipData.excerpt || 'Nuevo consejo místico...',
-            content: tipData.content || '<p>Contenido...</p>',
-            image: tipData.image || 'https://picsum.photos/800/600',
-            date: tipData.date || new Date().toLocaleDateString('es-UY', { day: 'numeric', month: 'short', year: 'numeric' }),
-            tags: typeof tipData.tags === 'string' ? (tipData.tags as string).split(',').map((t: string) => t.trim()) : (tipData.tags || [])
-        };
-        await dataService.saveTip(newTip);
-        alert('Tip publicado con éxito');
-        loadTips();
-        setView('tips-list');
+        try {
+            const tipToSave: Tip = {
+                id: tipData.id || '',
+                title: tipData.title,
+                excerpt: tipData.excerpt || '',
+                content: tipData.content || '',
+                image: tipData.image || '',
+                date: tipData.date || new Date().toISOString(),
+                tags: typeof tipData.tags === 'string' ? (tipData.tags as string).split(',').map((t: string) => t.trim()) : (tipData.tags || [])
+            };
+            
+            // Si no tiene id, no enviar el campo (MongoDB creará uno nuevo)
+            if (!tipToSave.id) {
+                delete (tipToSave as any).id;
+            }
+            
+            await dataService.saveTip(tipToSave);
+            showToast(tipData.id ? '✨ Entrada actualizada con éxito' : '✨ Entrada publicada con éxito', 'success');
+            loadTips();
+            setView('tips-list');
+        } catch (error) {
+            console.error('Error saving tip:', error);
+            showToast('❌ Error al guardar la entrada', 'error');
+        }
     };
 
     if (!isAuth) {
@@ -441,21 +452,95 @@ export const Admin: React.FC = () => {
                                 <h3 className="font-bold text-[#181611] dark:text-white mb-4 flex items-center gap-2">
                                     <span className="material-symbols-outlined text-primary">image</span> Imagen Destacada
                                 </h3>
-                                <div
-                                    className="relative w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 dark:border-white/20 flex flex-col items-center justify-center bg-gray-50 dark:bg-black/20 hover:bg-gray-100 dark:hover:bg-black/30 transition-colors cursor-pointer group overflow-hidden"
-                                    onClick={() => {
-                                        const url = prompt("Introduce URL de imagen:");
-                                        if (url) setTipData({ ...tipData, image: url });
-                                    }}
-                                >
-                                    {tipData.image ? (
+                                
+                                {/* Image Preview */}
+                                {tipData.image && (
+                                    <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-3 group">
                                         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${tipData.image}')` }}></div>
-                                    ) : (
-                                        <div className="text-center p-4 group-hover:scale-105 transition-transform duration-300">
-                                            <span className="material-symbols-outlined text-4xl text-gray-400 mb-2">add_photo_alternate</span>
-                                            <p className="text-xs text-stone-500 dark:text-gray-400">Clic para subir imagen</p>
-                                        </div>
-                                    )}
+                                        <button
+                                            onClick={() => setTipData(prev => ({ ...prev, image: '' }))}
+                                            className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                            title="Eliminar imagen"
+                                        >
+                                            <span className="material-symbols-outlined text-sm">close</span>
+                                        </button>
+                                    </div>
+                                )}
+                                
+                                {/* Upload Options */}
+                                <div className="flex gap-2">
+                                    {/* Upload from Device */}
+                                    <label className="flex-1 flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed border-primary/50 dark:border-primary/30 rounded-lg cursor-pointer hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors group">
+                                        <input
+                                            type="file"
+                                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                                            onChange={async (e) => {
+                                                const files = e.target.files;
+                                                if (!files || files.length === 0) return;
+                                                
+                                                setUploadingImage(true);
+                                                try {
+                                                    const formData = new FormData();
+                                                    formData.append('image', files[0]);
+                                                    
+                                                    console.log('Uploading image to backend...');
+                                                    const response = await fetch('/api/upload', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Authorization': `Bearer ${localStorage.getItem('geodas_auth')}`
+                                                        },
+                                                        body: formData
+                                                    });
+                                                    
+                                                    console.log('Response status:', response.status);
+                                                    
+                                                    if (response.ok) {
+                                                        const data = await response.json();
+                                                        console.log('Image uploaded successfully:', data.url);
+                                                        setTipData(prev => ({ ...prev, image: data.url }));
+                                                        showToast('📸 Imagen subida correctamente', 'success');
+                                                    } else {
+                                                        const errorText = await response.text();
+                                                        console.error('Upload failed:', errorText);
+                                                        showToast('❌ Error al subir imagen', 'error');
+                                                    }
+                                                } catch (error) {
+                                                    console.error('Error uploading image:', error);
+                                                    showToast('❌ Error al subir imagen', 'error');
+                                                } finally {
+                                                    setUploadingImage(false);
+                                                    // Reset file input
+                                                    e.target.value = '';
+                                                }
+                                            }}
+                                            className="hidden"
+                                            disabled={uploadingImage}
+                                        />
+                                        {uploadingImage ? (
+                                            <>
+                                                <span className="material-symbols-outlined text-primary animate-spin text-2xl">progress_activity</span>
+                                                <span className="text-xs text-primary font-medium">Subiendo...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">cloud_upload</span>
+                                                <span className="text-xs text-stone-600 dark:text-stone-400 font-medium text-center">Subir del dispositivo</span>
+                                            </>
+                                        )}
+                                    </label>
+                                    
+                                    {/* URL Manual */}
+                                    <button
+                                        onClick={() => {
+                                            const url = prompt("Introduce URL de imagen:");
+                                            if (url) setTipData(prev => ({ ...prev, image: url }));
+                                        }}
+                                        className="flex-1 flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed border-stone-300 dark:border-stone-600 rounded-lg hover:bg-stone-50 dark:hover:bg-white/5 transition-colors group"
+                                        title="Añadir URL de imagen"
+                                    >
+                                        <span className="material-symbols-outlined text-stone-400 text-2xl group-hover:scale-110 transition-transform">link</span>
+                                        <span className="text-xs text-stone-500 dark:text-stone-400 font-medium text-center">Añadir URL</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>

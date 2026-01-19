@@ -171,28 +171,54 @@ export const dataService = {
     try {
       const response = await fetch(`${API_URL}/tips`);
       if (!response.ok) return [];
-      return await response.json();
+      const tips = await response.json();
+      // Mapear _id de MongoDB a id para el frontend
+      return tips.map((t: any) => ({ ...t, id: t._id }));
     } catch (error) {
       console.error('Error fetching tips:', error);
       return [];
     }
   },
 
+  async getTipById(id: string): Promise<Tip | null> {
+    try {
+      const response = await fetch(`${API_URL}/tips/${id}`);
+      if (!response.ok) return null;
+      const tip = await response.json();
+      // Mapear _id de MongoDB a id para el frontend
+      return { ...tip, id: tip._id };
+    } catch (error) {
+      console.error('Error fetching tip:', error);
+      return null;
+    }
+  },
+
   async saveTip(tip: Tip): Promise<void> {
     try {
-      const isUpdate = tip.id && tip.id !== '';
+      // Si tiene _id de MongoDB, usar ese; si no, verificar si tiene id que no sea vacío
+      const tipId = (tip as any)._id || (tip.id && tip.id !== '' ? tip.id : null);
+      const isUpdate = !!tipId;
+      
       const url = isUpdate
-        ? `${API_URL}/tips/${tip.id}`
+        ? `${API_URL}/tips/${tipId}`
         : `${API_URL}/tips`;
 
       const method = isUpdate ? 'PUT' : 'POST';
 
+      // Crear una copia del tip sin el id local si estamos creando uno nuevo
+      const tipData = { ...tip };
+      if (!isUpdate) {
+        delete (tipData as any).id;
+      }
+
       const response = await fetchWithAuth(url, {
         method,
-        body: JSON.stringify(tip)
+        body: JSON.stringify(tipData)
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
         throw new Error('Failed to save tip');
       }
     } catch (error) {

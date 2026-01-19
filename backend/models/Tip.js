@@ -7,15 +7,18 @@ const tipSchema = mongoose.Schema({
     },
     excerpt: {
         type: String,
-        required: true
+        required: false,
+        default: ''
     },
     content: {
         type: String, // HTML/Rich Text
-        required: true
+        required: false,
+        default: '<p>Contenido en desarrollo...</p>'
     },
     image: {
         type: String,
-        required: true
+        required: false,
+        default: ''
     },
     date: {
         type: String, // Can store as formatted string or Date object

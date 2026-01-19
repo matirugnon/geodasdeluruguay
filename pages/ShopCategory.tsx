@@ -9,9 +9,9 @@ interface CategoryInfo {
 }
 
 const CATEGORY_MAP: Record<string, CategoryInfo> = {
-    'collares': { title: 'Collares de Amatista', description: '"Fragmentos de energía violeta para proteger tu espíritu y elevar tu vibración."' },
-    'anillos': { title: 'Anillos de Poder', description: '"Símbolos de compromiso contigo misma y con el universo."' },
-    'brazaletes': { title: 'Brazaletes Místicos', description: '"Lleva la energía de las piedras siempre contigo."' },
+    'collares': { title: 'Collares ', description: '"Fragmentos de energía violeta para proteger tu espíritu y elevar tu vibración."' },
+    'anillos': { title: 'Anillos ', description: '"Símbolos de compromiso contigo misma y con el universo."' },
+    'brazaletes': { title: 'Brazaletes', description: '"Lleva la energía de las piedras siempre contigo."' },
     'piedras': { title: 'Piedras Naturales', description: '"La naturaleza en su estado más puro, sin filtros ni alteraciones."' },
     'otros-accesorios': { title: 'Otros Accesorios', description: '"Complementos y decoración para tu santuario personal."' }
 };

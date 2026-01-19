@@ -1,6 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { dataService } from '../services/dataService';
+import { Tip } from '../types';
 
 export const Tips: React.FC = () => {
+  const [tips, setTips] = useState<Tip[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTips = async () => {
+      try {
+        const data = await dataService.getTips();
+        setTips(data);
+      } catch (error) {
+        console.error('Error loading tips:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTips();
+  }, []);
+
+  // Alternar estilos de layout para cada entrada
+  const getLayoutClasses = (index: number) => {
+    const isEven = index % 2 === 0;
+    return {
+      containerClass: isEven ? 'flex-col md:flex-row' : 'flex-col md:flex-row-reverse',
+      imageClass: isEven ? 'md:w-3/5' : 'md:w-3/5',
+      contentClass: isEven ? 'md:w-2/5 md:-ml-24' : 'md:w-2/5 md:-mr-24',
+      textAlign: isEven ? 'text-center md:text-left' : 'text-center md:text-right',
+      flexAlign: isEven ? 'justify-center md:justify-start' : 'justify-center md:justify-end',
+      blobShape: index % 3 === 0 ? 'blob-shape-1' : index % 3 === 1 ? 'blob-shape-2' : 'blob-shape-3'
+    };
+  };
+
+  // Extraer primer tag o usar default
+  const getTagInfo = (tags: string[]) => {
+    const tagColors = [
+      { icon: 'water_drop', color: 'olive', label: tags[0] || 'Rituales de Limpieza' },
+      { icon: 'wb_sunny', color: 'gold', label: tags[0] || 'Propiedades Energéticas' },
+      { icon: 'spa', color: 'olive', label: tags[0] || 'Conexión Natural' }
+    ];
+    return tagColors;
+  };
+
   return (
     <div className="bg-stone-50 text-stone-800 antialiased selection:bg-gold/30 selection:text-stone-900 relative">
       <div className="absolute inset-0 pointer-events-none z-0 texture-overlay opacity-40 mix-blend-multiply fixed"></div>
@@ -32,101 +75,77 @@ export const Tips: React.FC = () => {
         {/* Articles List */}
         <div className="w-full max-w-[1300px] px-6 md:px-10 lg:px-20 py-10 flex flex-col gap-32 md:gap-40 pb-32">
             
-            {/* Article 1 */}
-            <article className="group relative">
-                <div className="flex flex-col md:flex-row items-center">
-                    <div className="w-full md:w-3/5 relative z-0">
-                        <div className="aspect-[4/3] md:aspect-[16/11] relative overflow-hidden blob-shape-1 shadow-2xl shadow-stone-900/10 transition-transform duration-700 ease-out group-hover:scale-[1.02]">
-                            <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC7A5MQW_pef2MMdFqyZzDoT_QHkt4NArz2jlleBW4bKlMildZNUsm9-Ng-2k35vJ04uE0bZZUaEkCYPNgCYBjV2lERZgK1ZEoRxdALKUSBtSiF3kD8a2WrWpf2X7jSLA3mg2gltle5wPNgKV2pl6xez_epG6r1xTZshTyr8tHKNlDNoYnzwQ7lpM6z0yOOll9WpA6aNIK5Pb5c7uBLCcRpgWn2nX8hAgvphBmuVNvmCXIPo5XvfZ4doT0fDceGDfhlj1nuMJ94fbgi")'}}></div>
-                            <div className="absolute inset-0 bg-stone-900/10 mix-blend-overlay"></div>
-                        </div>
+            {loading ? (
+              // Loading skeleton
+              <div className="flex flex-col gap-32">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                      <div className="w-full md:w-3/5 aspect-[16/11] bg-stone-200 rounded-3xl"></div>
+                      <div className="w-full md:w-2/5 space-y-4">
+                        <div className="h-4 bg-stone-200 rounded w-1/3"></div>
+                        <div className="h-8 bg-stone-200 rounded w-3/4"></div>
+                        <div className="h-4 bg-stone-200 rounded"></div>
+                        <div className="h-4 bg-stone-200 rounded w-5/6"></div>
+                      </div>
                     </div>
-                    <div className="w-full md:w-2/5 md:-ml-24 mt-8 md:mt-0 relative z-10">
-                        <div className="bg-paper/95 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-stone-100 flex flex-col gap-5 text-center md:text-left transition-transform duration-500 group-hover:-translate-y-2">
-                            <div className="flex items-center justify-center md:justify-start gap-2 text-olive text-xs font-bold tracking-widest uppercase mb-1">
-                                <span className="material-symbols-outlined text-[16px]">water_drop</span>
-                                <span>Rituales de Limpieza</span>
+                  </div>
+                ))}
+              </div>
+            ) : tips.length === 0 ? (
+              // Empty state
+              <div className="text-center py-20">
+                <span className="material-symbols-outlined text-6xl text-stone-300 mb-4">auto_stories</span>
+                <p className="text-stone-400 text-xl">Aún no hay entradas en el diario místico</p>
+              </div>
+            ) : (
+              // Dynamic tips from MongoDB
+              tips.map((tip, index) => {
+                const layout = getLayoutClasses(index);
+                const tagInfo = getTagInfo(tip.tags || []);
+                const currentTag = tagInfo[index % 3];
+                
+                return (
+                  <article key={tip.id} className="group relative">
+                    <Link to={`/tips/${tip.id}`} className="block">
+                      <div className={`flex ${layout.containerClass} items-center`}>
+                        <div className={`w-full ${layout.imageClass} relative z-0`}>
+                          <div className={`aspect-[4/3] md:aspect-[16/11] relative overflow-hidden ${layout.blobShape} shadow-2xl shadow-stone-900/10 transition-transform duration-700 ease-out group-hover:scale-[1.02]`}>
+                            <div 
+                              className="absolute inset-0 bg-cover bg-center" 
+                              style={{backgroundImage: `url("${tip.image}")`}}
+                            ></div>
+                            <div className="absolute inset-0 bg-stone-900/10 mix-blend-overlay"></div>
+                          </div>
+                        </div>
+                        <div className={`w-full ${layout.contentClass} mt-8 md:mt-0 relative z-10`}>
+                          <div className={`bg-paper/95 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-stone-100 flex flex-col gap-5 ${layout.textAlign} transition-transform duration-500 group-hover:-translate-y-2`}>
+                            <div className={`flex items-center ${layout.flexAlign} gap-2 text-${currentTag.color} text-xs font-bold tracking-widest uppercase mb-1`}>
+                              {index % 2 === 0 && <span className="material-symbols-outlined text-[16px]">{currentTag.icon}</span>}
+                              <span>{currentTag.label}</span>
+                              {index % 2 !== 0 && <span className="material-symbols-outlined text-[16px]">{currentTag.icon}</span>}
                             </div>
                             <h2 className="text-stone-900 text-3xl md:text-4xl font-bold leading-tight font-serif">
-                                Cómo limpiar tu Amatista
+                              {tip.title}
                             </h2>
-                            <p className="text-stone-500 text-base leading-relaxed font-light font-sans">
-                                El agua y la luna son elementos clave para purificar la energía acumulada. Descubre los métodos ancestrales para devolverle el brillo vibracional a tus cristales sin dañarlos, respetando su estructura mineral.
-                            </p>
-                            <div className="pt-4 flex justify-center md:justify-start">
-                                <button className="group/btn flex items-center gap-2 text-stone-800 hover:text-olive font-serif italic text-lg transition-colors border-b border-stone-300 hover:border-olive pb-1">
-                                    <span>Leer entrada</span>
-                                    <span className="material-symbols-outlined text-[18px] transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
-                                </button>
+                            <div 
+                              className="text-stone-500 text-base leading-relaxed font-light font-sans prose prose-stone max-w-none line-clamp-3"
+                              dangerouslySetInnerHTML={{ __html: tip.excerpt || tip.content.substring(0, 200) + '...' }}
+                            />
+                            <div className={`pt-4 flex ${layout.flexAlign}`}>
+                              <span className="group/btn flex items-center gap-2 text-stone-800 hover:text-olive font-serif italic text-lg transition-colors border-b border-stone-300 hover:border-olive pb-1">
+                                <span>Leer entrada</span>
+                                <span className="material-symbols-outlined text-[18px] transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
+                              </span>
                             </div>
+                          </div>
                         </div>
-                    </div>
-                </div>
-            </article>
-
-            {/* Article 2 */}
-            <article className="group relative">
-                <div className="flex flex-col md:flex-row-reverse items-center">
-                    <div className="w-full md:w-3/5 relative z-0">
-                        <div className="aspect-[4/3] md:aspect-[16/11] relative overflow-hidden blob-shape-2 shadow-2xl shadow-gold/10 transition-transform duration-700 ease-out group-hover:scale-[1.02]">
-                            <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBcfkhcnRYccxBEKp5KUtwcvqh9281l6oFABOybI6yY8DnncvS29XZCHYeMmSNAi6DvOYn9gdsdUr92xGjygRHUjcO2OKZcmmnTY68FbTP_MmwXFUa-72gvRC_oeaD_AeTbe53AyQGyeemECVB3OzFM9MD6kWsdShn7kWwlidkEDzNjxSZKgP6Oq0BDmY9To-FxuNXarjQ9WDVNA5k1bb_qxpkbWig2uzz2igz6N5rxO0jFmIqleGtggcwmB12cyGUj562WTDVLd-va")'}}></div>
-                            <div className="absolute inset-0 bg-stone-900/10 mix-blend-overlay"></div>
-                        </div>
-                    </div>
-                    <div className="w-full md:w-2/5 md:-mr-24 mt-8 md:mt-0 relative z-10">
-                        <div className="bg-paper/95 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-stone-100 flex flex-col gap-5 text-center md:text-right transition-transform duration-500 group-hover:-translate-y-2">
-                            <div className="flex items-center justify-center md:justify-end gap-2 text-gold text-xs font-bold tracking-widest uppercase mb-1">
-                                <span>Propiedades Energéticas</span>
-                                <span className="material-symbols-outlined text-[16px]">wb_sunny</span>
-                            </div>
-                            <h2 className="text-stone-900 text-3xl md:text-4xl font-bold leading-tight font-serif">
-                                Energía de las Geodas
-                            </h2>
-                            <p className="text-stone-500 text-base leading-relaxed font-light font-sans">
-                                Las geodas actúan como amplificadores naturales. Aprende cómo ubicarlas estratégicamente en tu hogar para transformar la vibración de tus espacios, atraer abundancia y generar un flujo de energía positiva.
-                            </p>
-                            <div className="pt-4 flex justify-center md:justify-end">
-                                <button className="group/btn flex items-center gap-2 text-stone-800 hover:text-gold font-serif italic text-lg transition-colors border-b border-stone-300 hover:border-gold pb-1">
-                                    <span>Descubrir magia</span>
-                                    <span className="material-symbols-outlined text-[18px] transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            {/* Article 3 */}
-            <article className="group relative">
-                <div className="flex flex-col md:flex-row items-center">
-                    <div className="w-full md:w-3/5 relative z-0">
-                        <div className="aspect-[4/3] md:aspect-[16/11] relative overflow-hidden blob-shape-3 shadow-2xl shadow-olive/10 transition-transform duration-700 ease-out group-hover:scale-[1.02]">
-                            <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuABcVCsyjahxP_W_zjWs5afnzT9q_c8BUXbQmMkS7yvSIqBmJcnTeYYlDsbv0mzza5OIqDub69JbS8n--fC6nKKMP5nBtn-hPiIwvn2DAUcMuBJhhbEfwkDGH0FRXZP04y8wv_DdJNgOjUX8SISlhS1I0oIN4mDHbsSr-ACd63986g0EM_tsZTeEdyQA1YsLIwMob7FyMJgCgYptwxFeXeYQy_jKgmcTCK1Hqf4s0PenOCwFRxKUlhqwE6hRotwuRU6DXuqd_Qusanp")'}}></div>
-                            <div className="absolute inset-0 bg-stone-900/10 mix-blend-overlay"></div>
-                        </div>
-                    </div>
-                    <div className="w-full md:w-2/5 md:-ml-24 mt-8 md:mt-0 relative z-10">
-                        <div className="bg-paper/95 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-stone-100 flex flex-col gap-5 text-center md:text-left transition-transform duration-500 group-hover:-translate-y-2">
-                            <div className="flex items-center justify-center md:justify-start gap-2 text-olive text-xs font-bold tracking-widest uppercase mb-1">
-                                <span className="material-symbols-outlined text-[16px]">spa</span>
-                                <span>Conexión Natural</span>
-                            </div>
-                            <h2 className="text-stone-900 text-3xl md:text-4xl font-bold leading-tight font-serif">
-                                Meditación con Cuarzos
-                            </h2>
-                            <p className="text-stone-500 text-base leading-relaxed font-light font-sans">
-                                Una guía paso a paso para incorporar tus cristales en tu práctica de meditación diaria. Siente la conexión profunda con la tierra, ancla tu energía y encuentra tu centro en medio del caos moderno.
-                            </p>
-                            <div className="pt-4 flex justify-center md:justify-start">
-                                <button className="group/btn flex items-center gap-2 text-stone-800 hover:text-olive font-serif italic text-lg transition-colors border-b border-stone-300 hover:border-olive pb-1">
-                                    <span>Ver práctica</span>
-                                    <span className="material-symbols-outlined text-[18px] transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
+                      </div>
+                    </Link>
+                  </article>
+                );
+              })
+            )}
 
         </div>
 

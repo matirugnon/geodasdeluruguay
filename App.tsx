@@ -6,6 +6,7 @@ import { Home } from './pages/Home';
 import { Category } from './pages/Category';
 import { ProductDetail } from './pages/ProductDetail';
 import { Tips } from './pages/Tips';
+import { TipDetail } from './pages/TipDetail';
 import { Admin } from './pages/Admin';
 import { Shop } from './pages/Shop';
 import { ShopCategory } from './pages/ShopCategory';
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/categoria/:id" element={<Category />} />
           <Route path="/producto/:id" element={<ProductDetail />} />
           <Route path="/tips" element={<Tips />} />
+          <Route path="/tips/:id" element={<TipDetail />} />
           <Route path="/admin" element={<Admin />} />
           
           {/* New Shop Routes */}
