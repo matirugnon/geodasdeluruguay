@@ -107,7 +107,7 @@ export const Tips: React.FC = () => {
                 
                 return (
                   <article key={tip.id} className="group relative">
-                    <Link to={`/tips/${tip.id}`} className="block">
+                    <Link to={`/tips/${tip.slug}`} className="block">
                       <div className={`flex ${layout.containerClass} items-center`}>
                         <div className={`w-full ${layout.imageClass} relative z-0`}>
                           <div className={`aspect-[4/3] md:aspect-[16/11] relative overflow-hidden ${layout.blobShape} shadow-2xl shadow-stone-900/10 transition-transform duration-700 ease-out group-hover:scale-[1.02]`}>
