@@ -260,17 +260,23 @@ export const dataService = {
 
   async isAdmin(): Promise<boolean> {
     try {
+      console.log('🔍 Checking admin authentication...');
       const response = await fetch(`${API_URL}/admin/verify`, {
         credentials: 'include' // Envía la cookie automáticamente
       });
 
+      console.log('Response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
+        console.log('Response data:', data);
+        console.log('Authenticated:', data.authenticated);
         return data.authenticated === true;
       }
+      console.log('❌ Response not OK');
       return false;
     } catch (error) {
-      console.error('Error verifying authentication:', error);
+      console.error('❌ Error verifying authentication:', error);
       return false;
     }
   },

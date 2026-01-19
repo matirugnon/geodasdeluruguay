@@ -92,16 +92,25 @@ router.post('/login', rateLimiter, async (req, res) => {
 // @access  Private
 router.get('/verify', async (req, res) => {
     try {
+        console.log('--- VERIFY REQUEST ---');
+        console.log('Cookies received:', req.cookies);
+        console.log('Token in cookie:', req.cookies.token ? 'EXISTS' : 'MISSING');
+        
         const token = req.cookies.token;
         
         if (!token) {
+            console.log('❌ No token found in cookies');
             return res.status(401).json({ authenticated: false });
         }
 
+        console.log('✅ Token found, verifying...');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('Token decoded:', decoded);
+        
         const user = await User.findById(decoded.id).select('-password');
         
         if (user) {
+            console.log('✅ User authenticated:', user.username);
             res.json({ 
                 authenticated: true,
                 user: {
@@ -110,7 +119,9 @@ router.get('/verify', async (req, res) => {
                 }
             });
         } else {
+            console.log('❌ User not found in database');
             res.status(401).json({ authenticated: false });
+        }
         }
     } catch (error) {
         res.status(401).json({ authenticated: false });
