@@ -7,8 +7,17 @@ export const Navbar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,37 +51,67 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-stone-100/90 dark:bg-stone-900/90 border-b border-stone-200/50 dark:border-stone-800/50 shadow-sm transition-all duration-300">
+    <header className={`${isScrolled ? 'sticky' : 'fixed'} top-0 z-50 w-full transition-all duration-500 ${
+      isScrolled 
+        ? 'backdrop-blur-md bg-stone-100/90 dark:bg-stone-900/90 border-b border-stone-200/50 dark:border-stone-800/50 shadow-sm' 
+        : 'bg-transparent border-b border-transparent'
+    }`}>
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-3xl">diamond</span>
-            <span className="text-xl font-serif font-bold tracking-tight text-stone-900 dark:text-white">Geodas del Uruguay</span>
+            <span className={`material-symbols-outlined text-3xl transition-colors duration-300 ${
+              isScrolled ? 'text-primary' : 'text-white drop-shadow-lg'
+            }`}>diamond</span>
+            <span className={`text-xl font-serif font-bold tracking-tight transition-colors duration-300 ${
+              isScrolled ? 'text-stone-900 dark:text-white' : 'text-white drop-shadow-lg'
+            }`}>Geodas del Uruguay</span>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex gap-10">
-            <Link to="/" className="text-base font-serif font-medium text-stone-700 hover:text-primary transition-colors dark:text-stone-300 dark:hover:text-primary tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full">Inicio</Link>
-            <Link to="/tienda" className="text-base font-serif font-medium text-stone-700 hover:text-primary transition-colors dark:text-stone-300 dark:hover:text-primary tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full">Tienda</Link>
-            <Link to="/tips" className="text-base font-serif font-medium text-stone-700 hover:text-primary transition-colors dark:text-stone-300 dark:hover:text-primary tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full">Tips</Link>
+            <Link to="/" className={`text-base font-serif font-medium transition-colors tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${
+              isScrolled 
+                ? 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary' 
+                : 'text-white hover:text-primary drop-shadow-lg'
+            }`}>Inicio</Link>
+            <Link to="/tienda" className={`text-base font-serif font-medium transition-colors tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${
+              isScrolled 
+                ? 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary' 
+                : 'text-white hover:text-primary drop-shadow-lg'
+            }`}>Tienda</Link>
+            <Link to="/tips" className={`text-base font-serif font-medium transition-colors tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${
+              isScrolled 
+                ? 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary' 
+                : 'text-white hover:text-primary drop-shadow-lg'
+            }`}>Tips</Link>
           </nav>
 
           {/* Actions */}
           <div className="flex items-center gap-4">
              {/* Search */}
              <div className="hidden md:flex items-center relative group" ref={searchRef}>
-               <div className="flex items-center bg-transparent group-focus-within:bg-stone-200/50 dark:group-focus-within:bg-stone-800/50 rounded-full transition-all duration-300 border border-transparent group-focus-within:border-stone-200 dark:group-focus-within:border-stone-700 pr-1">
+               <div className={`flex items-center group-focus-within:bg-stone-200/50 dark:group-focus-within:bg-stone-800/50 rounded-full transition-all duration-300 border group-focus-within:border-stone-200 dark:group-focus-within:border-stone-700 pr-1 ${
+                 isScrolled ? 'bg-transparent border-transparent' : 'bg-white/10 border-white/20'
+               }`}>
                  <input 
-                   className="w-0 group-hover:w-48 focus:w-48 transition-all duration-500 ease-out bg-transparent border-none focus:ring-0 p-0 pl-4 py-2 text-stone-600 dark:text-stone-300 text-sm placeholder-stone-400 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer focus:cursor-text" 
+                   className={`w-0 group-hover:w-48 focus:w-48 transition-all duration-500 ease-out bg-transparent border-none focus:ring-0 p-0 pl-4 py-2 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer focus:cursor-text ${
+                     isScrolled 
+                       ? 'text-stone-600 dark:text-stone-300 placeholder-stone-400' 
+                       : 'text-white placeholder-white/70'
+                   }`}
                    placeholder="Buscar cristales..." 
                    type="text"
                    value={searchTerm}
                    onChange={(e) => setSearchTerm(e.target.value)}
                    onFocus={() => searchTerm.length > 2 && setShowResults(true)}
                  />
-                 <button className="p-2 text-stone-600 hover:text-primary transition-colors rounded-full dark:text-stone-300">
+                 <button className={`p-2 transition-colors rounded-full ${
+                   isScrolled 
+                     ? 'text-stone-600 hover:text-primary dark:text-stone-300' 
+                     : 'text-white hover:text-primary drop-shadow-lg'
+                 }`}>
                    <span className="material-symbols-outlined">search</span>
                  </button>
                </div>
@@ -111,7 +150,11 @@ export const Navbar: React.FC = () => {
                <span className="material-symbols-outlined">settings</span>
              </Link>
               */}
-             <button className="p-2 text-stone-600 hover:text-primary transition-colors rounded-full hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800">
+             <button className={`p-2 transition-colors rounded-full ${
+               isScrolled 
+                 ? 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800' 
+                 : 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+             }`}>
                <span className="material-symbols-outlined">shopping_bag</span>
              </button>
           </div>
