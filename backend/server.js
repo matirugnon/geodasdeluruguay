@@ -56,10 +56,22 @@ const corsOptions = {
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Set-Cookie'], // Exponer header de cookies
+    optionsSuccessStatus: 200 // Para navegadores legacy
 };
 
 app.use(cors(corsOptions));
+
+// Middleware adicional para asegurar headers de cookies en producción
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+    }
+    next();
+});
 app.use(cookieParser());
 app.use(express.json());
 
