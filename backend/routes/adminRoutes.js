@@ -51,32 +51,13 @@ router.post('/login', rateLimiter, async (req, res) => {
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = generateToken(user._id);
             
-            // Detectar si estamos en producción (Render) o desarrollo (localhost)
-            const isProduction = process.env.RENDER || process.env.NODE_ENV === 'production';
-            
-            // Enviar token como HttpOnly cookie (más seguro que localStorage)
-            const cookieOptions = {
-                httpOnly: true,  // No accesible desde JavaScript
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
-                path: '/'
-            };
-
-            // En producción (Render): configuración para cross-origin HTTPS
-            if (isProduction) {
-                cookieOptions.secure = true;      // Solo HTTPS
-                cookieOptions.sameSite = 'none';  // Permitir cross-origin (Vercel -> Render)
-                console.log('Production mode: secure cookies with SameSite=none');
-            } else {
-                cookieOptions.sameSite = 'lax';   // Más permisivo en desarrollo
-                console.log('Development mode: lax cookies for localhost');
-            }
-
-            res.cookie('token', token, cookieOptions);
-
+            // Enviar token en JSON (localStorage)
+            // HttpOnly cookies no funcionan cross-origin (Vercel -> Render)
             res.json({
                 success: true,
                 _id: user.id,
-                username: user.username
+                username: user.username,
+                token: token
             });
         } else {
             res.status(401).json({ message: 'Invalid credentials' });
@@ -92,25 +73,17 @@ router.post('/login', rateLimiter, async (req, res) => {
 // @access  Private
 router.get('/verify', async (req, res) => {
     try {
-        console.log('--- VERIFY REQUEST ---');
-        console.log('Cookies received:', req.cookies);
-        console.log('Token in cookie:', req.cookies.token ? 'EXISTS' : 'MISSING');
+        const authHeader = req.headers.authorization;
         
-        const token = req.cookies.token;
-        
-        if (!token) {
-            console.log('❌ No token found in cookies');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({ authenticated: false });
         }
 
-        console.log('✅ Token found, verifying...');
+        const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Token decoded:', decoded);
-        
         const user = await User.findById(decoded.id).select('-password');
         
         if (user) {
-            console.log('✅ User authenticated:', user.username);
             res.json({ 
                 authenticated: true,
                 user: {
@@ -119,11 +92,9 @@ router.get('/verify', async (req, res) => {
                 }
             });
         } else {
-            console.log('❌ User not found in database');
             res.status(401).json({ authenticated: false });
         }
     } catch (error) {
-        console.log('❌ Error in verify:', error.message);
         res.status(401).json({ authenticated: false });
     }
 });
