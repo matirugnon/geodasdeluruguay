@@ -26,7 +26,9 @@ export const ProductDetail: React.FC = () => {
 
   if (!product) return <div className="p-20 text-center font-newsreader text-xl">Cargando energía...</div>;
 
-  const whatsappLink = `https://wa.me/59899000000?text=${encodeURIComponent(`Hola, me interesa la pieza: ${product.title}`)}`;
+  const whatsappNumber = '59891458797'; // Cambiar por tu número real
+  const whatsappMessage = `¡Hola! Me interesa esta pieza:\n\n*${product.title}*\n\nPrecio: $${product.price.toLocaleString('es-UY')} UYU\nCategoría: ${product.category}\n\n¿Está disponible?`;
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <div className="bg-product-bg-light dark:bg-product-bg-dark font-newsreader text-[#161811] dark:text-gray-100 min-h-screen flex flex-col">
