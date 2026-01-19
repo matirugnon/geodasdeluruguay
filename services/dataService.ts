@@ -185,8 +185,8 @@ export const dataService = {
       const response = await fetch(`${API_URL}/tips/${id}`);
       if (!response.ok) return null;
       const tip = await response.json();
-      // Mapear _id de MongoDB a id para el frontend
-      return { ...tip, id: tip._id };
+      // Mapear _id de MongoDB a id y asegurar slug
+      return { ...tip, id: tip._id, slug: tip.slug || tip._id };
     } catch (error) {
       console.error('Error fetching tip:', error);
       return null;

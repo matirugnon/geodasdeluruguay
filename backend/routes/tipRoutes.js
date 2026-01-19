@@ -10,7 +10,14 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const tip = await Tip.findById(req.params.id);
+        // Intentar buscar por slug primero, si falla buscar por ID (retrocompatibilidad)
+        let tip = await Tip.findOne({ slug: req.params.slug });
+        
+        // Si no se encuentra por slug y el parámetro parece un ObjectId válido, buscar por _id
+        if (!tip && req.params.slug.match(/^[0-9a-fA-F]{24}$/)) {
+            tip = await Tip.findById(req.params.slug);
+        }
+        
         if (tip) {
             res.json(tip);
         } else {

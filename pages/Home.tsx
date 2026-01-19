@@ -163,15 +163,17 @@ export const Home: React.FC = () => {
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {tips.map(tip => (
-               <article key={tip.id} className="group relative h-80 rounded-xl overflow-hidden cursor-pointer shadow-lg">
-                  <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0" style={{backgroundImage: `url("${tip.image}")`}}></div>
-                  <div className="absolute inset-0 bg-stone-900/50 group-hover:bg-stone-900/40 transition-colors duration-300"></div>
-                  <div className="absolute bottom-0 left-0 p-8 w-full">
-                     <h3 className="font-serif text-2xl font-bold text-white mb-2">{tip.title}</h3>
-                     <div className="w-12 h-0.5 bg-primary mb-3"></div>
-                     <p className="text-stone-200 text-sm opacity-90 line-clamp-2">{tip.excerpt}</p>
-                  </div>
-               </article>
+               <Link key={tip.id} to={`/tips/${tip.slug}`}>
+                  <article className="group relative h-80 rounded-xl overflow-hidden cursor-pointer shadow-lg">
+                     <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0" style={{backgroundImage: `url("${tip.image}")`}}></div>
+                     <div className="absolute inset-0 bg-stone-900/50 group-hover:bg-stone-900/40 transition-colors duration-300"></div>
+                     <div className="absolute bottom-0 left-0 p-8 w-full">
+                        <h3 className="font-serif text-2xl font-bold text-white mb-2">{tip.title}</h3>
+                        <div className="w-12 h-0.5 bg-primary mb-3"></div>
+                        <p className="text-stone-200 text-sm opacity-90 line-clamp-2">{tip.excerpt}</p>
+                     </div>
+                  </article>
+               </Link>
             ))}
          </div>
          <div className="text-center">
