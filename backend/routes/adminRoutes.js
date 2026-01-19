@@ -52,13 +52,21 @@ router.post('/login', rateLimiter, async (req, res) => {
             const token = generateToken(user._id);
             
             // Enviar token como HttpOnly cookie (más seguro que localStorage)
-            res.cookie('token', token, {
+            const cookieOptions = {
                 httpOnly: true,  // No accesible desde JavaScript
-                secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
-                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // none para cross-origin en producción
                 maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
                 path: '/'
-            });
+            };
+
+            // En desarrollo: cookies más permisivas para localhost
+            if (process.env.NODE_ENV === 'production') {
+                cookieOptions.secure = true;      // Solo HTTPS
+                cookieOptions.sameSite = 'none';  // Permitir cross-origin
+            } else {
+                cookieOptions.sameSite = 'lax';   // Más permisivo en desarrollo
+            }
+
+            res.cookie('token', token, cookieOptions);
 
             res.json({
                 success: true,

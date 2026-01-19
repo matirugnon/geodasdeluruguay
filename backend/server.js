@@ -35,15 +35,22 @@ const allowedOrigins = [
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // Permitir peticiones sin origin (como Postman) en desarrollo
-        if (!origin && process.env.NODE_ENV !== 'production') {
+        // Log para debugging en producción
+        console.log('CORS request from origin:', origin);
+        
+        // Permitir peticiones sin origin (como Postman, health checks de Render)
+        if (!origin) {
+            console.log('No origin header - allowing (health checks, same-origin)');
             return callback(null, true);
         }
         
         // Validar que el origin esté exactamente en la lista
         if (allowedOrigins.includes(origin)) {
+            console.log('Origin allowed:', origin);
             callback(null, true);
         } else {
+            console.error('Origin REJECTED:', origin);
+            console.error('Allowed origins:', allowedOrigins);
             callback(new Error('Not allowed by CORS'));
         }
     },
