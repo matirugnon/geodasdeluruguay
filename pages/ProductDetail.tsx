@@ -16,7 +16,7 @@ export const ProductDetail: React.FC = () => {
         setProduct(p || null);
         
         // Fetch related products (mock logic: just get all and filter out current)
-        const all = await dataService.getProducts();
+        const all = await dataService.getVisibleProducts();
         setRelatedProducts(all.filter(item => item.id !== id).slice(0, 3));
       }
     };

@@ -25,11 +25,9 @@ export const ShopCategory: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      const allProducts = await dataService.getProducts();
+      const allProducts = await dataService.getVisibleProducts();
       
       const filtered = allProducts.filter(p => {
-         if (!p.visible) return false; // Ensure hidden products from admin are not shown
-
          const slug = category?.toLowerCase() || '';
          const pCat = p.category.toLowerCase();
          
