@@ -63,15 +63,20 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
          if (response.ok) {
             const data = await response.json();
+            console.log('✅ Login response:', data);
             
             // Validar token antes de guardar
             if (!data.token || data.token.split('.').length !== 3) {
+               console.error('❌ Invalid token received:', data);
                setError('Error: Token inválido recibido');
                return;
             }
 
+            console.log('✅ Saving token to localStorage...');
             // Guardar token en localStorage
             localStorage.setItem('geodas_auth', data.token);
+            console.log('✅ Token saved. Redirecting...');
+            
             onClose();
             navigate('/admin');
             window.location.reload();
