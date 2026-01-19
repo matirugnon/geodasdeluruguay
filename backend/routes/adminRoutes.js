@@ -51,6 +51,9 @@ router.post('/login', rateLimiter, async (req, res) => {
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = generateToken(user._id);
             
+            // Detectar si estamos en producción (Render) o desarrollo (localhost)
+            const isProduction = process.env.RENDER || process.env.NODE_ENV === 'production';
+            
             // Enviar token como HttpOnly cookie (más seguro que localStorage)
             const cookieOptions = {
                 httpOnly: true,  // No accesible desde JavaScript
@@ -58,12 +61,14 @@ router.post('/login', rateLimiter, async (req, res) => {
                 path: '/'
             };
 
-            // En desarrollo: cookies más permisivas para localhost
-            if (process.env.NODE_ENV === 'production') {
+            // En producción (Render): configuración para cross-origin HTTPS
+            if (isProduction) {
                 cookieOptions.secure = true;      // Solo HTTPS
-                cookieOptions.sameSite = 'none';  // Permitir cross-origin
+                cookieOptions.sameSite = 'none';  // Permitir cross-origin (Vercel -> Render)
+                console.log('Production mode: secure cookies with SameSite=none');
             } else {
                 cookieOptions.sameSite = 'lax';   // Más permisivo en desarrollo
+                console.log('Development mode: lax cookies for localhost');
             }
 
             res.cookie('token', token, cookieOptions);
