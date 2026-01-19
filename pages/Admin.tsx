@@ -27,11 +27,16 @@ export const Admin: React.FC = () => {
 
     useEffect(() => {
         const checkAuth = async () => {
+            console.log('🔐 Admin: Checking authentication...');
             const authenticated = await dataService.isAdmin();
+            console.log('🔐 Admin: authenticated =', authenticated);
             if (authenticated) {
+                console.log('✅ Admin: Setting isAuth to true');
                 setIsAuth(true);
                 loadProducts();
                 loadTips();
+            } else {
+                console.log('❌ Admin: Not authenticated, staying in login screen');
             }
         };
         checkAuth();
