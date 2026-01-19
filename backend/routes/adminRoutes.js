@@ -122,8 +122,8 @@ router.get('/verify', async (req, res) => {
             console.log('❌ User not found in database');
             res.status(401).json({ authenticated: false });
         }
-        }
     } catch (error) {
+        console.log('❌ Error in verify:', error.message);
         res.status(401).json({ authenticated: false });
     }
 });
