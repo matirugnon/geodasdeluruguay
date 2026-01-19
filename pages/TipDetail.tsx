@@ -18,7 +18,9 @@ export const TipDetail: React.FC = () => {
         const loadTip = async () => {
             if (!id) return;
             setLoading(true);
+            console.log('🔍 Loading tip with ID/slug:', id);
             const data = await dataService.getTipById(id);
+            console.log('📦 Tip data received:', data);
             setTip(data);
             setLoading(false);
 
