@@ -1,11 +1,8 @@
-Aquí tienes un archivo **SEO_STRATEGY.md** detallado y listo para integrar en tu repositorio. Este documento servirá como tu hoja de ruta técnica y de contenido para posicionar **Geodas del Uruguay** en los primeros lugares de Google.
-
 ---
 
 # 🚀 Estrategia de SEO: Geodas del Uruguay
 
 Este documento detalla las acciones técnicas y de contenido necesarias para optimizar el posicionamiento orgánico del sitio, enfocándose en el mercado uruguayo y el nicho de piedras naturales.
-
 ---
 
 ## 1. Configuración Técnica (Código)
