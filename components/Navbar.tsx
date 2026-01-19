@@ -106,9 +106,11 @@ export const Navbar: React.FC = () => {
                )}
              </div>
 
+               {/*
              <Link to="/admin" className="p-2 text-stone-600 hover:text-primary transition-colors rounded-full hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800">
                <span className="material-symbols-outlined">settings</span>
              </Link>
+              */}
              <button className="p-2 text-stone-600 hover:text-primary transition-colors rounded-full hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800">
                <span className="material-symbols-outlined">shopping_bag</span>
              </button>

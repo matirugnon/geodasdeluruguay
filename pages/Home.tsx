@@ -159,7 +159,7 @@ export const Home: React.FC = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto bg-stone-50 dark:bg-stone-900/30 rounded-3xl my-8">
          <div className="text-center mb-16">
             <span className="text-dried-green font-bold text-sm tracking-widest uppercase mb-2 block">Blog &amp; Conocimiento</span>
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Sabiduría de las Piedras</h2>
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Tips y consejos de nuestras Piedras</h2>
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {tips.map(tip => (
