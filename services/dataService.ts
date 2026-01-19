@@ -1,8 +1,8 @@
 import { Product, Tip } from '../types';
 
-// En producción, vercel.json redirige /api a Render backend
-// En desarrollo, vite.config.ts hace proxy a localhost:5000
-const API_URL = '/api';
+// En producción: usar variable de entorno o fallback
+// En desarrollo: vite.config.ts hace proxy a localhost:5000
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Master List of Categories
 export const PRODUCT_CATEGORIES = [
@@ -64,6 +64,23 @@ export const dataService = {
     } catch (error) {
       console.error('Error fetching product:', error);
       return undefined;
+    }
+  },
+
+  // Get ONLY visible products (Public - no auth required)
+  async getVisibleProducts(): Promise<Product[]> {
+    try {
+      const response = await fetch(`${API_URL}/products`);
+      if (!response.ok) {
+        console.error('Error fetching visible products:', response.statusText);
+        return [];
+      }
+
+      const products = await response.json();
+      return products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
+    } catch (error) {
+      console.error('Error fetching visible products:', error);
+      return [];
     }
   },
 

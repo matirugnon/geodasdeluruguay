@@ -9,8 +9,8 @@ export const Home: React.FC = () => {
 
   useEffect(() => {
     const load = async () => {
-      const allProducts = await dataService.getProducts();
-      setFeatured(allProducts.filter(p => p.visible).slice(0, 3)); // New design shows 3 columns
+      const allProducts = await dataService.getVisibleProducts();
+      setFeatured(allProducts.slice(0, 3)); // New design shows 3 columns
       
       const allTips = await dataService.getTips();
       setTips(allTips.slice(0, 2)); // New design shows 2 columns
