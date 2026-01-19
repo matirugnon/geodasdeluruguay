@@ -22,4 +22,34 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables (CRITICAL - NEVER COMMIT)
 .env
+.env.local
+.env.production
+.env.development
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Database dumps
+*.sql
+*.dump
+*.backup
+
+# Sensitive files
+config/secrets.js
+**/secrets.json
+**/*-secret.*
+**/*.pem
+**/*.key
+
+# Build outputs
+build/
+.next/
+out/
+
+# Dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

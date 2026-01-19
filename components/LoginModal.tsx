@@ -23,25 +23,64 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       e.preventDefault();
       setError('');
 
+      // Sanitización básica de inputs
+      const sanitizedUsername = username.trim();
+      const sanitizedPassword = password.trim();
+
+      // Validación de inputs
+      if (!sanitizedUsername || !sanitizedPassword) {
+         setError('Por favor complete todos los campos');
+         return;
+      }
+
+      if (sanitizedUsername.length < 3 || sanitizedUsername.length > 50) {
+         setError('Usuario inválido');
+         return;
+      }
+
+      if (sanitizedPassword.length < 6) {
+         setError('Contraseña demasiado corta');
+         return;
+      }
+
+      // Prevenir caracteres especiales que podrían usarse en inyección
+      if (!/^[a-zA-Z0-9_-]+$/.test(sanitizedUsername)) {
+         setError('Usuario contiene caracteres no permitidos');
+         return;
+      }
+
       try {
          const response = await fetch(`${API_URL}/admin/login`, {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            credentials: 'include', // Importante: permite enviar/recibir cookies
+            body: JSON.stringify({ 
+               username: sanitizedUsername, 
+               password: sanitizedPassword 
+            })
          });
 
          if (response.ok) {
             const data = await response.json();
-            // Guardar el token JWT real en localStorage
-            localStorage.setItem('geodas_auth', data.token);
+            
+            // Ya no guardamos el token - está en una HttpOnly cookie
+            // Simplemente redirigimos
             onClose();
             navigate('/admin');
             window.location.reload(); // Ensure admin state updates globally
          } else {
             const errorData = await response.json();
-            setError(errorData.message || 'Credenciales incorrectas');
+            
+            // Manejar diferentes códigos de error
+            if (response.status === 429) {
+               setError('Demasiados intentos. Por favor espere 15 minutos.');
+            } else if (response.status === 400) {
+               setError('Datos inválidos');
+            } else {
+               setError(errorData.message || 'Credenciales incorrectas');
+            }
          }
       } catch (error) {
          console.error('Error en login:', error);

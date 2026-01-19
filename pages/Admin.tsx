@@ -26,11 +26,15 @@ export const Admin: React.FC = () => {
     };
 
     useEffect(() => {
-        if (dataService.isAdmin()) {
-            setIsAuth(true);
-            loadProducts();
-            loadTips();
-        }
+        const checkAuth = async () => {
+            const authenticated = await dataService.isAdmin();
+            if (authenticated) {
+                setIsAuth(true);
+                loadProducts();
+                loadTips();
+            }
+        };
+        checkAuth();
     }, []);
 
     const loadProducts = async () => {

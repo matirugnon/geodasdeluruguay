@@ -11,7 +11,11 @@ export const TipDetail: React.FC = () => {
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        setIsAdmin(dataService.isAdmin());
+        const checkAuth = async () => {
+            const authenticated = await dataService.isAdmin();
+            setIsAdmin(authenticated);
+        };
+        checkAuth();
     }, []);
 
     useEffect(() => {

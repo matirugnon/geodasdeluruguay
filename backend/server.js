@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 
 // Routes
@@ -16,17 +17,31 @@ const PORT = process.env.PORT || 5000;
 // Connect to Database
 connectDB();
 
+// Security: Headers de seguridad
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    next();
+});
+
 // Middleware
 const allowedOrigins = [
     'http://localhost:3000',
-    'https://geodasdeluruguay.vercel.app',
-    process.env.FRONTEND_URL
-].filter(Boolean);
+    'http://localhost:3001',
+    'https://geodasdeluruguay.vercel.app'
+];
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // Permitir peticiones sin origin (como Postman) o desde orígenes permitidos
-        if (!origin || allowedOrigins.some(allowed => origin.startsWith(allowed.replace(/\/$/, '')))) {
+        // Permitir peticiones sin origin (como Postman) en desarrollo
+        if (!origin && process.env.NODE_ENV !== 'production') {
+            return callback(null, true);
+        }
+        
+        // Validar que el origin esté exactamente en la lista
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -38,6 +53,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.json());
 
 const path = require('path');

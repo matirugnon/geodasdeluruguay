@@ -13,19 +13,18 @@ export const PRODUCT_CATEGORIES = [
   'Otros Accesorios'
 ];
 
-// Helper to get auth token
-const getAuthToken = () => localStorage.getItem('geodas_auth');
-
-// Helper to make authenticated requests
+// Helper to make authenticated requests (las cookies se envían automáticamente)
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-  const token = getAuthToken();
   const headers = {
     'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` }),
     ...options.headers
   };
 
-  return fetch(url, { ...options, headers });
+  return fetch(url, { 
+    ...options, 
+    headers,
+    credentials: 'include' // Importante: envía cookies automáticamente
+  });
 };
 
 export const dataService = {
@@ -35,9 +34,7 @@ export const dataService = {
   async getProducts(): Promise<Product[]> {
     try {
       const response = await fetch(`${API_URL}/products/admin`, {
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
-        }
+        credentials: 'include' // Env\u00eda cookies autom\u00e1ticamente
       });
 
       if (!response.ok) {
@@ -261,20 +258,21 @@ export const dataService = {
 
   // --- Auth (Admin) ---
 
-  isAdmin(): boolean {
-    const token = getAuthToken();
-    if (!token) return false;
+  async isAdmin(): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_URL}/admin/verify`, {
+        credentials: 'include' // Envía la cookie automáticamente
+      });
 
-    // Check for valid JWT structure (3 parts separated by dots)
-    const isJWT = token.split('.').length === 3;
-
-    if (!isJWT && (token === 'true' || token !== '')) {
-      console.warn('Legacy or invalid token detected, clearing...');
-      this.logout();
+      if (response.ok) {
+        const data = await response.json();
+        return data.authenticated === true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error verifying authentication:', error);
       return false;
     }
-
-    return isJWT;
   },
 
   login(password: string): boolean {
@@ -283,9 +281,20 @@ export const dataService = {
     return false;
   },
 
-  logout(): void {
+  async logout(): Promise<void> {
+    try {
+      // Llamar al servidor para limpiar la cookie
+      await fetch(`${API_URL}/admin/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+    
+    // Limpiar cualquier dato legacy de localStorage
     localStorage.removeItem('geodas_auth');
-    localStorage.removeItem('isStaff'); // Limpiar banners legacy
+    localStorage.removeItem('isStaff');
     localStorage.removeItem('isAdmin');
   }
 };
