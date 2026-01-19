@@ -8,6 +8,7 @@ export const Navbar: React.FC = () => {
   const [results, setResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -150,16 +151,71 @@ export const Navbar: React.FC = () => {
                <span className="material-symbols-outlined">settings</span>
              </Link>
               */}
-             <button className={`p-2 transition-colors rounded-full ${
+             <button className={`hidden md:block p-2 transition-colors rounded-full ${
                isScrolled 
                  ? 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800' 
                  : 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
              }`}>
                <span className="material-symbols-outlined">shopping_bag</span>
              </button>
+
+             {/* Mobile Menu Button */}
+             <button 
+               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+               className={`md:hidden p-2 transition-colors rounded-full ${
+                 isScrolled 
+                   ? 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800' 
+                   : 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+               }`}
+             >
+               <span className="material-symbols-outlined">
+                 {mobileMenuOpen ? 'close' : 'menu'}
+               </span>
+             </button>
           </div>
 
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden py-4 border-t border-stone-200/50 dark:border-stone-800/50">
+            <nav className="flex flex-col gap-4">
+              <Link 
+                to="/" 
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-base font-serif font-medium transition-colors px-4 py-2 rounded-lg ${
+                  isScrolled 
+                    ? 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800' 
+                    : 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                }`}
+              >
+                Inicio
+              </Link>
+              <Link 
+                to="/tienda" 
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-base font-serif font-medium transition-colors px-4 py-2 rounded-lg ${
+                  isScrolled 
+                    ? 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800' 
+                    : 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                }`}
+              >
+                Tienda
+              </Link>
+              <Link 
+                to="/tips" 
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-base font-serif font-medium transition-colors px-4 py-2 rounded-lg ${
+                  isScrolled 
+                    ? 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800' 
+                    : 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                }`}
+              >
+                Tips
+              </Link>
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   );
