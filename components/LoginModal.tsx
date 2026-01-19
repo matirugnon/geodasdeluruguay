@@ -75,11 +75,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             console.log('✅ Saving token to localStorage...');
             // Guardar token en localStorage
             localStorage.setItem('geodas_auth', data.token);
-            console.log('✅ Token saved. Redirecting...');
+            console.log('✅ Token saved:', localStorage.getItem('geodas_auth') ? 'SUCCESS' : 'FAILED');
             
+            // Cerrar modal primero
             onClose();
-            navigate('/admin');
-            window.location.reload();
+            
+            // Pequeño delay para asegurar que el token se guardó
+            setTimeout(() => {
+               console.log('✅ Navigating to /admin...');
+               navigate('/admin');
+               // Force re-render - React Router manejará el cambio
+               window.location.href = '/#/admin';
+            }, 100);
          } else {
             const errorData = await response.json();
             
