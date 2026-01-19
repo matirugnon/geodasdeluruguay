@@ -55,7 +55,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             headers: {
                'Content-Type': 'application/json'
             },
-            credentials: 'include', // Importante: permite enviar/recibir cookies
             body: JSON.stringify({ 
                username: sanitizedUsername, 
                password: sanitizedPassword 
@@ -65,11 +64,17 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
          if (response.ok) {
             const data = await response.json();
             
-            // Ya no guardamos el token - está en una HttpOnly cookie
-            // Simplemente redirigimos
+            // Validar token antes de guardar
+            if (!data.token || data.token.split('.').length !== 3) {
+               setError('Error: Token inválido recibido');
+               return;
+            }
+
+            // Guardar token en localStorage
+            localStorage.setItem('geodas_auth', data.token);
             onClose();
             navigate('/admin');
-            window.location.reload(); // Ensure admin state updates globally
+            window.location.reload();
          } else {
             const errorData = await response.json();
             
