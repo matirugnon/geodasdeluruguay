@@ -22,7 +22,7 @@ export const Home: React.FC = () => {
     <main className="flex-grow">
       {/* Hero - Fullscreen */}
       <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuvaexz6cWFeoEIiXrrxl3Vf5fSz09A5H_FY55F6YX6F0WO_MBIOZSN26HHID4lM-Tq5stQChs5dOI3eTXAfY90_3KJJO1BVhQm9l0iYJdviHPb0Q1B9w9PVA6ziKm9FnJFGHLBqmqjkqm7XjKupK_i9tiuvhsp3Krmk2iy-74Y4C3mkAB1B2Vfwtyx7u66iplwTxV_6BB-d7TzFi2Yp-fEgnSJFER4m8VtQGQXBsSIYRWVX6LOhWz4Ed8OXp3fyxElgRcuI7iOwjm")'}}>
+        <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url("https://images.pexels.com/photos/1121123/pexels-photo-1121123.jpeg")'}}>
            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/40 to-transparent"></div>
         </div>
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
