@@ -33,8 +33,7 @@ const rateLimiter = (req, res, next) => {
 // @desc    Auth user & get token
 // @route   POST /api/admin/login
 // @access  Public
-// TEMP: Rate limiter deshabilitado para debugging
-router.post('/login', /* rateLimiter, */ async (req, res) => {
+router.post('/login', rateLimiter, async (req, res) => {
     const { username, password } = req.body;
 
     // Validación de entrada
