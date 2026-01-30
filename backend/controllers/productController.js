@@ -2,18 +2,18 @@ const Product = require('../models/Product');
 
 // @desc    Fetch all visible products (Public)
 // @route   GET /api/products
+// @route   GET /api/products?category=collares
 const getProducts = async (req, res) => {
     try {
-        const keyword = req.query.keyword
-            ? {
-                title: {
-                    $regex: req.query.keyword,
-                    $options: 'i',
-                },
-            }
-            : {};
-
-        const products = await Product.find({ ...keyword, visible: true });
+        // Construir filtros dinámicos
+        const filters = { visible: true };
+        
+        // Si hay categoría en query params, agregarla al filtro
+        if (req.query.category) {
+            filters.category = req.query.category;
+        }
+        
+        const products = await Product.find(filters);
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
