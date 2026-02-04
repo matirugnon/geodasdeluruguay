@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geodas del Uruguay</title>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dt5wnzvdg/image/upload/v1768794504/crystals_hxvbmq.png" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // Home / Global Gold Theme
+                        "primary": "#c5a059", 
+                        "primary-dark": "#b08d4b",
+                        "background-light": "#fafaf9", 
+                        "background-dark": "#1c1917", 
+                        "stone-dark": "#292524",
+                        "dried-green": "#7c8057",
+
+                        // Tips / Mystic Journal Theme
+                        "olive": {
+                            DEFAULT: '#556B2F',
+                            light: '#768d4d',
+                            dark: '#3b4d1e',
+                        },
+                        "gold": {
+                            DEFAULT: '#C5A059',
+                            dim: '#a38346',
+                        },
+                        "paper": '#fdfbf7',
+
+                        // Product Detail Green Theme
+                        "primary-green": "#93d411",
+                        "olive-dark": "#3f4a2c",
+                        "olive-light": "#7c8961",
+                        "amethyst-light": "#f4effa",
+                        "amethyst-border": "#e0d6e8",
+                        "amethyst-text": "#5e4b75",
+                        "product-bg-light": "#f7f8f6",
+                        "product-bg-dark": "#1c2210",
+
+                        // Admin Theme
+                        "admin-primary": "#a4d411", 
+                        "admin-primary-dark": "#8cb60e",
+                        "admin-olive": "#4a5d23",
+                        "text-main": "#161811",
+                        "text-secondary": "#5c6645",
+
+                        // Shop / Stitch Theme Colors
+                        "accent-stone": "#57534e",
+                        "soft-stone": "#e7e5e4",
+                        "text-main-light": "#161811",
+                        "text-main-dark": "#f3f4f0",
+                        "text-secondary-light": "#7c8961",
+                        "text-secondary-dark": "#aab396",
+                        "surface-light": "#f3f4f0",
+                        "surface-dark": "#2c3320",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                        "sans": ["Work Sans", "Manrope", "sans-serif"],
+                        "newsreader": ["Newsreader", "serif"],
+                        "noto-sans": ["Noto Sans", "sans-serif"],
+                        "noto-serif": ["Noto Serif", "serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem", 
+                        "xl": "1.5rem", 
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'paper-texture': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
+                    }
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .bg-pattern {
+            background-color: #fafaf9;
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC9iKrOV4KRp9PnCpj136EXPMs5QmHH5R9fs28ZatkHd7yYiZI66lMtfxWFhSUn9Xk_Bp7DGP_HmpZeVC04kUowdJQGo-7dEI810o3d3cr89FfZvNm6KA_WuF5NrD3V13peO2D0oOhceeA6X_ffEBsB91mQDTBpBg0mWVkzJoBaM9ZUswdcM58I-SJmaFOIdF6AASv2r3wWtoKNJbdzqjbr9a0wX-ANQOdBIx-IAJPF4R6EXm1WvQH2hgSwedlKR-yghB1W9M_NB3sa)
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Tips Page Custom Shapes */
+        .blob-shape-1 { border-radius: 64% 36% 24% 76%/59% 34% 66% 41% }
+        .blob-shape-2 { border-radius: 35% 65% 68% 32%/45% 73% 27% 55% }
+        .blob-shape-3 { border-radius: 71% 29% 31% 69%/37% 65% 35% 63% }
+        .texture-overlay {
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBvfIYrrpM65_Hld1IZ7d9NCsTH3KepULPD3DfmKG1sV_f9Aic4CpOLCsQu95vz98TJxC9DpXuD4BGXS0LpYDTBkcmEVvpEGRxe9cjf0rst6MZL4IXVoGSAzGe7J2szNGXXAq9JP0VLC4UexLh2ClfdsiWKTP8cybG9bvV2EigIfRG17ndujQLVQvm5u7blFW-GfgBmM1MzpjA9cF-Viwl6rTHfytFM1k8tzc3f2MfBWc-3F6bQxoWaEW224UPfdOJtTOWz6QtVmNBW)
+        }
+    </style>
+    <script type="importmap">
+    {
+      "imports": {
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3",
+        "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0"
+      }
+    }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-stone-800 dark:text-stone-100 overflow-x-hidden flex flex-col min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+</body>
+</html>
