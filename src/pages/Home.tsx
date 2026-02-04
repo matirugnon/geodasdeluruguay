@@ -22,28 +22,24 @@ export const Home: React.FC = () => {
     <main className="flex-grow">
       {/* Hero - Fullscreen */}
       <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url("https://images.pexels.com/photos/1121123/pexels-photo-1121123.jpeg")'}}>
-           <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/40 to-transparent"></div>
+        <div className="absolute inset-0">
+          <img 
+            alt="Deep Purple Amethyst Crystal Texture" 
+            className="w-full h-full object-cover brightness-75" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZBa8edQuZxUp2odcdtkXgs7l0AbbparbCnrwGK-tEuvS7DQ2pePzXbYEH4f5Oqarng-hUGVKb4k8TeaT0MbhQlvKmgcEO2dh3qBR73JXlo1aUx78zRsrGsW-0wYNRyfnjKy2rWSAyumvPRChylIEvscNkY7v866hkqgyinfS4tNHqAM8iPxC371ztHym_zzTpwPS6OOeusL8s6C2VUwwcJFpWJXpOGfV4y4sjNY5W3tIqxyMAXcd37Qq5n-KcFQnO6MTpWYJCz1Y-"
+          />
         </div>
-        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-tight drop-shadow-md leading-tight">
-                Conecta con la <br className="hidden sm:block"/><span className="italic text-primary">energía</span> de la tierra
-            </h1>
-            <p className="text-stone-200 text-base sm:text-lg md:text-xl lg:text-2xl font-medium max-w-3xl mx-auto mb-8 sm:mb-10 leading-relaxed px-4">
-                Descubre la magia y el misticismo de los cristales uruguayos seleccionados a mano.
-            </p>
-            <Link to="/tienda" className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-white transition-all duration-200 bg-primary rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-lg shadow-primary/30 transform hover:-translate-y-1">
-                Explorar Colección
-                <span className="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform text-sm sm:text-base">arrow_forward</span>
-            </Link>
-        </div>
-        
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce hidden md:block">
-          <div className="flex flex-col items-center gap-2 text-white/70">
-            <span className="text-xs uppercase tracking-wider">Scroll</span>
-            <span className="material-symbols-outlined text-2xl">keyboard_arrow_down</span>
-          </div>
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+          <h2 className="font-serif text-[1.85rem] sm:text-4xl font-light text-white leading-[1.4] drop-shadow-xl mb-12 max-w-xl mx-auto" style={{wordSpacing: '0.25em', letterSpacing: '0.05em'}}>
+            Cristales uruguayos<br/>
+            seleccionados en piezas únicas
+          </h2>
+          <Link 
+            to="/tienda" 
+            className="font-serif px-10 py-4 border border-white text-white text-[10px] tracking-[0.3em] uppercase font-semibold transition-all hover:bg-white hover:text-stone-dark bg-black/10 backdrop-blur-sm"
+          >
+            VER COLECCIÓN
+          </Link>
         </div>
       </section>
 
