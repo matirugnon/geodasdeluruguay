@@ -10,6 +10,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const tipRoutes = require('./routes/tipRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -43,13 +44,13 @@ const corsOptions = {
     origin: function (origin, callback) {
         // Log para debugging en producción
         console.log('CORS request from origin:', origin);
-        
+
         // Permitir peticiones sin origin (como Postman, health checks de Render)
         if (!origin) {
             console.log('No origin header - allowing (health checks, same-origin)');
             return callback(null, true);
         }
-        
+
         // Validar que el origin esté exactamente en la lista
         if (allowedOrigins.includes(origin)) {
             console.log('Origin allowed:', origin);
@@ -85,7 +86,7 @@ const path = require('path');
 
 // Root route
 app.get('/', (req, res) => {
-    res.json({ 
+    res.json({
         message: 'Geodas del Uruguay API',
         status: 'running',
         endpoints: {
@@ -104,6 +105,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/tips', tipRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/payments', paymentRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 

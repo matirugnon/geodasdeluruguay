@@ -14,13 +14,6 @@ interface ShippingForm {
     codigoPostal: string;
 }
 
-interface PaymentForm {
-    cardNumber: string;
-    expiry: string;
-    cvv: string;
-    nameOnCard: string;
-}
-
 type CheckoutStep = 'shipping' | 'payment' | 'success';
 
 type FormErrors<T> = Partial<Record<keyof T, string>>;
@@ -33,19 +26,7 @@ function generateOrderId(): string {
     return 'GDU-' + Math.random().toString(36).toUpperCase().slice(2, 8);
 }
 
-function formatCardNumber(value: string): string {
-    return value
-        .replace(/\D/g, '')
-        .slice(0, 16)
-        .replace(/(.{4})/g, '$1 ')
-        .trim();
-}
 
-function formatExpiry(value: string): string {
-    const digits = value.replace(/\D/g, '').slice(0, 4);
-    if (digits.length > 2) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-    return digits;
-}
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
@@ -60,14 +41,7 @@ function validateShipping(form: ShippingForm): FormErrors<ShippingForm> {
     return errors;
 }
 
-function validatePayment(form: PaymentForm): FormErrors<PaymentForm> {
-    const errors: FormErrors<PaymentForm> = {};
-    if (form.cardNumber.replace(/\s/g, '').length < 16) errors.cardNumber = 'Número de tarjeta inválido.';
-    if (!/^\d{2}\/\d{2}$/.test(form.expiry)) errors.expiry = 'Formato: MM/AA';
-    if (form.cvv.replace(/\D/g, '').length < 3) errors.cvv = 'CVV inválido.';
-    if (!form.nameOnCard.trim()) errors.nameOnCard = 'El nombre es requerido.';
-    return errors;
-}
+
 
 // ─── Field Component ──────────────────────────────────────────────────────────
 
@@ -127,13 +101,19 @@ export const Checkout: React.FC = () => {
     });
     const [shippingErrors, setShippingErrors] = useState<FormErrors<ShippingForm>>({});
 
-    const [payment, setPayment] = useState<PaymentForm>({
-        cardNumber: '', expiry: '', cvv: '', nameOnCard: '',
-    });
-    const [paymentErrors, setPaymentErrors] = useState<FormErrors<PaymentForm>>({});
+    // Parse once for early return check
+    const isSuccessCallback = new URLSearchParams(window.location.search).get('status') === 'success';
+
+    React.useEffect(() => {
+        if (isSuccessCallback) {
+            clearCart();
+            setStep('success');
+            window.history.replaceState({}, document.title, '/checkout');
+        }
+    }, [isSuccessCallback, clearCart]);
 
     // Redirect if cart is empty (and not on success screen)
-    if (items.length === 0 && step !== 'success') {
+    if (items.length === 0 && step !== 'success' && !isSuccessCallback) {
         return (
             <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 gap-6">
                 <span className="material-symbols-outlined text-6xl text-stone-200 dark:text-stone-700">shopping_bag</span>
@@ -160,18 +140,34 @@ export const Checkout: React.FC = () => {
 
     const handlePaymentSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const errors = validatePayment(payment);
-        if (Object.keys(errors).length > 0) { setPaymentErrors(errors); return; }
-        setPaymentErrors({});
         setProcessing(true);
 
-        // Simulate payment processing
-        await new Promise(r => setTimeout(r, 2200));
+        try {
+            const response = await fetch('/api/payments/create-preference', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    items,
+                    shipping,
+                    total: finalTotal
+                }),
+            });
 
-        setProcessing(false);
-        clearCart();
-        setStep('success');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (!response.ok) {
+                throw new Error('Error al crear preferencia');
+            }
+
+            const data = await response.json();
+
+            // Redirect to Mercado Pago
+            window.location.href = data.init_point;
+        } catch (error) {
+            console.error(error);
+            alert("Hubo un error al intentar conectarse de forma segura con Mercado Pago. Intentá de nuevo más tarde.");
+            setProcessing(false);
+        }
     };
 
     // ── Success screen ────────────────────────────────────────────────────────
@@ -279,74 +275,22 @@ export const Checkout: React.FC = () => {
                             </form>
                         )}
 
-                        {/* ── STEP 2: Payment (Mock) ─────────────────────────────────── */}
+                        {/* ── STEP 2: Payment (Mercado Pago redirect) ─────────────────── */}
                         {step === 'payment' && (
                             <form onSubmit={handlePaymentSubmit} noValidate className="flex flex-col gap-6">
                                 <div>
-                                    <h2 className="text-2xl font-bold font-serif text-stone-900 dark:text-white mb-1">Datos de pago</h2>
+                                    <h2 className="text-2xl font-bold font-serif text-stone-900 dark:text-white mb-1">Pago seguro</h2>
                                     <p className="text-xs text-stone-400 dark:text-stone-500 flex items-center gap-1">
-                                        <span className="material-symbols-outlined !text-[14px]">info</span>
-                                        Entorno de demostración — ningún cargo real será procesado.
+                                        Serás redirigido a la plataforma segura de Mercado Pago.
                                     </p>
                                 </div>
 
-                                {/* Mock card preview */}
-                                <div className="relative w-full h-44 rounded-2xl overflow-hidden shadow-xl"
-                                    style={{ background: 'linear-gradient(135deg, #c5a059 0%, #8a6d35 60%, #5c4820 100%)' }}>
-                                    <div className="absolute inset-0 opacity-10"
-                                        style={{ backgroundImage: 'url(https://www.transparenttextures.com/patterns/diamond-upholstery.png)' }} />
-                                    <div className="absolute top-5 left-6">
-                                        <span className="material-symbols-outlined text-white/60 text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>diamond</span>
+                                <div className="p-8 border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/50 rounded-2xl flex flex-col items-center justify-center text-center gap-4">
+                                    <div className="flex gap-2 text-stone-300 dark:text-stone-600">
+                                        <span className="material-symbols-outlined text-4xl">lock</span>
+                                        <span className="material-symbols-outlined text-4xl">account_balance</span>
                                     </div>
-                                    <div className="absolute bottom-6 left-6 right-6">
-                                        <p className="text-white/90 text-xl font-mono font-bold tracking-[0.18em] mb-3">
-                                            {payment.cardNumber || '•••• •••• •••• ••••'}
-                                        </p>
-                                        <div className="flex justify-between items-end">
-                                            <p className="text-white/70 text-xs uppercase tracking-wider">
-                                                {payment.nameOnCard || 'NOMBRE EN TARJETA'}
-                                            </p>
-                                            <p className="text-white/70 text-xs font-mono">{payment.expiry || 'MM/AA'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="sm:col-span-2">
-                                        <Field
-                                            label="Número de tarjeta"
-                                            value={payment.cardNumber}
-                                            onChange={v => setPayment(p => ({ ...p, cardNumber: formatCardNumber(v) }))}
-                                            error={paymentErrors.cardNumber}
-                                            placeholder="1234 5678 9012 3456"
-                                            maxLength={19}
-                                        />
-                                    </div>
-                                    <Field
-                                        label="Nombre en tarjeta"
-                                        value={payment.nameOnCard}
-                                        onChange={v => setPayment(p => ({ ...p, nameOnCard: v.toUpperCase() }))}
-                                        error={paymentErrors.nameOnCard}
-                                        placeholder="MARIA GARCIA"
-                                    />
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <Field
-                                            label="Vencimiento"
-                                            value={payment.expiry}
-                                            onChange={v => setPayment(p => ({ ...p, expiry: formatExpiry(v) }))}
-                                            error={paymentErrors.expiry}
-                                            placeholder="MM/AA"
-                                            maxLength={5}
-                                        />
-                                        <Field
-                                            label="CVV"
-                                            value={payment.cvv}
-                                            onChange={v => setPayment(p => ({ ...p, cvv: v.replace(/\D/g, '').slice(0, 4) }))}
-                                            error={paymentErrors.cvv}
-                                            placeholder="•••"
-                                            maxLength={4}
-                                        />
-                                    </div>
+                                    <p className="text-sm text-stone-500 dark:text-stone-400">Paga de forma rápida y segura a través de Mercado Pago sin dejarnos los datos de tus tarjetas.</p>
                                 </div>
 
                                 {/* Pay button */}
@@ -358,12 +302,12 @@ export const Checkout: React.FC = () => {
                                     {processing ? (
                                         <>
                                             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                            Procesando...
+                                            Redirigiendo a pasarela segura...
                                         </>
                                     ) : (
                                         <>
                                             <span className="material-symbols-outlined !text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
-                                            Pagar $ {finalTotal.toLocaleString('es-UY')}
+                                            Pagar con Mercado Pago
                                         </>
                                     )}
                                 </button>
