@@ -1,0 +1,125 @@
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { CartItem, Product } from '../types';
+
+// ─── State & Actions ──────────────────────────────────────────────────────────
+
+interface CartState {
+    items: CartItem[];
+    isOpen: boolean;
+}
+
+type CartAction =
+    | { type: 'ADD_ITEM'; payload: Product }
+    | { type: 'REMOVE_ITEM'; payload: string }
+    | { type: 'UPDATE_QTY'; payload: { id: string; qty: number } }
+    | { type: 'CLEAR_CART' }
+    | { type: 'OPEN_CART' }
+    | { type: 'CLOSE_CART' };
+
+function cartReducer(state: CartState, action: CartAction): CartState {
+    switch (action.type) {
+        case 'ADD_ITEM': {
+            const existing = state.items.find(i => i.id === action.payload.id);
+            if (existing) {
+                return {
+                    ...state,
+                    items: state.items.map(i =>
+                        i.id === action.payload.id ? { ...i, quantity: i.quantity + 1 } : i
+                    ),
+                };
+            }
+            return {
+                ...state,
+                items: [...state.items, { ...action.payload, quantity: 1 }],
+            };
+        }
+        case 'REMOVE_ITEM':
+            return { ...state, items: state.items.filter(i => i.id !== action.payload) };
+        case 'UPDATE_QTY':
+            if (action.payload.qty <= 0) {
+                return { ...state, items: state.items.filter(i => i.id !== action.payload.id) };
+            }
+            return {
+                ...state,
+                items: state.items.map(i =>
+                    i.id === action.payload.id ? { ...i, quantity: action.payload.qty } : i
+                ),
+            };
+        case 'CLEAR_CART':
+            return { ...state, items: [] };
+        case 'OPEN_CART':
+            return { ...state, isOpen: true };
+        case 'CLOSE_CART':
+            return { ...state, isOpen: false };
+        default:
+            return state;
+    }
+}
+
+// ─── Context ──────────────────────────────────────────────────────────────────
+
+interface CartContextValue {
+    items: CartItem[];
+    isOpen: boolean;
+    itemCount: number;
+    subtotal: number;
+    addItem: (product: Product) => void;
+    removeItem: (id: string) => void;
+    updateQty: (id: string, qty: number) => void;
+    clearCart: () => void;
+    openCart: () => void;
+    closeCart: () => void;
+}
+
+const CartContext = createContext<CartContextValue | null>(null);
+
+const STORAGE_KEY = 'cart_geodas';
+
+function loadFromStorage(): CartItem[] {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    } catch {
+        return [];
+    }
+}
+
+// ─── Provider ─────────────────────────────────────────────────────────────────
+
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [state, dispatch] = useReducer(cartReducer, {
+        items: loadFromStorage(),
+        isOpen: false,
+    });
+
+    // Persist items to localStorage on every change
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
+    }, [state.items]);
+
+    const itemCount = state.items.reduce((sum, i) => sum + i.quantity, 0);
+    const subtotal = state.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    const value: CartContextValue = {
+        items: state.items,
+        isOpen: state.isOpen,
+        itemCount,
+        subtotal,
+        addItem: (product) => dispatch({ type: 'ADD_ITEM', payload: product }),
+        removeItem: (id) => dispatch({ type: 'REMOVE_ITEM', payload: id }),
+        updateQty: (id, qty) => dispatch({ type: 'UPDATE_QTY', payload: { id, qty } }),
+        clearCart: () => dispatch({ type: 'CLEAR_CART' }),
+        openCart: () => dispatch({ type: 'OPEN_CART' }),
+        closeCart: () => dispatch({ type: 'CLOSE_CART' }),
+    };
+
+    return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+};
+
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
+export function useCart(): CartContextValue {
+    const ctx = useContext(CartContext);
+    if (!ctx) throw new Error('useCart must be used inside a CartProvider');
+    return ctx;
+}

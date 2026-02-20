@@ -36,3 +36,7 @@ export interface SearchResult {
   price: number;
   type: 'product' | 'tip';
 }
+
+export interface CartItem extends Product {
+  quantity: number;
+}
