@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Product, Tip } from '../types';
+import { useCart } from '../context/CartContext';
 
 import { motion } from 'framer-motion';
 
 export const Home: React.FC = () => {
    const [featured, setFeatured] = useState<Product[]>([]);
    const [tips, setTips] = useState<Tip[]>([]);
+   const { addItem } = useCart();
 
    useEffect(() => {
       const load = async () => {
          const allProducts = await dataService.getVisibleProducts();
-         setFeatured(allProducts.slice(0, 3)); // New design shows 3 columns
+         setFeatured(allProducts.slice(0, 4)); // New design shows 4 columns for collection
 
          const allTips = await dataService.getTips();
          setTips(allTips.slice(0, 2)); // New design shows 2 columns
@@ -32,16 +34,16 @@ export const Home: React.FC = () => {
    return (
       <main className="flex-grow">
          {/* Hero Section - Replicating the provided image design */}
-         <section className="relative pt-20 pb-8 px-4 md:px-8 lg:px-12 h-screen min-h-[700px] flex items-center justify-center bg-[#F5F5F0]">
+         <section className="relative pt-20 h-screen min-h-[700px] flex items-center justify-center bg-[#F5F5F0]">
 
             <motion.div
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.8, ease: "easeOut" }}
-               className="relative w-full max-w-7xl bg-white shadow-xl overflow-hidden rounded-sm flex flex-col lg:flex-row h-[85vh] min-h-[500px]"
+               className="relative w-full h-[85vh] min-h-[500px] bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row"
             >
                {/* Left Content */}
-               <div className="flex-1 p-12 lg:p-24 flex flex-col justify-center relative z-10 bg-white">
+               <div className="flex-1 p-8 md:p-12 lg:p-24 flex flex-col justify-center relative z-10 bg-white">
                   <motion.h1
                      initial={{ opacity: 0, x: -20 }}
                      animate={{ opacity: 1, x: 0 }}
@@ -72,17 +74,17 @@ export const Home: React.FC = () => {
                      whileTap={{ scale: 0.95 }}
                      className="w-fit"
                   >
-                     <Link
-                        to="/tienda"
+                     <button
+                        onClick={scrollToShop}
                         className="inline-block px-8 py-3 border border-[#8C7E60] rounded-full text-[#8C7E60] text-sm tracking-widest hover:bg-[#8C7E60] hover:text-white transition-all duration-300 uppercase font-sans"
                      >
                         Ver Tienda
-                     </Link>
+                     </button>
                   </motion.div>
                </div>
 
                {/* Right Image Area */}
-               <div className="flex-1 relative h-[400px] lg:h-auto bg-white overflow-hidden">
+               <div className="hidden lg:block flex-1 relative h-[400px] lg:h-auto bg-white overflow-hidden">
                   {/* Gradient Overlay to blend image with white background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent z-10 w-1/3"></div>
 
@@ -102,6 +104,62 @@ export const Home: React.FC = () => {
             </motion.div>
          </section>
 
+         {/* Nuestra Colección (Shop Section) */}
+         <section id="shop" className="py-24 px-6 md:px-12 max-w-[1280px] mx-auto">
+            <div className="text-center mb-16">
+               <h2 className="font-serif text-4xl md:text-5xl text-[#8C7E60] mb-4">Nuestra Colección</h2>
+               <div className="w-16 h-[1px] bg-[#D4C4A8] mx-auto"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+               {featured.length === 0 ? (
+                  <div className="col-span-1 md:col-span-2 lg:col-span-4 text-center text-[#8C8C8C]">Cargando colección...</div>
+               ) : (
+                  featured.map((product) => (
+                     <motion.div
+                        key={product.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="group cursor-pointer flex flex-col"
+                     >
+                        <div className="relative aspect-[3/4] overflow-hidden bg-white mb-4 rounded-sm shadow-sm hover:shadow-md transition-shadow">
+                           <Link to={`/producto/${product.id}`}>
+                              <img
+                                 src={product.images[0]}
+                                 alt={product.title}
+                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                              />
+                           </Link>
+                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none"></div>
+                           <button
+                              onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 addItem(product);
+                              }}
+                              className="absolute bottom-4 right-4 bg-white/90 p-3 rounded-full shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#8C7E60] hover:text-white flex items-center justify-center z-10"
+                           >
+                              <span className="material-symbols-outlined !text-[18px]">shopping_bag</span>
+                           </button>
+                        </div>
+                        <Link to={`/producto/${product.id}`} className="mt-auto">
+                           <h3 className="font-serif text-lg text-[#5A5243] mb-1 group-hover:text-[#8C7E60] transition-colors line-clamp-1">{product.title}</h3>
+                           <p className="text-[#8C8C8C] font-light">$ {product.price.toLocaleString('es-UY')}</p>
+                        </Link>
+                     </motion.div>
+                  ))
+               )}
+            </div>
+
+            <div className="mt-16 text-center">
+               <Link to="/tienda" className="inline-flex items-center gap-2 text-[#8C7E60] hover:text-[#5A5243] transition-colors border-b border-[#8C7E60] pb-1 uppercase text-sm tracking-widest font-sans">
+                  Ver todo el catálogo <span className="material-symbols-outlined !text-[16px]">arrow_forward</span>
+               </Link>
+            </div>
+         </section>
+
          {/* Categorías Destacadas - Nuevo diseño minimalista */}
          <section className="w-full py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-[#FDFBF7] dark:bg-[#1A1917] transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
@@ -114,15 +172,16 @@ export const Home: React.FC = () => {
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 items-end">
 
                   {/* Collares */}
-                  <div className="group flex flex-col items-center text-center">
-                     <div className="relative w-full aspect-[4/5] flex items-center justify-center mb-6 overflow-hidden">
+                  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="group flex flex-col items-center text-center">
+                     <div className="relative w-full aspect-square flex items-center justify-center mb-6 overflow-hidden">
+                        <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Collar de oro con colgante de geoda blanca"
-                           className="h-64 md:h-72 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
+                           className="w-48 h-48 md:w-56 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6_5Eph0A8KHNmuHLTSLlaqbtLBvFpLFPzR1jJM-XuobE-YBtuHT5puMTSm8qEgFtdst-PP6Cd02XI6c0MCdpKtTBUJJxlcNBY-WpTDnAfpPxjPdnD3dDqcSL7S-oOiNnIWMU9MkNsAUkymAFybCXKW3mm4qJIWFo2aL9lssKcOq4humv2fCuttKNlVc5JJT060OELWXBBESY0pK4ryFXpAjdV6KnIimSY4u70D-oXLenBsmMGV8OqPQSIXo6hF4lYM80rDbSipYs"
                         />
                      </div>
-                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60]">
+                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60] min-h-[3rem] flex items-center">
                         Collares
                      </h3>
                      <Link
@@ -131,18 +190,19 @@ export const Home: React.FC = () => {
                      >
                         Ver Categoría
                      </Link>
-                  </div>
+                  </motion.div>
 
                   {/* Anillos */}
-                  <div className="group flex flex-col items-center text-center">
-                     <div className="relative w-full aspect-[4/5] flex items-center justify-center mb-6 overflow-hidden">
+                  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="group flex flex-col items-center text-center">
+                     <div className="relative w-full aspect-square flex items-center justify-center mb-6 overflow-hidden">
+                        <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Anillo de oro con amatista rugosa"
-                           className="h-48 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
+                           className="w-48 h-48 md:w-56 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnSMhRgCqhmDYFYh3ESceU8A3AdIRHeEFxc5Abqrd13ZiRDfE0RwPi4kMH9Cq35BMXlejc0paIe1P0bOCL_Q8iOJHkmE8c29ymDelXBJAM1mlEi5U31f68lWmpAO3JI3Kh5T79kKJ6tCutDU1lYM1JQi7638TtmSC5Qcz_6VSJNAUtZGDHWWPScQ-vEaIB1E9LkCFckr_2eQPWwQNF1i1-clgxTMg0UqwSAD58nsdl89SLwtkOdr4QzAW4bKVmRFf45NKDW7BUNpQ"
                         />
                      </div>
-                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60]">
+                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60] min-h-[3rem] flex items-center">
                         Anillos
                      </h3>
                      <Link
@@ -151,18 +211,19 @@ export const Home: React.FC = () => {
                      >
                         Ver Categoría
                      </Link>
-                  </div>
+                  </motion.div>
 
                   {/* Brazaletes */}
-                  <div className="group flex flex-col items-center text-center">
-                     <div className="relative w-full aspect-[4/5] flex items-center justify-center mb-6 overflow-hidden">
+                  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="group flex flex-col items-center text-center">
+                     <div className="relative w-full aspect-square flex items-center justify-center mb-6 overflow-hidden">
+                        <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Brazalete ancho de oro con piedra blanca"
-                           className="h-40 md:h-48 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
+                           className="w-48 h-48 md:w-56 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTaeVS6A1XDK8iUsulRqkPQFnZu65sRdzX-ICjYuUEU7_iWUo4GTfPI9u2m3p6B7sKA4iO51NyEQLar7ZtkFFv6SKUUweyOL_cbdkphian9iMmBGWzeqw01_5823q4hgX4Cac3TyH9xazEv9f-NwtsJSeFxruHCY5U8hYPknpnMRMiKQ_1_r7oUfAsLFRnIdXZw6-vdQpODgS02RKo40ou961Zoua6MMjor51oPwQcejCODG2vlgC4fJmxfg28o5qWo5-IT5zywHM"
                         />
                      </div>
-                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60]">
+                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60] min-h-[3rem] flex items-center">
                         Brazaletes
                      </h3>
                      <Link
@@ -171,18 +232,19 @@ export const Home: React.FC = () => {
                      >
                         Ver Categoría
                      </Link>
-                  </div>
+                  </motion.div>
 
                   {/* Piedras Naturales */}
-                  <div className="group flex flex-col items-center text-center">
-                     <div className="relative w-full aspect-[4/5] flex items-center justify-center mb-6 overflow-hidden">
+                  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="group flex flex-col items-center text-center">
+                     <div className="relative w-full aspect-square flex items-center justify-center mb-6 overflow-hidden">
+                        <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Geoda de amatista púrpura natural"
-                           className="h-56 md:h-64 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
+                           className="w-48 h-48 md:w-56 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuApabR_HinlbryjIg1XoxoeJHVH2D4L6McnZ0DsOlrzjewK8OhbOjLvPkhHgGzhaET_8d9zsb4cPIfOK_MHKMMm7Qv5g_iPeo0vGXBg97-BYfO3geC1JsRv2Sqf7m-I2BkS_-PEJ22rgJ1CQJIJElGNvDl7NKyW5t8WDQ4hPX-EReRCg3av6lhQeI2rD3KR3xXeEqaefBK7PcJ28OeqesrOBd9E6__Cd5dz5xs-KXwXErs14uAGam3lDJ9SWmnFjEQHSd8i-SYXZBk"
                         />
                      </div>
-                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60] max-w-[200px] leading-tight">
+                     <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60] min-h-[3rem] flex items-center">
                         Piedras Naturales
                      </h3>
                      <Link
@@ -191,44 +253,11 @@ export const Home: React.FC = () => {
                      >
                         Ver Categoría
                      </Link>
-                  </div>
+                  </motion.div>
 
                </div>
             </div>
             <div className="w-full h-1 mt-16 bg-gradient-to-r from-transparent via-[#8C7E60]/20 to-transparent"></div>
-         </section>
-
-         {/* Featured - Tesoros de Artigas */}
-         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto border-t border-stone-200 dark:border-stone-800">
-            <div className="text-center mb-16">
-               <span className="text-primary font-bold text-sm tracking-widest uppercase mb-2 block">Selección del Mes</span>
-               <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Tesoros de Artigas</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-               {featured.length === 0 ? (
-                  <div className="col-span-3 text-center text-stone-500">Cargando tesoros...</div>
-               ) : (
-                  featured.map(product => (
-                     <div key={product.id} className="flex flex-col gap-5">
-                        <Link to={`/producto/${product.id}`}>
-                           <div className="relative aspect-[4/5] rounded-xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
-                              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url("${product.images[0]}")` }}></div>
-                              <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/0 transition-colors duration-300"></div>
-                           </div>
-                        </Link>
-                        <div className="text-center px-4">
-                           <Link to={`/producto/${product.id}`}>
-                              <h3 className="font-serif text-2xl font-bold text-stone-900 dark:text-white mb-1 hover:text-primary transition-colors">{product.title}</h3>
-                           </Link>
-                           <p className="text-stone-500 dark:text-stone-400 text-sm mb-5 font-medium capitalize">{product.category}</p>
-                           <Link to={`/producto/${product.id}`} className="inline-block w-full md:w-auto px-8 py-3 bg-dried-green hover:bg-stone-600 text-white font-bold rounded-lg transition-colors shadow-sm">
-                              Consultar
-                           </Link>
-                        </div>
-                     </div>
-                  ))
-               )}
-            </div>
          </section>
 
          {/* Blog & Knowledge */}

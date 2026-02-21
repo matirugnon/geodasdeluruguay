@@ -60,16 +60,15 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className={`${shouldBeTransparent ? 'fixed' : 'sticky'} top-0 z-50 w-full transition-all duration-500 ${shouldBeTransparent
-        ? 'bg-transparent border-b border-transparent'
-        : 'backdrop-blur-md bg-stone-100/90 dark:bg-stone-900/90 border-b border-stone-200/50 dark:border-stone-800/50 shadow-sm'
+      ? 'bg-transparent border-b border-transparent'
+      : 'backdrop-blur-md bg-stone-100/90 dark:bg-stone-900/90 border-b border-stone-200/50 dark:border-stone-800/50 shadow-sm'
       }`}>
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <span className={`material-symbols-outlined text-3xl transition-colors duration-300 ${shouldBeTransparent ? 'text-white drop-shadow-lg' : 'text-primary'
-              }`}>diamond</span>
+
             <span className={`text-xl font-serif font-bold tracking-tight transition-colors duration-300 ${shouldBeTransparent ? 'text-white drop-shadow-lg' : 'text-stone-900 dark:text-white'
               }`}>Geodas del Uruguay</span>
           </Link>
@@ -77,16 +76,16 @@ export const Navbar: React.FC = () => {
           {/* Desktop Nav */}
           <nav className="hidden md:flex gap-10">
             <Link to="/" className={`text-base font-serif font-medium transition-colors tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${shouldBeTransparent
-                ? 'text-white hover:text-primary drop-shadow-lg'
-                : 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary'
+              ? 'text-white hover:text-primary drop-shadow-lg'
+              : 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary'
               }`}>Inicio</Link>
             <Link to="/tienda" className={`text-base font-serif font-medium transition-colors tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${shouldBeTransparent
-                ? 'text-white hover:text-primary drop-shadow-lg'
-                : 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary'
+              ? 'text-white hover:text-primary drop-shadow-lg'
+              : 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary'
               }`}>Tienda</Link>
             <Link to="/tips" className={`text-base font-serif font-medium transition-colors tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${shouldBeTransparent
-                ? 'text-white hover:text-primary drop-shadow-lg'
-                : 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary'
+              ? 'text-white hover:text-primary drop-shadow-lg'
+              : 'text-stone-700 hover:text-primary dark:text-stone-300 dark:hover:text-primary'
               }`}>Tips</Link>
           </nav>
 
@@ -98,8 +97,8 @@ export const Navbar: React.FC = () => {
                 }`}>
                 <input
                   className={`w-0 group-hover:w-48 focus:w-48 transition-all duration-500 ease-out bg-transparent border-none focus:ring-0 p-0 pl-4 py-2 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer focus:cursor-text ${shouldBeTransparent
-                      ? 'text-white placeholder-white/70'
-                      : 'text-stone-600 dark:text-stone-300 placeholder-stone-400'
+                    ? 'text-white placeholder-white/70'
+                    : 'text-stone-600 dark:text-stone-300 placeholder-stone-400'
                     }`}
                   placeholder="Buscar cristales..."
                   type="text"
@@ -108,8 +107,8 @@ export const Navbar: React.FC = () => {
                   onFocus={() => searchTerm.length > 2 && setShowResults(true)}
                 />
                 <button className={`p-2 transition-colors rounded-full ${shouldBeTransparent
-                    ? 'text-white hover:text-primary drop-shadow-lg'
-                    : 'text-stone-600 hover:text-primary dark:text-stone-300'
+                  ? 'text-white hover:text-primary drop-shadow-lg'
+                  : 'text-stone-600 hover:text-primary dark:text-stone-300'
                   }`}>
                   <span className="material-symbols-outlined">search</span>
                 </button>
@@ -152,8 +151,8 @@ export const Navbar: React.FC = () => {
             <button
               onClick={openCart}
               className={`hidden md:block relative p-2 transition-colors rounded-full ${shouldBeTransparent
-                  ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
-                  : 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800'
+                ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                : 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800'
                 }`}
               aria-label="Abrir carrito"
             >
@@ -169,8 +168,8 @@ export const Navbar: React.FC = () => {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`md:hidden p-2 transition-colors rounded-full ${shouldBeTransparent
-                  ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
-                  : 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800'
+                ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                : 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800'
                 }`}
             >
               <span className="material-symbols-outlined">
@@ -189,8 +188,8 @@ export const Navbar: React.FC = () => {
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`text-base font-serif font-medium transition-colors px-4 py-2 rounded-lg ${shouldBeTransparent
-                    ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
-                    : 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800'
+                  ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                  : 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800'
                   }`}
               >
                 Inicio
@@ -199,8 +198,8 @@ export const Navbar: React.FC = () => {
                 to="/tienda"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`text-base font-serif font-medium transition-colors px-4 py-2 rounded-lg ${shouldBeTransparent
-                    ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
-                    : 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800'
+                  ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                  : 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800'
                   }`}
               >
                 Tienda
@@ -209,8 +208,8 @@ export const Navbar: React.FC = () => {
                 to="/tips"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`text-base font-serif font-medium transition-colors px-4 py-2 rounded-lg ${shouldBeTransparent
-                    ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
-                    : 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800'
+                  ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
+                  : 'text-stone-700 hover:text-primary hover:bg-stone-100 dark:text-stone-300 dark:hover:text-primary dark:hover:bg-stone-800'
                   }`}
               >
                 Tips
