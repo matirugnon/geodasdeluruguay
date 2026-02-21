@@ -105,15 +105,15 @@ export const Home: React.FC = () => {
          </section>
 
          {/* Nuestra Colección (Shop Section) */}
-         <section id="shop" className="py-24 px-6 md:px-12 max-w-[1280px] mx-auto">
-            <div className="text-center mb-16">
-               <h2 className="font-serif text-4xl md:text-5xl text-[#8C7E60] mb-4">Nuestra Colección</h2>
+         <section id="shop" className="py-16 md:py-24 px-4 md:px-12 max-w-[1280px] mx-auto">
+            <div className="text-center mb-10 md:mb-16">
+               <h2 className="font-serif text-3xl md:text-5xl text-[#8C7E60] mb-4">Nuestra Colección</h2>
                <div className="w-16 h-[1px] bg-[#D4C4A8] mx-auto"></div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
                {featured.length === 0 ? (
-                  <div className="col-span-1 md:col-span-2 lg:col-span-4 text-center text-[#8C8C8C]">Cargando colección...</div>
+                  <div className="col-span-2 lg:col-span-4 text-center text-[#8C8C8C]">Cargando colección...</div>
                ) : (
                   featured.map((product) => (
                      <motion.div
@@ -124,7 +124,7 @@ export const Home: React.FC = () => {
                         transition={{ duration: 0.5 }}
                         className="group cursor-pointer flex flex-col"
                      >
-                        <div className="relative aspect-[3/4] overflow-hidden bg-white mb-4 rounded-sm shadow-sm hover:shadow-md transition-shadow">
+                        <div className="relative aspect-square md:aspect-[3/4] overflow-hidden bg-white mb-3 md:mb-4 rounded-sm shadow-sm hover:shadow-md transition-shadow">
                            <Link to={`/producto/${product.id}`}>
                               <img
                                  src={product.images[0]}
@@ -139,23 +139,23 @@ export const Home: React.FC = () => {
                                  e.stopPropagation();
                                  addItem(product);
                               }}
-                              className="absolute bottom-4 right-4 bg-white/90 p-3 rounded-full shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#8C7E60] hover:text-white flex items-center justify-center z-10"
+                              className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-white/90 p-2.5 md:p-3 rounded-full shadow-md md:shadow-lg opacity-100 translate-y-0 md:opacity-0 md:translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#8C7E60] hover:text-white flex items-center justify-center z-10"
                            >
-                              <span className="material-symbols-outlined !text-[18px]">shopping_bag</span>
+                              <span className="material-symbols-outlined !text-[16px] md:!text-[18px]">shopping_bag</span>
                            </button>
                         </div>
-                        <Link to={`/producto/${product.id}`} className="mt-auto">
-                           <h3 className="font-serif text-lg text-[#5A5243] mb-1 group-hover:text-[#8C7E60] transition-colors line-clamp-1">{product.title}</h3>
-                           <p className="text-[#8C8C8C] font-light">$ {product.price.toLocaleString('es-UY')}</p>
+                        <Link to={`/producto/${product.id}`} className="mt-auto px-1 md:px-0">
+                           <h3 className="font-serif text-sm md:text-lg text-[#5A5243] mb-0.5 md:mb-1 group-hover:text-[#8C7E60] transition-colors line-clamp-2 md:line-clamp-1 leading-snug">{product.title}</h3>
+                           <p className="text-[#8C8C8C] font-light text-xs md:text-base">$ {product.price.toLocaleString('es-UY')}</p>
                         </Link>
                      </motion.div>
                   ))
                )}
             </div>
 
-            <div className="mt-16 text-center">
-               <Link to="/tienda" className="inline-flex items-center gap-2 text-[#8C7E60] hover:text-[#5A5243] transition-colors border-b border-[#8C7E60] pb-1 uppercase text-sm tracking-widest font-sans">
-                  Ver todo el catálogo <span className="material-symbols-outlined !text-[16px]">arrow_forward</span>
+            <div className="mt-12 md:mt-16 text-center">
+               <Link to="/tienda" className="inline-flex items-center gap-2 text-[#8C7E60] hover:text-[#5A5243] transition-colors border-b border-[#8C7E60] pb-1 uppercase text-xs md:text-sm tracking-widest font-sans">
+                  Ver todo el catálogo <span className="material-symbols-outlined !text-[14px] md:!text-[16px]">arrow_forward</span>
                </Link>
             </div>
          </section>
