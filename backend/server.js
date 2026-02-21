@@ -37,7 +37,11 @@ app.use((req, res, next) => {
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001',
-    'https://geodasdeluruguay.vercel.app'
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'https://geodasdeluruguay.vercel.app',
+    'https://admin-geodas.vercel.app'
 ];
 
 const corsOptions = {
