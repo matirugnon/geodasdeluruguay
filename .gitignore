@@ -68,6 +68,9 @@ build/
 .next/
 out/
 
+# Admin panel backup (managed externally)
+_admin_backup/
+
 # Dependencies
 package-lock.json
 yarn.lock

@@ -143,11 +143,6 @@ export const Navbar: React.FC = () => {
               )}
             </div>
 
-            {/*
-             <Link to="/admin" className="p-2 text-stone-600 hover:text-primary transition-colors rounded-full hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800">
-               <span className="material-symbols-outlined">settings</span>
-             </Link>
-              */}
             <button
               onClick={openCart}
               className={`hidden md:block relative p-2 transition-colors rounded-full ${shouldBeTransparent

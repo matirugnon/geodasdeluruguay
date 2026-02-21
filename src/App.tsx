@@ -9,7 +9,6 @@ import { Category } from './pages/Category';
 import { ProductDetail } from './pages/ProductDetail';
 import { Tips } from './pages/Tips';
 import { TipDetail } from './pages/TipDetail';
-import { Admin } from './pages/Admin';
 import { Shop } from './pages/Shop';
 import { ShopCategory } from './pages/ShopCategory';
 import { Checkout } from './pages/Checkout';
@@ -39,7 +38,6 @@ const AppLayout: React.FC = () => {
         <Route path="/producto/:id" element={<ProductDetail />} />
         <Route path="/tips" element={<Tips />} />
         <Route path="/tips/:id" element={<TipDetail />} />
-        <Route path="/admin" element={<Admin />} />
         {/* Shop Routes */}
         <Route path="/tienda" element={<Shop />} />
         <Route path="/tienda/:categorySlug" element={<Shop />} />

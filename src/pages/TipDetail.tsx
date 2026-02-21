@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Tip } from '../types';
 
 export const TipDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const [tip, setTip] = useState<Tip | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(false);
-
-    useEffect(() => {
-        const checkAuth = async () => {
-            const authenticated = await dataService.isAdmin();
-            setIsAdmin(authenticated);
-        };
-        checkAuth();
-    }, []);
 
     useEffect(() => {
         const loadTip = async () => {
@@ -101,15 +91,6 @@ export const TipDetail: React.FC = () => {
                         <h2 className="text-stone-900 dark:text-white text-xl font-bold tracking-tight">Diario Místico</h2>
                     </Link>
                     <div className="flex items-center gap-4">
-                        {isAdmin && (
-                            <button
-                                onClick={() => navigate('/admin')}
-                                className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 text-sm font-semibold transition-colors border border-stone-200 dark:border-stone-700"
-                            >
-                                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>edit</span>
-                                <span>Editar entrada</span>
-                            </button>
-                        )}
                     </div>
                 </div>
                 {/* Reading Progress Bar - You can add scroll tracking here */}
@@ -229,15 +210,6 @@ export const TipDetail: React.FC = () => {
                 </footer>
             </main>
 
-            {/* Floating Mobile Edit Button */}
-            {isAdmin && (
-                <button
-                    onClick={() => navigate('/admin')}
-                    className="md:hidden fixed bottom-6 right-6 z-50 bg-primary text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-primary-dark transition-colors"
-                >
-                    <span className="material-symbols-outlined">edit</span>
-                </button>
-            )}
         </div>
     );
 };

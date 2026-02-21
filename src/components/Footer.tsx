@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { LoginModal } from './LoginModal';
+import React from 'react';
 
   const whatsappNumber = '59891458797'; // Cambiar por tu número real
   const whatsappLink = `https://wa.me/${whatsappNumber}`;
 
 export const Footer: React.FC = () => {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   return (
     <>
@@ -58,17 +56,10 @@ export const Footer: React.FC = () => {
                   <a className="text-stone-400 hover:text-stone-600 text-sm" href="#">Política de Privacidad</a>
                   <a className="text-stone-400 hover:text-stone-600 text-sm" href="#">Términos de Servicio</a>
                 </div>
-                <button 
-                  onClick={() => setIsLoginModalOpen(true)}
-                  className="text-stone-300 hover:text-stone-500 text-xs transition-colors cursor-pointer"
-                >
-                  Acceso Staff
-                </button>
               </div>
             </div>
           </div>
       </footer>
-      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </>
   );
 };
