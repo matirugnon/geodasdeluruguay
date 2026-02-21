@@ -1,19 +1,41 @@
 const Product = require('../models/Product');
 
-// @desc    Fetch all visible products (Public)
+// @desc    Fetch all visible products (Public) — supports pagination
 // @route   GET /api/products
-// @route   GET /api/products?category=collares
+// @route   GET /api/products?category=collares&page=1&limit=12
 const getProducts = async (req, res) => {
     try {
         // Construir filtros dinámicos
         const filters = { visible: true };
         
-        // Si hay categoría en query params, agregarla al filtro
+        // Si hay categoría en query params, agregarla al filtro (case-insensitive)
         if (req.query.category) {
-            filters.category = req.query.category;
+            filters.category = new RegExp(`^${req.query.category.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
         }
-        
-        const products = await Product.find(filters);
+
+        // Pagination params
+        const page = parseInt(req.query.page) || 0;   // 0 = return all (backward compat)
+        const limit = parseInt(req.query.limit) || 0;  // 0 = return all
+
+        if (page > 0 && limit > 0) {
+            const skip = (page - 1) * limit;
+            const totalProducts = await Product.countDocuments(filters);
+            const totalPages = Math.ceil(totalProducts / limit);
+            const products = await Product.find(filters)
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit);
+
+            return res.json({
+                products,
+                currentPage: page,
+                totalPages,
+                totalProducts
+            });
+        }
+
+        // No pagination — return all (backward compatibility)
+        const products = await Product.find(filters).sort({ createdAt: -1 });
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });

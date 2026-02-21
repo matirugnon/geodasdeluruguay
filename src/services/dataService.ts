@@ -1,4 +1,4 @@
-import { Product, Tip } from '../types';
+import { Product, Tip, PaginatedResponse } from '../types';
 
 // En producción: usar variable de entorno o fallback
 // En desarrollo: vite.config.ts hace proxy a localhost:5000
@@ -77,6 +77,49 @@ export const dataService = {
     } catch (error) {
       console.error('Error fetching visible products:', error);
       return [];
+    }
+  },
+
+  // Get visible products with pagination (Public - no auth required)
+  // Handles both old backend (flat array) and new backend (paginated object)
+  async getVisibleProductsPaginated(page: number = 1, limit: number = 12, category?: string): Promise<PaginatedResponse> {
+    try {
+      let url = `${API_URL}/products?page=${page}&limit=${limit}`;
+      if (category) {
+        url += `&category=${encodeURIComponent(category)}`;
+      }
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.error('Error fetching paginated products:', response.statusText);
+        return { products: [], currentPage: 1, totalPages: 1, totalProducts: 0 };
+      }
+
+      const data = await response.json();
+
+      // New backend returns { products, currentPage, totalPages, totalProducts }
+      if (data.products && Array.isArray(data.products)) {
+        return {
+          products: data.products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id })),
+          currentPage: data.currentPage,
+          totalPages: data.totalPages,
+          totalProducts: data.totalProducts
+        };
+      }
+
+      // Old backend returns flat array — paginate client-side
+      const allProducts: Product[] = (Array.isArray(data) ? data : []).map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
+      const total = allProducts.length;
+      const totalPages = Math.max(1, Math.ceil(total / limit));
+      const start = (page - 1) * limit;
+      return {
+        products: allProducts.slice(start, start + limit),
+        currentPage: page,
+        totalPages,
+        totalProducts: total
+      };
+    } catch (error) {
+      console.error('Error fetching paginated products:', error);
+      return { products: [], currentPage: 1, totalPages: 1, totalProducts: 0 };
     }
   },
 

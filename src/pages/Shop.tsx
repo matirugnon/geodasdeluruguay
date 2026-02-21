@@ -1,92 +1,352 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { dataService, PRODUCT_CATEGORIES } from '../services/dataService';
+import { Product } from '../types';
+import { ProductCard } from '../components/ProductCard';
+
+const CATEGORY_SLUG_MAP: Record<string, string> = {
+    'collares': 'Collares',
+    'anillos': 'Anillos',
+    'brazaletes': 'Brazaletes',
+    'piedras': 'Piedras',
+    'otros-accesorios': 'Otros Accesorios'
+};
+
+const PRODUCTS_PER_PAGE = 12;
 
 export const Shop: React.FC = () => {
-  return (
-    <div className="font-newsreader text-[#181511] dark:text-gray-100 transition-colors duration-300 bg-background-light dark:bg-background-dark">
-        <main className="flex-grow flex flex-col items-center w-full px-6 py-10 lg:px-20 lg:py-16">
-            <div className="w-full max-w-[1200px] flex flex-col gap-10">
-                <div className="flex flex-col items-center text-center gap-4 max-w-2xl mx-auto animate-fade-in-up">
-                    <p className="text-primary text-sm font-bold uppercase tracking-widest font-noto-sans">Catálogo 2023</p>
-                    <h1 className="text-[#1c1917] dark:text-white text-4xl md:text-5xl lg:text-6xl font-black italic tracking-tight font-newsreader">Explora nuestra Colección</h1>
-                    <p className="text-accent-stone dark:text-stone-400 text-lg md:text-xl font-normal leading-relaxed max-w-lg font-newsreader">
-                        Piezas únicas formadas por la naturaleza a lo largo de milenios, curadas artesanalmente para ti.
-                    </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mt-6">
-                    {/* Collares */}
-                    <Link to="/tienda/collares" className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 min-h-[400px] md:min-h-[500px] lg:col-span-1">
-                        <div className="absolute inset-0 bg-gray-200">
-                            <div className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcm0KWIwELayMnFdk7DB7GRMQM_66UW97KdiJp3_gCOhI6g-TNxupr5Rct7JYNeMEEn0hnBjGKHfN3e2Mrov3X5cB5WOKsR3uTKtviWcgsyDKIUCe1dJXz-QHqpf3j1vY2nDHyvVP5U0M_vzhlWTAGUos7mvuine_6PDuuMUfHXctGkB08Yuly-hkRT5_DL4RlWki-IQEJeXYFc4Oi_T1qxM9MEmys1CcFR6OoLPCFBy6Z7i0KKVJKcGw88zKeEPpMNewbWFKO-H8g')"}}>
-                            </div>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                        <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col gap-2 items-start transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div className="bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 font-noto-sans">Joyería Fina</div>
-                            <h3 className="text-white text-3xl md:text-4xl font-bold font-newsreader italic">Collares</h3>
-                            <div className="h-1 w-12 bg-primary rounded-full mt-2 group-hover:w-24 transition-all duration-500"></div>
-                            <p className="text-stone-300 mt-2 text-sm md:text-base font-noto-sans font-light opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75 max-w-[80%]">Amatista, cuarzo y plata.</p>
-                        </div>
-                    </Link>
+    const { categorySlug } = useParams<{ categorySlug?: string }>();
+    const [products, setProducts] = useState<Product[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-                    {/* Anillos */}
-                    <Link to="/tienda/anillos" className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 min-h-[400px] md:min-h-[500px] lg:col-span-1">
-                        <div className="absolute inset-0 bg-gray-200">
-                            <div className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEftD6U86_aHd85S4nLRDM3MaX8t8TXpzInkDJpr5OvF4K0iifelTx4gcSDX7IyVSX3FPI20IkA2IZ-3xKOPh9r9x8Jm8bFcEQsQGxIAdFZ1AqghRk-iE5HydGmpBR5vs0Eg6DTcBemE_odFFPoO6DD7G1x4-AL4fIVd_M1yI57dWLUrFeazOfUhs4vKCQFsTicW7rRcbmu9x4SAA0ekv2PWg0fcTt_8I87895TlRcpAjfGBn79-0BqI_dvHYsZVMcv9ucu9BrpmaF')"}}>
-                            </div>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                        <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col gap-2 items-start transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div className="bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 font-noto-sans">Hecho a mano</div>
-                            <h3 className="text-white text-3xl md:text-4xl font-bold font-newsreader italic">Anillos</h3>
-                            <div className="h-1 w-12 bg-primary rounded-full mt-2 group-hover:w-24 transition-all duration-500"></div>
-                            <p className="text-stone-300 mt-2 text-sm md:text-base font-noto-sans font-light opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75 max-w-[80%]">Diseños únicos en oro y plata.</p>
-                        </div>
-                    </Link>
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalProducts, setTotalProducts] = useState(0);
 
-                    {/* Brazaletes (Previously Piedras en Bruto space) */}
-                    <Link to="/tienda/brazaletes" className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 min-h-[300px] md:min-h-[400px] lg:col-span-1">
-                        <div className="absolute inset-0 bg-gray-200">
-                            <div className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8k-UuWG8UhZqQEWRbYzP48OurLczlOiS1DapOY560Q_t2AIGbvb_q9-9G-zVF4XEUdtIKhCiHOLjlxZhX9eadXRjk5G09AStGME75qXVWwh91eYG-zzVn0VdgI73oTSTfihfml_rbMo8TlN_73LcWQOs-YfAYxIr16nDW1I-C5ugeqsJEcyRhC7YG2yU3CRSqIm41qbuFLFSVHmmMRmnkDRUgplm7TiWPP1bEWo4N9JmBEKQp8fNUBBfG76S0-Gem6628WNZD3GOl')"}}>
-                            </div>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                        <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col gap-2 items-start transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <h3 className="text-white text-3xl md:text-4xl font-bold font-newsreader italic">Brazaletes</h3>
-                            <div className="h-1 w-12 bg-primary rounded-full mt-2 group-hover:w-24 transition-all duration-500"></div>
-                        </div>
-                    </Link>
+    const gridRef = useRef<HTMLDivElement>(null);
 
-                    {/* Piedras (Previously Piedras de Intención) */}
-                    <Link to="/tienda/piedras" className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 min-h-[300px] md:min-h-[400px] lg:col-span-1">
-                        <div className="absolute inset-0 bg-gray-200">
-                            <div className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6t1h4XVu53CHw4bna8AJvWF9JBRuloU_PxqHKSk5FZj7jRcBnXQWY6lNT8WsakYscY-rYtJRkvGGvaxKMxFYRbMQgtnzFt8pzSiVlRp77fK33u_pTPr9wTtQm6qz03cmv3d5GBQGiL9-UDCYIAHavNj7IEqCL_f0_0FFdEXVWreI03kEBO5ZnRtjEF-hRMLSa_m7FJyYyzyldpFw0jw-GOBxegH0vAtOqigag4LX8bHlbOVVWKKansALRFpyilJVNBOekZhvVf7jd')"}}>
-                            </div>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                        <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col gap-2 items-start transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <h3 className="text-white text-3xl md:text-4xl font-bold font-newsreader italic">Piedras</h3>
-                            <div className="h-1 w-12 bg-primary rounded-full mt-2 group-hover:w-24 transition-all duration-500"></div>
-                        </div>
-                    </Link>
+    useEffect(() => {
+        if (categorySlug && CATEGORY_SLUG_MAP[categorySlug]) {
+            setSelectedCategories([CATEGORY_SLUG_MAP[categorySlug]]);
+        } else {
+            setSelectedCategories([]);
+        }
+        setCurrentPage(1);
+    }, [categorySlug]);
 
-                    {/* Otros Accesorios (Previously Decoración) */}
-                    <Link to="/tienda/otros-accesorios" className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 min-h-[300px] md:min-h-[400px] md:col-span-2">
-                        <div className="absolute inset-0 bg-gray-200">
-                            <div className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQST63bp2GPEW4CsaIMd-b9dLrv1CDr6BiFvGqGmm4o_gTtBfIq3ME20W0Nh2qKh2gxs578vIYg9zUg4YvgvOCjvQLR0y5Wr2ZHJlLyQRFWBLEQDk5PVzVbGPZWPI6Y5RKtD-iweKRW6YQTehxksx9lKI26LG_0RBkA1UdK3f7hN_GRzuqLecf7cDnX72iQB1KhvckZHqtlojEaGWXO69PuupgPSqetNCvbN3qhfR31hK2Ew_G3BQtbLliyh0psrPQ1fUQ78SoWrjm')"}}>
+    // Fetch products with pagination from backend
+    const fetchProducts = useCallback(async (page: number, categories: string[]) => {
+        setIsLoading(true);
+        // If a single category is selected, use backend filter
+        const categoryFilter = categories.length === 1 ? categories[0] : undefined;
+
+        if (categories.length <= 1) {
+            // Server-side pagination
+            const data = await dataService.getVisibleProductsPaginated(page, PRODUCTS_PER_PAGE, categoryFilter);
+            setProducts(data.products);
+            setTotalPages(data.totalPages);
+            setTotalProducts(data.totalProducts);
+        } else {
+            // Multiple categories: fetch all and paginate client-side
+            const allProducts = await dataService.getVisibleProducts();
+            const filtered = allProducts.filter(p =>
+                categories.some(cat => p.category.toLowerCase() === cat.toLowerCase())
+            );
+            setTotalProducts(filtered.length);
+            setTotalPages(Math.ceil(filtered.length / PRODUCTS_PER_PAGE));
+            const start = (page - 1) * PRODUCTS_PER_PAGE;
+            setProducts(filtered.slice(start, start + PRODUCTS_PER_PAGE));
+        }
+        setIsLoading(false);
+    }, []);
+
+    useEffect(() => {
+        fetchProducts(currentPage, selectedCategories);
+    }, [currentPage, selectedCategories, fetchProducts]);
+
+    const goToPage = (page: number) => {
+        if (page < 1 || page > totalPages || page === currentPage) return;
+        setCurrentPage(page);
+        // Scroll to top of grid
+        if (gridRef.current) {
+            const offset = gridRef.current.getBoundingClientRect().top + window.scrollY - 100;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+    };
+
+    const toggleCategory = (category: string) => {
+        setSelectedCategories(prev =>
+            prev.includes(category)
+                ? prev.filter(c => c !== category)
+                : [...prev, category]
+        );
+        setCurrentPage(1);
+    };
+
+    const clearFilters = () => {
+        setSelectedCategories([]);
+        setCurrentPage(1);
+    };
+
+    // Generate page numbers with ellipsis
+    const getPageNumbers = (): (number | '...')[] => {
+        if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+        const pages: (number | '...')[] = [];
+        if (currentPage <= 3) {
+            pages.push(1, 2, 3, 4, '...', totalPages);
+        } else if (currentPage >= totalPages - 2) {
+            pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+        } else {
+            pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+        }
+        return pages;
+    };
+
+    return (
+        <div className="min-h-screen bg-[#FDFBF7] dark:bg-[#1A1917] transition-colors duration-300">
+            {/* Page Header */}
+            <header className="pt-24 pb-12 px-6 md:px-12 max-w-7xl mx-auto text-center">
+                <motion.h1
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#8C7E60] mb-4"
+                >
+                    Nuestra Tienda
+                </motion.h1>
+                <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="w-24 h-[1px] bg-[#D4C4A8] mx-auto mb-6"
+                />
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-[#8C8C8C] font-light max-w-2xl mx-auto italic"
+                >
+                    Piezas únicas formadas por la naturaleza, curadas con elegancia para tu hogar.
+                </motion.p>
+            </header>
+
+            <div className="max-w-[1400px] mx-auto px-6 md:px-12 pb-24">
+                <div className="flex flex-col lg:flex-row gap-12">
+
+                    {/* Desktop Sidebar Filters */}
+                    <aside className="hidden lg:block w-64 space-y-8 flex-shrink-0">
+                        <div>
+                            <h3 className="font-serif text-xl text-[#8C7E60] mb-6 tracking-wide uppercase text-sm font-bold">Categorías</h3>
+                            <div className="space-y-4">
+                                {PRODUCT_CATEGORIES.map(category => (
+                                    <label key={category} className="flex items-center group cursor-pointer">
+                                        <div className="relative flex items-center justify-center">
+                                            <input
+                                                type="checkbox"
+                                                className="peer appearance-none w-5 h-5 border border-[#D4C4A8] rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer"
+                                                checked={selectedCategories.includes(category)}
+                                                onChange={() => toggleCategory(category)}
+                                            />
+                                            <span className="material-symbols-outlined text-white text-[16px] absolute opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
+                                                check
+                                            </span>
+                                        </div>
+                                        <span className={`ml-3 text-sm font-sans transition-colors ${selectedCategories.includes(category) ? 'text-[#8C7E60] font-medium' : 'text-[#8C8C8C] group-hover:text-[#8C7E60]'}`}>
+                                            {category}
+                                        </span>
+                                    </label>
+                                ))}
                             </div>
                         </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                        <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col gap-2 items-start transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                            <div className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 font-noto-sans">Novedad</div>
-                            <h3 className="text-white text-3xl md:text-4xl font-bold font-newsreader italic">Otros Accesorios</h3>
-                            <div className="h-1 w-12 bg-primary rounded-full mt-2 group-hover:w-24 transition-all duration-500"></div>
-                            <p className="text-stone-300 mt-2 text-sm md:text-base font-noto-sans font-light opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75 max-w-[80%]">Complementos únicos para tu energía.</p>
-                        </div>
-                    </Link>
+
+                        {selectedCategories.length > 0 && (
+                            <button
+                                onClick={clearFilters}
+                                className="text-[#8C7E60] text-xs font-bold uppercase tracking-widest border-b border-[#8C7E60] pb-1 hover:text-[#5A5243] hover:border-[#5A5243] transition-colors"
+                            >
+                                Limpiar Filtros
+                            </button>
+                        )}
+                    </aside>
+
+                    {/* Mobile Filter Trigger */}
+                    <div className="lg:hidden flex justify-between items-center mb-4">
+                        <button
+                            onClick={() => setIsMobileFilterOpen(true)}
+                            className="flex items-center gap-2 bg-[#8C7E60] text-white px-6 py-2 rounded-full shadow-md text-sm tracking-widest"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">tune</span>
+                            FILTRAR
+                        </button>
+                        <p className="text-xs text-[#8C8C8C] font-light">
+                            {totalProducts} productos
+                        </p>
+                    </div>
+
+                    {/* Main Content: Product Grid */}
+                    <main className="flex-grow" ref={gridRef}>
+                        {isLoading ? (
+                            <div className="flex flex-col items-center justify-center py-24 gap-4">
+                                <div className="w-8 h-8 border-2 border-[#D4C4A8] border-t-[#8C7E60] rounded-full animate-spin" />
+                                <p className="text-[#8C8C8C] font-light italic">Descubriendo tesoros...</p>
+                            </div>
+                        ) : products.length === 0 ? (
+                            <div className="text-center py-24">
+                                <p className="text-[#8C8C8C] font-light italic text-lg mb-4">No encontramos productos en esta categoría.</p>
+                                <button onClick={clearFilters} className="text-[#8C7E60] underline underline-offset-4">Ver todo el catálogo</button>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-7">
+                                    <AnimatePresence mode="popLayout">
+                                        {products.map((product) => (
+                                            <motion.div
+                                                key={product.id}
+                                                layout
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.9 }}
+                                                transition={{ duration: 0.3 }}
+                                            >
+                                                <ProductCard product={product} />
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+
+                                {/* Pagination */}
+                                {totalPages > 1 && (
+                                    <nav aria-label="Paginación" className="mt-12 mb-4 flex flex-col items-center gap-4">
+                                        {/* Page info */}
+                                        <p className="text-xs text-[#8C8C8C] font-light tracking-wide">
+                                            Página {currentPage} de {totalPages} — {totalProducts} productos
+                                        </p>
+
+                                        <div className="flex items-center gap-1 sm:gap-1.5">
+                                            {/* Previous */}
+                                            <button
+                                                onClick={() => goToPage(currentPage - 1)}
+                                                disabled={currentPage === 1}
+                                                className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[#D4C4A8]/60 text-[#8C7E60] hover:bg-[#8C7E60] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#8C7E60] transition-all duration-200"
+                                                aria-label="Página anterior"
+                                            >
+                                                <span className="material-symbols-outlined !text-[18px]">chevron_left</span>
+                                            </button>
+
+                                            {/* Page numbers */}
+                                            {getPageNumbers().map((page, idx) => (
+                                                page === '...' ? (
+                                                    <span key={`ellipsis-${idx}`} className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-[#8C8C8C] text-sm select-none">
+                                                        ···
+                                                    </span>
+                                                ) : (
+                                                    <button
+                                                        key={page}
+                                                        onClick={() => goToPage(page)}
+                                                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                                                            page === currentPage
+                                                                ? 'bg-[#8C7E60] text-white shadow-md'
+                                                                : 'border border-[#D4C4A8]/40 text-[#8C7E60] hover:bg-[#8C7E60]/10'
+                                                        }`}
+                                                        aria-label={`Página ${page}`}
+                                                        aria-current={page === currentPage ? 'page' : undefined}
+                                                    >
+                                                        {page}
+                                                    </button>
+                                                )
+                                            ))}
+
+                                            {/* Next */}
+                                            <button
+                                                onClick={() => goToPage(currentPage + 1)}
+                                                disabled={currentPage === totalPages}
+                                                className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[#D4C4A8]/60 text-[#8C7E60] hover:bg-[#8C7E60] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#8C7E60] transition-all duration-200"
+                                                aria-label="Página siguiente"
+                                            >
+                                                <span className="material-symbols-outlined !text-[18px]">chevron_right</span>
+                                            </button>
+                                        </div>
+                                    </nav>
+                                )}
+                            </>
+                        )}
+                    </main>
                 </div>
             </div>
-        </main>
-    </div>
-  );
+
+            {/* Mobile Filter Drawer */}
+            <AnimatePresence>
+                {isMobileFilterOpen && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsMobileFilterOpen(false)}
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
+                        />
+                        <motion.div
+                            initial={{ x: '100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="fixed right-0 top-0 h-full w-full max-w-[300px] bg-white dark:bg-[#1A1917] z-[101] shadow-2xl p-8 flex flex-col"
+                        >
+                            <div className="flex justify-between items-center mb-10">
+                                <h3 className="font-serif text-2xl text-[#8C7E60]">Filtros</h3>
+                                <button onClick={() => setIsMobileFilterOpen(false)} className="text-[#8C8C8C]">
+                                    <span className="material-symbols-outlined text-[32px]">close</span>
+                                </button>
+                            </div>
+
+                            <div className="flex-grow space-y-6">
+                                <p className="text-[#8C8C8C] text-xs font-bold uppercase tracking-[0.2em] mb-4">Por Categoría</p>
+                                <div className="space-y-4">
+                                    {PRODUCT_CATEGORIES.map(category => (
+                                        <label key={category} className="flex items-center group cursor-pointer">
+                                            <div className="relative flex items-center justify-center">
+                                                <input
+                                                    type="checkbox"
+                                                    className="peer appearance-none w-6 h-6 border border-[#D4C4A8] rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer"
+                                                    checked={selectedCategories.includes(category)}
+                                                    onChange={() => toggleCategory(category)}
+                                                />
+                                                <span className="material-symbols-outlined text-white text-[18px] absolute opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
+                                                    check
+                                                </span>
+                                            </div>
+                                            <span className={`ml-4 text-base font-sans transition-colors ${selectedCategories.includes(category) ? 'text-[#8C7E60] font-medium' : 'text-stone-600 dark:text-stone-300'}`}>
+                                                {category}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="pt-8 border-t border-[#D4C4A8]/20 space-y-4">
+                                <button
+                                    onClick={() => {
+                                        clearFilters();
+                                        setIsMobileFilterOpen(false);
+                                    }}
+                                    className="w-full py-4 text-[#8C7E60] font-medium border border-[#8C7E60] rounded-full text-sm tracking-widest uppercase font-sans"
+                                >
+                                    Limpiar Todo
+                                </button>
+                                <button
+                                    onClick={() => setIsMobileFilterOpen(false)}
+                                    className="w-full py-4 bg-[#8C7E60] text-white rounded-full text-sm tracking-widest uppercase font-bold font-sans shadow-lg"
+                                >
+                                    Aplicar Filtros
+                                </button>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+        </div>
+    );
 };
