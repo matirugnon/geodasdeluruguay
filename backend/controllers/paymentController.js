@@ -1,17 +1,14 @@
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
+const crypto = require('crypto');
+const Order = require('../models/Order');
 
 // Agregamos un token de prueba (Sandbox) como fallback si no hay en .env
 const accessToken = process.env.MP_ACCESS_TOKEN || 'TEST-8278278278278278-022019-1234567890abcdef1234567890abcdef-123456789';
 
-const client = new MercadoPagoConfig({
-    accessToken: accessToken,
-    options: { timeout: 5000, idempotencyKey: 'abc' }
-});
-
 // Crear preferencia
 const createPreference = async (req, res) => {
     try {
-        const { items, shipping, total } = req.body;
+        const { items, shipping, deliveryMethod } = req.body;
 
         const mpItems = items.map(item => ({
             id: item.id || item._id,
@@ -21,17 +18,43 @@ const createPreference = async (req, res) => {
             currency_id: 'UYU'
         }));
 
-        // Si hay costo de envío, lo agregamos como un ítem más
+        // Recálculo estricto de subtotales en el servidor como única fuente de verdad
         const subtotal = items.reduce((acc, item) => acc + (Number(item.price) * Number(item.quantity)), 0);
-        if (total > subtotal) {
+
+        let shippingCost = 0;
+        // Si hay envío a domicilio seleccionado, se calcula un costo extra fijo
+        if (deliveryMethod === 'delivery') {
+            shippingCost = 100;
             mpItems.push({
                 id: 'shipping',
-                title: 'Costo de envío',
-                unit_price: Number(total - subtotal),
+                title: 'Costo de envío a domicilio',
+                unit_price: shippingCost,
                 quantity: 1,
                 currency_id: 'UYU'
             });
         }
+
+        const finalTotal = subtotal + shippingCost;
+
+        // 1. Guardar la orden inicial como pendiente en MongoDB para tracking seguro
+        const order = new Order({
+            items,
+            subtotal,
+            shippingCost,
+            total: finalTotal,
+            shipping,
+            deliveryMethod,
+            status: 'pending'
+        });
+        await order.save();
+
+        // 2. Generar UUID dinámica para evitar replicación en creaciones dobles
+        const idempotencyKey = crypto.randomUUID();
+
+        const client = new MercadoPagoConfig({
+            accessToken: accessToken,
+            options: { timeout: 5000, idempotencyKey: idempotencyKey }
+        });
 
         const body = {
             items: mpItems,
@@ -40,7 +63,7 @@ const createPreference = async (req, res) => {
                 email: shipping.email,
                 phone: {
                     area_code: "598",
-                    number: shipping.telefono.replace(/\D/g, '').slice(-8) // Intentamos normalizar un poco
+                    number: shipping.telefono.replace(/\D/g, '').slice(-8)
                 },
                 address: {
                     street_name: shipping.direccion,
@@ -53,9 +76,8 @@ const createPreference = async (req, res) => {
                 pending: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/checkout`,
             },
             auto_return: "approved",
-            // TODO: Cambiar por la URL real donde se expondrá el servidor (ej: ngrok) cuando se quiera probar real
             notification_url: `${process.env.BACKEND_URL || 'https://tuservidor.com'}/api/payments/webhook`,
-            external_reference: `GDU-${Date.now()}` // ID interno para el pedido
+            external_reference: order._id.toString() // Referencia estricta mapeada a Mongo
         };
 
         const preference = new Preference(client);
@@ -79,13 +101,7 @@ const webhook = async (req, res) => {
         const topic = req.query.topic || req.body.type;
 
         if ((topic === 'payment' || topic === 'merchant_order') && paymentId) {
-            // Verificación del lado del servidor:
-            // 1. MP envía una notificación a nuestra URL indicando que hubo un evento de 'payment' con ID X.
-            // 2. Aquí NO confiamos simplemente en este aviso, sino que usamos nuestro ACCESS_TOKEN interno
-            //    (inaccesible desde el frontend) para consultar a la API de MP la información de este pago.
-            // 3. Confirmamos si el pago realmente está "approved" y comprobamos que los montos/ítems concuerden.
-            // Esto anula cualquier intento de falsificar un callback de "success" desde el navegador.
-
+            const client = new MercadoPagoConfig({ accessToken });
             const paymentClient = new Payment(client);
             const paymentInfo = await paymentClient.get({ id: paymentId });
 
@@ -95,12 +111,35 @@ const webhook = async (req, res) => {
                 external_reference: paymentInfo.external_reference
             });
 
-            if (paymentInfo.status === 'approved') {
-                // Aquí deberíamos:
-                // - Buscar el pedido en la BD (usando external_reference)
-                // - Cambiar el estado del pedido a 'pagado'
-                // - Enviar el email de confirmación
-                // - Restar stock
+            // Si Mercado Pago aprueba el paso
+            if (paymentInfo.status === 'approved' && paymentInfo.currency_id === 'UYU') {
+                const orderId = paymentInfo.external_reference;
+                const order = await Order.findById(orderId);
+
+                if (!order) {
+                    console.error('Orden no encontrada en BD con ID:', orderId);
+                    return res.status(200).send('OK');
+                }
+
+                // Asegurar idempotencia: no reprocesar si ya es paid
+                if (order.status === 'paid') {
+                    console.log('Orden ya estaba pagada previamente:', orderId);
+                    return res.status(200).send('OK');
+                }
+
+                // Doble chequeo crítico: El total de MP DEBE ser igual al tracking
+                if (paymentInfo.transaction_amount === order.total) {
+                    order.status = 'paid';
+                    await order.save();
+                    console.log('✅ Orden pagada y actualizada exitosamente:', orderId);
+
+                    // Aquí en el futuro se enviará el correo, restará stock, etc.
+                } else {
+                    console.error('Cuidado: Monto recibido en MP difiere de la Orden BD', {
+                        mpAmount: paymentInfo.transaction_amount,
+                        dbAmount: order.total
+                    });
+                }
             }
         }
 

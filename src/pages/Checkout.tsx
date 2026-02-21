@@ -20,8 +20,6 @@ type FormErrors<T> = Partial<Record<keyof T, string>>;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const SHIPPING_COST = 200;
-
 function generateOrderId(): string {
     return 'GDU-' + Math.random().toString(36).toUpperCase().slice(2, 8);
 }
@@ -88,9 +86,14 @@ const Field: React.FC<FieldProps> = ({ label, value, onChange, error, placeholde
 export const Checkout: React.FC = () => {
     const navigate = useNavigate();
     const { items, subtotal, clearCart } = useCart();
-    const total = subtotal + SHIPPING_COST;
-    const freeShipping = subtotal >= 5000;
-    const finalTotal = freeShipping ? subtotal : total;
+
+    // Estado del método de entrega
+    const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'delivery'>('pickup');
+
+    // Cálculos visuales locales
+    const isFreeShippingEligible = subtotal >= 5000;
+    const shippingCost = deliveryMethod === 'delivery' ? (isFreeShippingEligible ? 0 : 100) : 0;
+    const finalTotal = subtotal + shippingCost;
 
     const [step, setStep] = useState<CheckoutStep>('shipping');
     const [processing, setProcessing] = useState(false);
@@ -151,7 +154,7 @@ export const Checkout: React.FC = () => {
                 body: JSON.stringify({
                     items,
                     shipping,
-                    total: finalTotal
+                    deliveryMethod
                 }),
             });
 
@@ -265,6 +268,40 @@ export const Checkout: React.FC = () => {
                                     <Field label="Código postal (opcional)" value={shipping.codigoPostal} onChange={v => setShipping(s => ({ ...s, codigoPostal: v }))} placeholder="11300" />
                                 </div>
 
+                                {/* Delivery Method Selector */}
+                                <div className="mt-4 flex flex-col gap-3">
+                                    <label className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                                        Método de entrega
+                                    </label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div
+                                            onClick={() => setDeliveryMethod('pickup')}
+                                            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-stone-200 dark:border-stone-700 hover:border-primary/50'}`}
+                                        >
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'pickup' ? 'border-primary' : 'border-stone-300'}`}>
+                                                    {deliveryMethod === 'pickup' && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                                </div>
+                                                <h4 className="font-bold text-sm text-stone-800 dark:text-stone-100">Retiro en domicilio</h4>
+                                            </div>
+                                            <p className="text-xs text-stone-500 dark:text-stone-400 pl-7">A coordinar (Sin costo extra)</p>
+                                        </div>
+
+                                        <div
+                                            onClick={() => setDeliveryMethod('delivery')}
+                                            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${deliveryMethod === 'delivery' ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-stone-200 dark:border-stone-700 hover:border-primary/50'}`}
+                                        >
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'delivery' ? 'border-primary' : 'border-stone-300'}`}>
+                                                    {deliveryMethod === 'delivery' && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                                </div>
+                                                <h4 className="font-bold text-sm text-stone-800 dark:text-stone-100">Envío a domicilio</h4>
+                                            </div>
+                                            <p className="text-xs text-stone-500 dark:text-stone-400 pl-7">+ $ 100 extra</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button
                                     type="submit"
                                     className="w-full py-4 mt-2 bg-primary hover:bg-primary-dark text-white font-bold uppercase tracking-widest text-xs rounded-full shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
@@ -358,15 +395,18 @@ export const Checkout: React.FC = () => {
                             </div>
                             <div className="flex justify-between text-sm text-stone-500 dark:text-stone-400">
                                 <span>Envío</span>
-                                <span className={freeShipping ? 'text-primary font-semibold' : ''}>
-                                    {freeShipping ? 'Gratis 🎉' : `$ ${SHIPPING_COST.toLocaleString('es-UY')}`}
+                                <span className={isFreeShippingEligible && deliveryMethod === 'delivery' ? 'text-primary font-semibold' : ''}>
+                                    {deliveryMethod === 'pickup'
+                                        ? 'Retiro (Gratis)'
+                                        : (isFreeShippingEligible ? 'Gratis 🎉' : `$ ${shippingCost.toLocaleString('es-UY')}`)
+                                    }
                                 </span>
                             </div>
                             <div className="flex justify-between font-bold text-stone-900 dark:text-white text-base pt-2 border-t border-stone-100 dark:border-stone-800 mt-1">
                                 <span className="font-serif">Total</span>
                                 <span>$ {finalTotal.toLocaleString('es-UY')}</span>
                             </div>
-                            {!freeShipping && (
+                            {!isFreeShippingEligible && deliveryMethod === 'delivery' && (
                                 <p className="text-[11px] text-stone-400 dark:text-stone-500 text-center mt-1">
                                     Agregá $ {(5000 - subtotal).toLocaleString('es-UY')} más para envío gratis
                                 </p>

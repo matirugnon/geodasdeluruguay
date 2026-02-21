@@ -57,7 +57,7 @@ export const Home: React.FC = () => {
                      transition={{ delay: 0.5, duration: 0.8 }}
                      className="text-lg text-[#8C8C8C] font-light tracking-wide mb-8 font-sans"
                   >
-                     Elegancia natural para tu hogar
+                     Conectá con la energía de la tierra
                   </motion.p>
 
                   <motion.div
@@ -119,7 +119,7 @@ export const Home: React.FC = () => {
                         <img
                            alt="Collar de oro con colgante de geoda blanca"
                            className="h-64 md:h-72 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
-                           src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6_5Eph0A8KHNmuHLTSLlaqbtLBvFpLFPzR1jJM-XuobE-YBtuHT5puMTSm8qEgFtdst-PP6Cd02XI6c0MCdpKtTBUJJxlcNBY-WpTDnAfpPxjPdnD3dDqcSL7S-oOiNnIWMU9MkNsAUkymAFybCXKW3mm4qJIWFo2aL9lssKcOq4humv2fCuttKNlVc5JJT060OELWXBBESY0pK4ryFXpAjdV6KnIimSY4u70D-oXLenBsmMGV8OqPQSIXo6hF4lYM80rDbSipYs"
+                           src="collar_recorte.jpeg"
                         />
                      </div>
                      <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60]">
