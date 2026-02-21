@@ -42,7 +42,7 @@ const AppLayout: React.FC = () => {
         <Route path="/admin" element={<Admin />} />
         {/* Shop Routes */}
         <Route path="/tienda" element={<Shop />} />
-        <Route path="/tienda/:category" element={<ShopCategory />} />
+        <Route path="/tienda/:categorySlug" element={<Shop />} />
         {/* Checkout */}
         <Route path="/checkout" element={<Checkout />} />
       </Routes>

@@ -40,3 +40,10 @@ export interface SearchResult {
 export interface CartItem extends Product {
   quantity: number;
 }
+
+export interface PaginatedResponse {
+  products: Product[];
+  currentPage: number;
+  totalPages: number;
+  totalProducts: number;
+}
