@@ -24,9 +24,9 @@ const orderSchema = new mongoose.Schema({
         nombre: { type: String, required: true },
         email: { type: String, required: true },
         telefono: { type: String, required: true },
-        direccion: { type: String, required: true },
-        ciudad: { type: String, required: true },
-        departamento: { type: String, required: true },
+        direccion: { type: String },
+        ciudad: { type: String },
+        departamento: { type: String },
         codigoPostal: { type: String }
     },
     deliveryMethod: {
@@ -34,9 +34,18 @@ const orderSchema = new mongoose.Schema({
         enum: ['pickup', 'delivery'],
         required: true
     },
+    paymentMethod: {
+        type: String,
+        enum: ['mercadopago', 'transfer'],
+        default: 'mercadopago'
+    },
+    discount: {
+        type: Number,
+        default: 0
+    },
     status: {
         type: String,
-        enum: ['pending', 'paid', 'cancelled'],
+        enum: ['pending', 'paid', 'awaiting_transfer', 'cancelled'],
         default: 'pending'
     },
     createdAt: {

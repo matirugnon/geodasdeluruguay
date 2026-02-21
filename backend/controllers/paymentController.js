@@ -151,7 +151,50 @@ const webhook = async (req, res) => {
     }
 };
 
+// Crear orden por transferencia (sin Mercado Pago)
+const createTransferOrder = async (req, res) => {
+    try {
+        const { items, shipping, deliveryMethod } = req.body;
+
+        const subtotal = items.reduce((acc, item) => acc + (Number(item.price) * Number(item.quantity)), 0);
+
+        let shippingCost = 0;
+        if (deliveryMethod === 'delivery') {
+            shippingCost = subtotal >= 5000 ? 0 : 100;
+        }
+
+        const subtotalWithShipping = subtotal + shippingCost;
+        // 5% descuento por transferencia
+        const discount = Math.round(subtotalWithShipping * 0.05);
+        const finalTotal = subtotalWithShipping - discount;
+
+        const order = new Order({
+            items,
+            subtotal,
+            shippingCost,
+            discount,
+            total: finalTotal,
+            shipping,
+            deliveryMethod,
+            paymentMethod: 'transfer',
+            status: 'awaiting_transfer'
+        });
+        await order.save();
+
+        res.json({
+            orderId: order._id.toString(),
+            total: finalTotal,
+            discount,
+            message: 'Orden creada. Esperando transferencia.'
+        });
+    } catch (error) {
+        console.error('Error al crear orden por transferencia:', error);
+        res.status(500).json({ message: 'Error al crear la orden' });
+    }
+};
+
 module.exports = {
     createPreference,
+    createTransferOrder,
     webhook
 };
