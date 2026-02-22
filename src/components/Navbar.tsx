@@ -15,9 +15,8 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const { itemCount, openCart } = useCart();
 
-  // Solo hacer transparente la navbar en la página de inicio
-  const isHomePage = location.pathname === '/' || location.pathname === '/#/';
-  const shouldBeTransparent = isHomePage && !isScrolled;
+  // Navbar siempre sólida
+  const shouldBeTransparent = false;
 
   useEffect(() => {
     const handleScroll = () => {

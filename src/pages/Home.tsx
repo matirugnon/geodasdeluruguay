@@ -34,7 +34,7 @@ export const Home: React.FC = () => {
    return (
       <main className="flex-grow">
          {/* Hero Section - Replicating the provided image design */}
-         <section className="relative pt-20 h-screen min-h-[700px] flex items-center justify-center bg-[#F5F5F0]">
+         <section className="relative h-[calc(100vh-5rem)] min-h-[700px] flex items-center justify-center bg-[#F5F5F0]">
 
             <motion.div
                initial={{ opacity: 0, y: 20 }}
