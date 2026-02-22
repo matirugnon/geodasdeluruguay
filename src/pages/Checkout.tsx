@@ -119,7 +119,6 @@ export const Checkout: React.FC = () => {
     const [verifying, setVerifying] = useState(false);
     const [verifiedOrderId, setVerifiedOrderId] = useState('');
     const [verifyError, setVerifyError] = useState(false);
-    const [pendingOrderId, setPendingOrderId] = useState('');
 
     const [shipping, setShipping] = useState<ShippingForm>({
         nombre: '', email: '', telefono: '', direccion: '', ciudad: '', departamento: '', codigoPostal: '',
@@ -261,31 +260,10 @@ export const Checkout: React.FC = () => {
             if (!response.ok) throw new Error('Error al crear preferencia');
 
             const data = await response.json();
-            if (data.order_id) setPendingOrderId(data.order_id);
             window.location.href = data.checkout_url;
         } catch (error) {
             console.error(error);
             alert("Hubo un error al conectarse con Mercado Pago. Intentá de nuevo más tarde.");
-            setProcessing(false);
-        }
-    };
-
-    const handleSimulatePayment = async () => {
-        setProcessing(true);
-        try {
-            const response = await fetch('/api/payments/create-preference', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items, shipping, deliveryMethod }),
-            });
-            if (!response.ok) throw new Error('Error al crear orden de prueba');
-            const data = await response.json();
-            const oid = data.order_id;
-            // Simula el redirect de vuelta de MP con un payment_id falso
-            window.location.href = `/checkout?status=success&payment_id=SIM_${oid}&external_reference=${oid}`;
-        } catch (error) {
-            console.error(error);
-            alert('Error al simular el pago.');
             setProcessing(false);
         }
     };
@@ -752,19 +730,6 @@ export const Checkout: React.FC = () => {
                                 >
                                     ← Volver a datos de envío
                                 </button>
-
-                                {/* Botón de simulación — solo visible en desarrollo */}
-                                {import.meta.env.DEV && paymentMethod === 'mercadopago' && (
-                                    <button
-                                        type="button"
-                                        onClick={handleSimulatePayment}
-                                        disabled={processing}
-                                        className="w-full py-3 border-2 border-dashed border-amber-400 text-amber-600 dark:text-amber-400 font-bold text-xs rounded-full hover:bg-amber-50 dark:hover:bg-amber-900/20 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        <span className="material-symbols-outlined !text-[16px]">science</span>
-                                        [DEV] Simular pago aprobado
-                                    </button>
-                                )}
                             </form>
                         )}
                     </div>

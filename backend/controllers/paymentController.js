@@ -56,7 +56,7 @@ const createPreference = async (req, res) => {
         });
 
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-        const isProduction = process.env.NODE_ENV === 'production';
+        const isLocalhost = frontendUrl.includes('localhost') || frontendUrl.includes('127.0.0.1');
 
         const body = {
             items: mpItems,
@@ -77,8 +77,8 @@ const createPreference = async (req, res) => {
                 failure: `${frontendUrl}/checkout?status=failure`,
                 pending: `${frontendUrl}/checkout?status=pending`,
             },
-            // auto_return solo funciona con URLs públicas (no localhost), se activa solo en producción
-            ...(isProduction && { auto_return: "approved" }),
+            // auto_return solo funciona con URLs públicas (no localhost)
+            ...(!isLocalhost && { auto_return: "approved" }),
             notification_url: `${process.env.BACKEND_URL || 'https://tuservidor.com'}/api/payments/webhook`,
             external_reference: order._id.toString() // Referencia estricta mapeada a Mongo
         };
@@ -86,10 +86,9 @@ const createPreference = async (req, res) => {
         const preference = new Preference(client);
         const result = await preference.create({ body });
 
-        // En desarrollo usamos sandbox para poder testear con cuentas de prueba
-        const checkoutUrl = process.env.NODE_ENV === 'production'
-            ? result.init_point
-            : result.sandbox_init_point;
+        // Usamos init_point para pagos reales, sandbox_init_point solo con credenciales TEST-
+        const isSandbox = accessToken?.startsWith('TEST-');
+        const checkoutUrl = isSandbox ? result.sandbox_init_point : result.init_point;
 
         res.json({
             id: result.id,
@@ -202,31 +201,12 @@ const createTransferOrder = async (req, res) => {
 };
 
 // Verificar pago desde el frontend al volver del redirect de MP
-// Esto es necesario en desarrollo porque el webhook no puede llegar a localhost
 const verifyPayment = async (req, res) => {
     try {
         const { payment_id } = req.query;
 
         if (!payment_id) {
             return res.status(400).json({ message: 'payment_id requerido' });
-        }
-
-        // Modo simulación: solo disponible en desarrollo
-        if (payment_id.startsWith('SIM_') && process.env.NODE_ENV !== 'production') {
-            const orderId = payment_id.replace('SIM_', '');
-            const order = await Order.findById(orderId);
-            if (order && order.status !== 'paid') {
-                order.status = 'paid';
-                order.paymentId = payment_id;
-                await order.save();
-                console.log('✅ Orden simulada marcada como pagada:', orderId);
-            }
-            return res.json({
-                verified: true,
-                status: 'approved',
-                order_id: orderId,
-                simulated: true,
-            });
         }
 
         const client = new MercadoPagoConfig({ accessToken });
