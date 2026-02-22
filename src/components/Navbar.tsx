@@ -145,7 +145,7 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={openCart}
-              className={`hidden md:block relative p-2 transition-colors rounded-full ${shouldBeTransparent
+              className={`relative p-2 transition-colors rounded-full ${shouldBeTransparent
                 ? 'text-white hover:text-primary hover:bg-white/10 drop-shadow-lg'
                 : 'text-stone-600 hover:text-primary hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800'
                 }`}
