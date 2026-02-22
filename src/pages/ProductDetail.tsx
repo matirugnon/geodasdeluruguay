@@ -3,9 +3,11 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
+import { SEOHead } from '../components/SEOHead';
+import { productUrl, SITE_URL } from '../utils/slugify';
 
 export const ProductDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -15,15 +17,25 @@ export const ProductDetail: React.FC = () => {
 
   useEffect(() => {
     const load = async () => {
-      if (!id) return;
+      if (!slug) return;
       setActiveImage(0);
-      const p = await dataService.getProductById(id);
-      setProduct(p || null);
+
+      // Fetch product by slug (backend resolves slug → product)
+      const p = await dataService.getProductBySlug(slug);
+      if (!p) { setProduct(null); return; }
+
+      // If the URL slug doesn't match the stored slug, redirect to canonical
+      if (slug !== p.slug) {
+        navigate(productUrl(p.slug), { replace: true });
+        return;
+      }
+
+      setProduct(p);
       const all = await dataService.getVisibleProducts();
-      setRelatedProducts(all.filter(item => item.id !== id).slice(0, 6));
+      setRelatedProducts(all.filter(item => item.id !== p.id).slice(0, 6));
     };
     load();
-  }, [id]);
+  }, [slug, navigate]);
 
   if (!product) {
     return (
@@ -43,8 +55,62 @@ export const ProductDetail: React.FC = () => {
     setTimeout(() => setAddedFeedback(false), 1800);
   };
 
+  // SEO: canonical URL and structured data
+  const canonicalPath = productUrl(product.slug);
+  const canonicalUrl = `${SITE_URL}${canonicalPath}`;
+  const seoDescription = product.description
+    ? product.description.slice(0, 160)
+    : `${product.title} — ${product.category}. Cristal natural de Uruguay. $${product.price} UYU.`;
+
+  // JSON-LD Product Schema
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    image: product.images?.[0] || '',
+    sku: product.id,
+    brand: { '@type': 'Brand', name: 'Geodas del Uruguay' },
+    category: product.category,
+    offers: {
+      '@type': 'Offer',
+      url: canonicalUrl,
+      priceCurrency: 'UYU',
+      price: product.price,
+      availability: product.stock > 0
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Organization', name: 'Geodas del Uruguay' },
+    },
+    ...(product.specs?.weight && { weight: { '@type': 'QuantitativeValue', value: product.specs.weight, unitCode: 'GRM' } }),
+  };
+
+  // JSON-LD BreadcrumbList
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Tienda', item: `${SITE_URL}/tienda` },
+      ...(product.category ? [{
+        '@type': 'ListItem', position: 3,
+        name: product.category,
+        item: `${SITE_URL}/tienda/${product.category.toLowerCase()}`
+      }] : []),
+      { '@type': 'ListItem', position: product.category ? 4 : 3, name: product.title, item: canonicalUrl },
+    ],
+  };
+
   return (
     <div className="bg-[#FDFDFD] text-[#1c1917] font-display">
+      <SEOHead
+        title={product.title}
+        description={seoDescription}
+        canonical={canonicalUrl}
+        image={product.images?.[0]}
+        type="product"
+        jsonLd={[productJsonLd, breadcrumbJsonLd]}
+      />
       {/* ── Breadcrumb ──────────────────────────────────────────────── */}
       <div className="max-w-[1280px] mx-auto px-6 sm:px-10 pt-6 pb-2">
         <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-stone-400">
@@ -259,7 +325,7 @@ export const ProductDetail: React.FC = () => {
               {relatedProducts.map(r => (
                 <Link
                   key={r.id}
-                  to={`/producto/${r.id}`}
+                  to={productUrl(r.slug)}
                   className="group flex flex-col gap-2"
                 >
                   <div className="aspect-square rounded-xl overflow-hidden bg-stone-100">
@@ -267,6 +333,7 @@ export const ProductDetail: React.FC = () => {
                       <img
                         src={r.images[0]}
                         alt={r.title}
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     )}

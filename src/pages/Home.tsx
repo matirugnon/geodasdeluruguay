@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Product, Tip } from '../types';
 import { useCart } from '../context/CartContext';
+import { productUrl, tipUrl } from '../utils/slugify';
+import { SEOHead } from '../components/SEOHead';
 
 import { motion } from 'framer-motion';
 
@@ -33,6 +35,10 @@ export const Home: React.FC = () => {
 
    return (
       <main className="flex-grow">
+         <SEOHead
+           title="Cristales y Piedras Naturales de Uruguay"
+           description="Geodas, amatistas, cuarzos y accesorios energéticos naturales de Uruguay. Envío a todo el país. Conectá con la energía de la tierra."
+         />
          {/* Hero Section - Replicating the provided image design */}
          <section className="relative h-[calc(100vh-5rem)] min-h-[700px] flex items-center justify-center bg-[#F5F5F0]">
 
@@ -125,10 +131,11 @@ export const Home: React.FC = () => {
                         className="group cursor-pointer flex flex-col"
                      >
                         <div className="relative aspect-square md:aspect-[3/4] overflow-hidden bg-white mb-3 md:mb-4 rounded-sm shadow-sm hover:shadow-md transition-shadow">
-                           <Link to={`/producto/${product.id}`}>
+                           <Link to={productUrl(product.slug)}>
                               <img
                                  src={product.images[0]}
                                  alt={product.title}
+                                 loading="lazy"
                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                               />
                            </Link>
@@ -144,7 +151,7 @@ export const Home: React.FC = () => {
                               <span className="material-symbols-outlined !text-[16px] md:!text-[18px]">shopping_bag</span>
                            </button>
                         </div>
-                        <Link to={`/producto/${product.id}`} className="mt-auto px-1 md:px-0">
+                        <Link to={productUrl(product.slug)} className="mt-auto px-1 md:px-0">
                            <h3 className="font-serif text-sm md:text-lg text-[#5A5243] mb-0.5 md:mb-1 group-hover:text-[#8C7E60] transition-colors line-clamp-2 md:line-clamp-1 leading-snug">{product.title}</h3>
                            <p className="text-[#8C8C8C] font-light text-xs md:text-base">$ {product.price.toLocaleString('es-UY')}</p>
                         </Link>
@@ -268,7 +275,7 @@ export const Home: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                {tips.map(tip => (
-                  <Link key={tip.id} to={`/tips/${tip.slug}`}>
+                  <Link key={tip.id} to={tipUrl(tip.slug)}>
                      <article className="group relative h-80 rounded-xl overflow-hidden cursor-pointer shadow-lg">
                         <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0" style={{ backgroundImage: `url("${tip.image}")` }}></div>
                         <div className="absolute inset-0 bg-stone-900/50 group-hover:bg-stone-900/40 transition-colors duration-300"></div>

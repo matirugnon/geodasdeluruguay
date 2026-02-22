@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Tip } from '../types';
+import { tipUrl } from '../utils/slugify';
+import { SEOHead } from '../components/SEOHead';
 
 export const Tips: React.FC = () => {
   const [tips, setTips] = useState<Tip[]>([]);
@@ -46,6 +48,12 @@ export const Tips: React.FC = () => {
 
   return (
     <div className="bg-stone-50 text-stone-800 antialiased selection:bg-gold/30 selection:text-stone-900 relative">
+      <SEOHead
+        title="Diario Místico — Tips y Guías de Cristales"
+        description="Aprendé a cuidar, limpiar y potenciar tus geodas y cristales. Guías, rituales y sabiduría natural."
+        canonical="https://geodasdeluruguay.vercel.app/tips"
+        type="website"
+      />
       <div className="absolute inset-0 pointer-events-none z-0 texture-overlay opacity-40 mix-blend-multiply fixed"></div>
       
       <main className="relative flex-1 flex flex-col items-center w-full z-10">
@@ -107,7 +115,7 @@ export const Tips: React.FC = () => {
                 
                 return (
                   <article key={tip.id} className="group relative">
-                    <Link to={`/tips/${tip.slug}`} className="block">
+                    <Link to={tipUrl(tip.slug)} className="block">
                       <div className={`flex ${layout.containerClass} items-center`}>
                         <div className={`w-full ${layout.imageClass} relative z-0`}>
                           <div className={`aspect-[4/3] md:aspect-[16/11] relative overflow-hidden ${layout.blobShape} shadow-2xl shadow-stone-900/10 transition-transform duration-700 ease-out group-hover:scale-[1.02]`}>

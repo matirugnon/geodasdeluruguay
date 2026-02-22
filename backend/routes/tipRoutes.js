@@ -8,16 +8,18 @@ router.get('/', async (req, res) => {
     res.json(tips);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:slugOrId', async (req, res) => {
     try {
-        // Intentar buscar por slug primero, si falla buscar por ID (retrocompatibilidad)
-        let tip = await Tip.findOne({ slug: req.params.id });
-        
-        // Si no se encuentra por slug y el parámetro parece un ObjectId válido, buscar por _id
-        if (!tip && req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-            tip = await Tip.findById(req.params.id);
+        const param = req.params.slugOrId;
+
+        // Try finding by slug first
+        let tip = await Tip.findOne({ slug: param });
+
+        // Fallback: if param looks like a valid ObjectId, search by _id
+        if (!tip && param.match(/^[0-9a-fA-F]{24}$/)) {
+            tip = await Tip.findById(param);
         }
-        
+
         if (tip) {
             res.json(tip);
         } else {

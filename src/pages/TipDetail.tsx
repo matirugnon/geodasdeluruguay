@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Tip } from '../types';
+import { SEOHead } from '../components/SEOHead';
+import { tipUrl, SITE_URL } from '../utils/slugify';
 
 export const TipDetail: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { slug } = useParams<{ slug: string }>();
+    const navigate = useNavigate();
     const [tip, setTip] = useState<Tip | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadTip = async () => {
-            if (!id) return;
+            if (!slug) return;
             setLoading(true);
-            console.log('🔍 Loading tip with ID/slug:', id);
-            const data = await dataService.getTipById(id);
-            console.log('📦 Tip data received:', data);
+            const data = await dataService.getTipBySlug(slug);
+
+            if (data) {
+                // Redirect to canonical slug URL if needed
+                if (slug !== data.slug) {
+                    navigate(tipUrl(data.slug), { replace: true });
+                    return;
+                }
+            }
+
             setTip(data);
             setLoading(false);
-
-            // Update document title for SEO
-            if (data) {
-                document.title = `${data.title} | Diario Místico - Geodas Uruguay`;
-            }
         };
 
         loadTip();
-    }, [id]);
+    }, [slug, navigate]);
 
     if (loading) {
         return (

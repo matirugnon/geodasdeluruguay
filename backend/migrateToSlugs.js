@@ -1,21 +1,7 @@
 require('dotenv').config();
-const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const Product = require('./models/Product');
 const Tip = require('./models/Tip');
-
-// Helper function to generate slug
-function generateSlug(text) {
-    return text
-        .toString()
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-');
-}
 
 const migrateToSlugs = async () => {
     await connectDB();
@@ -23,26 +9,15 @@ const migrateToSlugs = async () => {
     try {
         console.log('🔄 Iniciando migración de slugs...');
 
-        // Migrar Products
+        // Migrar Products — forzar regeneración usando el pre-save hook del modelo
         const products = await Product.find({});
         console.log(`📦 Encontrados ${products.length} productos`);
 
         for (const product of products) {
-            if (!product.slug) {
-                const baseSlug = generateSlug(product.title);
-                let slug = baseSlug;
-                let counter = 1;
-
-                // Asegurar que el slug sea único
-                while (await Product.findOne({ slug, _id: { $ne: product._id } })) {
-                    slug = `${baseSlug}-${counter}`;
-                    counter++;
-                }
-
-                product.slug = slug;
-                await product.save();
-                console.log(`✅ Producto "${product.title}" → slug: "${slug}"`);
-            }
+            product.markModified('title');
+            product.slug = undefined;
+            await product.save();
+            console.log(`✅ Producto "${product.title}" → slug: "${product.slug}"`);
         }
 
         // Migrar Tips
@@ -50,20 +25,10 @@ const migrateToSlugs = async () => {
         console.log(`📝 Encontrados ${tips.length} tips`);
 
         for (const tip of tips) {
-            if (!tip.slug) {
-                const baseSlug = generateSlug(tip.title);
-                let slug = baseSlug;
-                let counter = 1;
-
-                while (await Tip.findOne({ slug, _id: { $ne: tip._id } })) {
-                    slug = `${baseSlug}-${counter}`;
-                    counter++;
-                }
-
-                tip.slug = slug;
-                await tip.save();
-                console.log(`✅ Tip "${tip.title}" → slug: "${slug}"`);
-            }
+            tip.markModified('title');
+            tip.slug = undefined;
+            await tip.save();
+            console.log(`✅ Tip "${tip.title}" → slug: "${tip.slug}"`);
         }
 
         console.log('✨ Migración completada exitosamente');

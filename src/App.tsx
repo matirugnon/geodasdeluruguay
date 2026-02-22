@@ -1,23 +1,40 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { CartProvider } from './context/CartContext';
-import { Home } from './pages/Home';
-import { Category } from './pages/Category';
-import { ProductDetail } from './pages/ProductDetail';
-import { Tips } from './pages/Tips';
-import { TipDetail } from './pages/TipDetail';
-import { Shop } from './pages/Shop';
-import { ShopCategory } from './pages/ShopCategory';
-import { Checkout } from './pages/Checkout';
+
+// Lazy-loaded pages for code splitting
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
+const Category = lazy(() => import('./pages/Category').then(m => ({ default: m.Category })));
+const ProductDetail = lazy(() => import('./pages/ProductDetail').then(m => ({ default: m.ProductDetail })));
+const Tips = lazy(() => import('./pages/Tips').then(m => ({ default: m.Tips })));
+const TipDetail = lazy(() => import('./pages/TipDetail').then(m => ({ default: m.TipDetail })));
+const Shop = lazy(() => import('./pages/Shop').then(m => ({ default: m.Shop })));
+const Checkout = lazy(() => import('./pages/Checkout').then(m => ({ default: m.Checkout })));
+
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+  return null;
+};
+
+// Trailing slash normalizer — redirect /tienda/ → /tienda
+const TrailingSlashRedirect = () => {
+  const { pathname, search } = useLocation();
+  if (pathname !== '/' && pathname.endsWith('/')) {
+    return <Navigate to={pathname.slice(0, -1) + search} replace />;
+  }
   return null;
 };
 
@@ -32,18 +49,23 @@ const AppLayout: React.FC = () => {
     <div className="flex flex-col min-h-screen">
       {!isStandalone && <Navbar />}
       <CartDrawer />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/categoria/:id" element={<Category />} />
-        <Route path="/producto/:id" element={<ProductDetail />} />
-        <Route path="/tips" element={<Tips />} />
-        <Route path="/tips/:id" element={<TipDetail />} />
-        {/* Shop Routes */}
-        <Route path="/tienda" element={<Shop />} />
-        <Route path="/tienda/:categorySlug" element={<Shop />} />
-        {/* Checkout */}
-        <Route path="/checkout" element={<Checkout />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/categoria/:id" element={<Category />} />
+          {/* Producto: slug descriptivo con ID al final */}
+          <Route path="/producto/:slug" element={<ProductDetail />} />
+          <Route path="/tips" element={<Tips />} />
+          <Route path="/tips/:slug" element={<TipDetail />} />
+          {/* Shop Routes */}
+          <Route path="/tienda" element={<Shop />} />
+          <Route path="/tienda/:categorySlug" element={<Shop />} />
+          {/* Checkout */}
+          <Route path="/checkout" element={<Checkout />} />
+          {/* Catch-all → home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
       {!isStandalone && <Footer />}
     </div>
   );
@@ -51,11 +73,14 @@ const AppLayout: React.FC = () => {
 
 export default function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <CartProvider>
-        <AppLayout />
-      </CartProvider>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop />
+        <TrailingSlashRedirect />
+        <CartProvider>
+          <AppLayout />
+        </CartProvider>
+      </Router>
+    </HelmetProvider>
   );
 }

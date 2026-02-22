@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
+import { productUrl } from '../utils/slugify';
 
 export const Navbar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,10 +52,10 @@ export const Navbar: React.FC = () => {
     return () => clearTimeout(debounce);
   }, [searchTerm]);
 
-  const handleResultClick = (id: string) => {
+  const handleResultClick = (product: Product) => {
     setSearchTerm('');
     setShowResults(false);
-    navigate(`/producto/${id}`);
+    navigate(productUrl(product.slug));
   };
 
   return (
@@ -122,7 +123,7 @@ export const Navbar: React.FC = () => {
                       results.map(product => (
                         <button
                           key={product.id}
-                          onClick={() => handleResultClick(product.id)}
+                          onClick={() => handleResultClick(product)}
                           className="flex w-full items-center gap-3 p-2 hover:bg-stone-50 dark:hover:bg-stone-800/50 rounded-xl transition-colors group/item text-left"
                         >
                           <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 relative">

@@ -57,11 +57,20 @@ const getAdminProducts = async (req, res) => {
     }
 };
 
-// @desc    Fetch single product
-// @route   GET /api/products/:id
+// @desc    Fetch single product by slug or ID
+// @route   GET /api/products/:slugOrId
 const getProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const param = req.params.id;
+
+        // Try finding by slug first
+        let product = await Product.findOne({ slug: param });
+
+        // Fallback: if param looks like a valid ObjectId, search by _id
+        if (!product && param.match(/^[0-9a-fA-F]{24}$/)) {
+            product = await Product.findById(param);
+        }
+
         if (product) {
             res.json(product);
         } else {

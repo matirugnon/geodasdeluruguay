@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { dataService, PRODUCT_CATEGORIES } from '../services/dataService';
 import { Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
+import { SEOHead } from '../components/SEOHead';
+import { SITE_URL } from '../utils/slugify';
 
 const CATEGORY_SLUG_MAP: Record<string, string> = {
     'collares': 'Collares',
@@ -106,8 +108,19 @@ export const Shop: React.FC = () => {
         return pages;
     };
 
+    const categoryName = categorySlug ? CATEGORY_SLUG_MAP[categorySlug] || categorySlug : '';
+    const shopTitle = categoryName ? `${categoryName} — Tienda` : 'Tienda';
+    const shopDesc = categoryName
+        ? `Comprá ${categoryName.toLowerCase()} naturales de Uruguay. Piedras, cristales y accesorios energéticos.`
+        : 'Explorá nuestra colección de cristales, geodas y accesorios naturales de Uruguay. Envío a todo el país.';
+
     return (
         <div className="min-h-screen bg-[#FDFBF7] dark:bg-[#1A1917] transition-colors duration-300">
+            <SEOHead
+                title={shopTitle}
+                description={shopDesc}
+                canonical={`${SITE_URL}/tienda${categorySlug ? `/${categorySlug}` : ''}`}
+            />
             {/* Page Header */}
             <header className="pt-24 pb-12 px-6 md:px-12 max-w-7xl mx-auto text-center">
                 <motion.h1

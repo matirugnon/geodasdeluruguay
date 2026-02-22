@@ -43,7 +43,7 @@ export const dataService = {
 
       const products = await response.json();
       // Mapear _id de MongoDB a id para el frontend
-      return products.map((p: any) => ({ ...p, id: p._id }));
+      return products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
     } catch (error) {
       console.error('Error fetching products:', error);
       return [];
@@ -56,9 +56,22 @@ export const dataService = {
       if (!response.ok) return undefined;
       const product = await response.json();
       // Mapear _id de MongoDB a id para el frontend
-      return { ...product, id: product._id };
+      return { ...product, id: product._id, slug: product.slug || product._id };
     } catch (error) {
       console.error('Error fetching product:', error);
+      return undefined;
+    }
+  },
+
+  // Get product by slug (same endpoint — backend resolves slug or ID)
+  async getProductBySlug(slug: string): Promise<Product | undefined> {
+    try {
+      const response = await fetch(`${API_URL}/products/${slug}`);
+      if (!response.ok) return undefined;
+      const product = await response.json();
+      return { ...product, id: product._id, slug: product.slug || product._id };
+    } catch (error) {
+      console.error('Error fetching product by slug:', error);
       return undefined;
     }
   },
@@ -229,7 +242,7 @@ export const dataService = {
       if (!response.ok) return [];
       const tips = await response.json();
       // Mapear _id de MongoDB a id para el frontend
-      return tips.map((t: any) => ({ ...t, id: t._id }));
+      return tips.map((t: any) => ({ ...t, id: t._id, slug: t.slug || t._id }));
     } catch (error) {
       console.error('Error fetching tips:', error);
       return [];
@@ -245,6 +258,19 @@ export const dataService = {
       return { ...tip, id: tip._id, slug: tip.slug || tip._id };
     } catch (error) {
       console.error('Error fetching tip:', error);
+      return null;
+    }
+  },
+
+  // Get tip by slug (same endpoint — backend resolves slug or ID)
+  async getTipBySlug(slug: string): Promise<Tip | null> {
+    try {
+      const response = await fetch(`${API_URL}/tips/${slug}`);
+      if (!response.ok) return null;
+      const tip = await response.json();
+      return { ...tip, id: tip._id, slug: tip.slug || tip._id };
+    } catch (error) {
+      console.error('Error fetching tip by slug:', error);
       return null;
     }
   },

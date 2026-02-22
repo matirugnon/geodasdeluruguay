@@ -6,6 +6,7 @@ export interface ProductSpecs {
 
 export interface Product {
   id: string;
+  slug: string;
   title: string;
   description: string;
   price: number;
@@ -21,6 +22,7 @@ export interface Product {
 
 export interface Tip {
   id: string;
+  slug: string;
   title: string;
   excerpt: string;
   content: string; // HTML-like string

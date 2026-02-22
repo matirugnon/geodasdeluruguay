@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
+import { productUrl } from '../utils/slugify';
 
 interface ProductCardProps {
   product: Product;
@@ -23,7 +24,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <article className="group flex flex-col bg-white dark:bg-[#1A1917] rounded-xl overflow-hidden h-full shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-stone-200/60 dark:border-stone-700/40 transition-all duration-300 hover:-translate-y-1">
       {/* Image */}
       <div className="relative aspect-[4/5] overflow-hidden bg-stone-100 dark:bg-stone-800">
-        <Link to={`/producto/${product.id}`} className="block absolute inset-0">
+        <Link to={productUrl(product.slug)} className="block absolute inset-0">
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             style={{ backgroundImage: `url('${product.images[0]}')` }}
@@ -63,7 +64,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </span>
 
         {/* Title */}
-        <Link to={`/producto/${product.id}`}>
+          <Link to={productUrl(product.slug)}>
           <h3 className="text-[13px] sm:text-sm md:text-base lg:text-lg font-bold text-stone-800 dark:text-stone-100 leading-snug font-serif hover:text-[#8C7E60] dark:hover:text-[#C5A059] transition-colors duration-200 line-clamp-2 mb-2 sm:mb-3">
             {product.title}
           </h3>
@@ -75,7 +76,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             $ {product.price.toLocaleString('es-UY')}
           </span>
           <Link
-            to={`/producto/${product.id}`}
+            to={productUrl(product.slug)}
             className="w-full inline-flex items-center justify-center gap-1.5 py-2 sm:py-2.5 lg:py-3 bg-[#8C7E60] hover:bg-[#756A50] text-white text-[11px] sm:text-xs md:text-sm font-semibold rounded-lg transition-all duration-250 tracking-wide"
           >
             Ver Detalle

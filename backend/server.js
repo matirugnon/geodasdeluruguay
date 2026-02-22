@@ -11,6 +11,7 @@ const tipRoutes = require('./routes/tipRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const seoRoutes = require('./routes/seoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -104,6 +105,9 @@ app.use('/api/tips', tipRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/payments', paymentRoutes);
+
+// SEO: sitemap.xml y robots.txt (servidos desde /api/seo/ y rewriteados desde Vercel)
+app.use('/api/seo', seoRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
