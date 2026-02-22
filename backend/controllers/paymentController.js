@@ -2,8 +2,7 @@ const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 const crypto = require('crypto');
 const Order = require('../models/Order');
 
-// Agregamos un token de prueba (Sandbox) como fallback si no hay en .env
-const accessToken = process.env.MP_ACCESS_TOKEN || 'TEST-8278278278278278-022019-1234567890abcdef1234567890abcdef-123456789';
+const accessToken = process.env.MP_ACCESS_TOKEN;
 
 // Crear preferencia
 const createPreference = async (req, res) => {
@@ -56,6 +55,9 @@ const createPreference = async (req, res) => {
             options: { timeout: 5000, idempotencyKey: idempotencyKey }
         });
 
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        const isProduction = process.env.NODE_ENV === 'production';
+
         const body = {
             items: mpItems,
             payer: {
@@ -71,11 +73,12 @@ const createPreference = async (req, res) => {
                 }
             },
             back_urls: {
-                success: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/checkout?status=success`,
-                failure: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/checkout`,
-                pending: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/checkout`,
+                success: `${frontendUrl}/checkout?status=success`,
+                failure: `${frontendUrl}/checkout?status=failure`,
+                pending: `${frontendUrl}/checkout?status=pending`,
             },
-            auto_return: "approved",
+            // auto_return solo funciona con URLs públicas (no localhost), se activa solo en producción
+            ...(isProduction && { auto_return: "approved" }),
             notification_url: `${process.env.BACKEND_URL || 'https://tuservidor.com'}/api/payments/webhook`,
             external_reference: order._id.toString() // Referencia estricta mapeada a Mongo
         };
@@ -83,10 +86,15 @@ const createPreference = async (req, res) => {
         const preference = new Preference(client);
         const result = await preference.create({ body });
 
+        // En desarrollo usamos sandbox para poder testear con cuentas de prueba
+        const checkoutUrl = process.env.NODE_ENV === 'production'
+            ? result.init_point
+            : result.sandbox_init_point;
+
         res.json({
             id: result.id,
-            init_point: result.init_point,
-            sandbox_init_point: result.sandbox_init_point,
+            order_id: order._id.toString(),
+            checkout_url: checkoutUrl,
         });
     } catch (error) {
         console.error('Error al crear preferencia de Mercado Pago:', error);
@@ -193,8 +201,80 @@ const createTransferOrder = async (req, res) => {
     }
 };
 
+// Verificar pago desde el frontend al volver del redirect de MP
+// Esto es necesario en desarrollo porque el webhook no puede llegar a localhost
+const verifyPayment = async (req, res) => {
+    try {
+        const { payment_id } = req.query;
+
+        if (!payment_id) {
+            return res.status(400).json({ message: 'payment_id requerido' });
+        }
+
+        // Modo simulación: solo disponible en desarrollo
+        if (payment_id.startsWith('SIM_') && process.env.NODE_ENV !== 'production') {
+            const orderId = payment_id.replace('SIM_', '');
+            const order = await Order.findById(orderId);
+            if (order && order.status !== 'paid') {
+                order.status = 'paid';
+                order.paymentId = payment_id;
+                await order.save();
+                console.log('✅ Orden simulada marcada como pagada:', orderId);
+            }
+            return res.json({
+                verified: true,
+                status: 'approved',
+                order_id: orderId,
+                simulated: true,
+            });
+        }
+
+        const client = new MercadoPagoConfig({ accessToken });
+        const paymentClient = new Payment(client);
+        const paymentInfo = await paymentClient.get({ id: payment_id });
+
+        console.log('Verificación manual de pago:', {
+            id: paymentInfo.id,
+            status: paymentInfo.status,
+            external_reference: paymentInfo.external_reference,
+            amount: paymentInfo.transaction_amount,
+        });
+
+        if (paymentInfo.status === 'approved') {
+            const orderId = paymentInfo.external_reference;
+
+            if (orderId) {
+                const order = await Order.findById(orderId);
+                if (order && order.status !== 'paid') {
+                    order.status = 'paid';
+                    order.paymentId = payment_id;
+                    await order.save();
+                    console.log('✅ Orden confirmada por verify-payment:', orderId);
+                }
+            }
+
+            return res.json({
+                verified: true,
+                status: paymentInfo.status,
+                order_id: paymentInfo.external_reference,
+                amount: paymentInfo.transaction_amount,
+            });
+        }
+
+        res.json({
+            verified: false,
+            status: paymentInfo.status,
+        });
+
+    } catch (error) {
+        console.error('Error al verificar pago:', error);
+        res.status(500).json({ message: 'Error al verificar el pago' });
+    }
+};
+
 module.exports = {
     createPreference,
     createTransferOrder,
-    webhook
+    webhook,
+    verifyPayment,
 };

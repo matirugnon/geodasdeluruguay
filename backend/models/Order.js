@@ -48,6 +48,10 @@ const orderSchema = new mongoose.Schema({
         enum: ['pending', 'paid', 'awaiting_transfer', 'cancelled'],
         default: 'pending'
     },
+    paymentId: {
+        type: String,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: Date.now

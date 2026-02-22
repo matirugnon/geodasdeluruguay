@@ -14,7 +14,7 @@ interface ShippingForm {
     codigoPostal: string;
 }
 
-type CheckoutStep = 'shipping' | 'payment' | 'success' | 'transfer-success';
+type CheckoutStep = 'shipping' | 'payment' | 'success' | 'failure' | 'pending' | 'transfer-success';
 type PaymentMethod = 'mercadopago' | 'transfer';
 
 type FormErrors<T> = Partial<Record<keyof T, string>>;
@@ -116,25 +116,74 @@ export const Checkout: React.FC = () => {
     const [processing, setProcessing] = useState(false);
     const [orderId, setOrderId] = useState(generateOrderId);
     const [transferOrderId, setTransferOrderId] = useState('');
+    const [verifying, setVerifying] = useState(false);
+    const [verifiedOrderId, setVerifiedOrderId] = useState('');
+    const [verifyError, setVerifyError] = useState(false);
+    const [pendingOrderId, setPendingOrderId] = useState('');
 
     const [shipping, setShipping] = useState<ShippingForm>({
         nombre: '', email: '', telefono: '', direccion: '', ciudad: '', departamento: '', codigoPostal: '',
     });
     const [shippingErrors, setShippingErrors] = useState<FormErrors<ShippingForm>>({});
 
-    // Parse once for early return check
-    const isSuccessCallback = new URLSearchParams(window.location.search).get('status') === 'success';
+    // Parse once for early return check — MP agrega collection_status, payment_id, external_reference al redirect
+    const params = new URLSearchParams(window.location.search);
+    const mpStatus = params.get('status'); // Nuestro param: success | failure | pending
+    const collectionStatus = params.get('collection_status'); // Param de MP: approved | rejected | pending | null
+    const isMpCallback = mpStatus === 'success' || mpStatus === 'failure' || mpStatus === 'pending' || collectionStatus !== null;
 
     React.useEffect(() => {
-        if (isSuccessCallback) {
-            clearCart();
-            setStep('success');
-            window.history.replaceState({}, document.title, '/checkout');
-        }
-    }, [isSuccessCallback, clearCart]);
+        if (!isMpCallback) return;
 
-    // Redirect if cart is empty (and not on success screen)
-    if (items.length === 0 && step !== 'success' && step !== 'transfer-success' && !isSuccessCallback) {
+        const paymentId = params.get('payment_id') || params.get('collection_id');
+        const externalRef = params.get('external_reference');
+        const resolvedStatus = collectionStatus || mpStatus; // approved/rejected/pending ó success/failure/pending
+
+        window.history.replaceState({}, document.title, '/checkout');
+
+        // Pago rechazado o error
+        if (resolvedStatus === 'failure' || resolvedStatus === 'rejected') {
+            setStep('failure');
+            return;
+        }
+
+        // Pago pendiente (ej. efectivo, transferencia bancaria desde MP)
+        if (resolvedStatus === 'pending' && mpStatus === 'pending') {
+            setVerifiedOrderId(externalRef || '');
+            setStep('pending');
+            return;
+        }
+
+        // Pago exitoso — vaciar carrito y verificar
+        clearCart();
+        setStep('success');
+
+        if (paymentId) {
+            setVerifying(true);
+            fetch(`/api/payments/verify-payment?payment_id=${paymentId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.verified) {
+                        setVerifiedOrderId(data.order_id || externalRef || '');
+                    } else {
+                        // MP dice approved pero nuestra API no pudo verificar — mostramos éxito con warning
+                        setVerifiedOrderId(externalRef || '');
+                        setVerifyError(true);
+                    }
+                })
+                .catch(() => {
+                    setVerifiedOrderId(externalRef || '');
+                    setVerifyError(true);
+                })
+                .finally(() => setVerifying(false));
+        } else if (externalRef) {
+            setVerifiedOrderId(externalRef);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMpCallback]);
+
+    // Redirect if cart is empty (and not on a result screen)
+    if (items.length === 0 && !['success', 'transfer-success', 'failure', 'pending'].includes(step) && !isMpCallback) {
         return (
             <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 gap-6">
                 <span className="material-symbols-outlined text-6xl text-stone-200 dark:text-stone-700">shopping_bag</span>
@@ -212,13 +261,89 @@ export const Checkout: React.FC = () => {
             if (!response.ok) throw new Error('Error al crear preferencia');
 
             const data = await response.json();
-            window.location.href = data.init_point;
+            if (data.order_id) setPendingOrderId(data.order_id);
+            window.location.href = data.checkout_url;
         } catch (error) {
             console.error(error);
             alert("Hubo un error al conectarse con Mercado Pago. Intentá de nuevo más tarde.");
             setProcessing(false);
         }
     };
+
+    const handleSimulatePayment = async () => {
+        setProcessing(true);
+        try {
+            const response = await fetch('/api/payments/create-preference', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items, shipping, deliveryMethod }),
+            });
+            if (!response.ok) throw new Error('Error al crear orden de prueba');
+            const data = await response.json();
+            const oid = data.order_id;
+            // Simula el redirect de vuelta de MP con un payment_id falso
+            window.location.href = `/checkout?status=success&payment_id=SIM_${oid}&external_reference=${oid}`;
+        } catch (error) {
+            console.error(error);
+            alert('Error al simular el pago.');
+            setProcessing(false);
+        }
+    };
+
+    // ── Failure screen (pago rechazado) ───────────────────────────────────────
+
+    if (step === 'failure') {
+        return (
+            <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+                <div className="w-24 h-24 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined text-5xl text-red-500" style={{ fontVariationSettings: "'FILL' 1" }}>cancel</span>
+                </div>
+                <h1 className="text-3xl font-bold font-serif text-stone-800 dark:text-white">Pago no procesado</h1>
+                <p className="text-stone-500 dark:text-stone-400 max-w-md leading-relaxed">
+                    Tu pago no pudo ser procesado. Podés intentar de nuevo o elegir otro método de pago.
+                </p>
+                <div className="flex flex-wrap gap-4 justify-center mt-4">
+                    <Link
+                        to="/tienda"
+                        className="px-6 py-3 bg-primary text-white rounded-full text-sm font-bold tracking-wide hover:bg-primary-dark transition-colors"
+                    >
+                        Volver a la tienda
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    // ── Pending screen (pago en espera) ───────────────────────────────────────
+
+    if (step === 'pending') {
+        return (
+            <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+                <div className="w-24 h-24 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined text-5xl text-amber-500" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
+                </div>
+                <h1 className="text-3xl font-bold font-serif text-stone-800 dark:text-white">Pago pendiente</h1>
+                <p className="text-stone-500 dark:text-stone-400 max-w-md leading-relaxed">
+                    Tu pago está siendo procesado por Mercado Pago. Te notificaremos cuando se confirme.
+                </p>
+                {verifiedOrderId && (
+                    <div className="bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl px-6 py-3 flex items-center gap-3">
+                        <span className="material-symbols-outlined !text-[18px] text-amber-500">receipt_long</span>
+                        <span className="text-xs text-stone-500 dark:text-stone-400">N° de orden:</span>
+                        <span className="font-mono font-bold text-stone-800 dark:text-stone-100 text-sm">{verifiedOrderId}</span>
+                    </div>
+                )}
+                <div className="flex flex-wrap gap-4 justify-center mt-4">
+                    <Link
+                        to="/"
+                        className="px-6 py-3 bg-primary text-white rounded-full text-sm font-bold tracking-wide hover:bg-primary-dark transition-colors"
+                    >
+                        Volver al inicio
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     // ── Transfer Success screen ───────────────────────────────────────────────
 
@@ -284,19 +409,64 @@ export const Checkout: React.FC = () => {
     // ── Success screen (Mercado Pago) ─────────────────────────────────────────
 
     if (step === 'success') {
+        // Verifying state
+        if (verifying) {
+            return (
+                <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 gap-5">
+                    <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                    <p className="text-stone-500 dark:text-stone-400 text-sm">Confirmando tu pago con Mercado Pago...</p>
+                </div>
+            );
+        }
+
         return (
             <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
-                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                    <span className="material-symbols-outlined text-5xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                <div className="w-24 h-24 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center mb-2 animate-[scale-in_0.4s_ease-out]">
+                    <span className="material-symbols-outlined text-5xl text-green-500" style={{ fontVariationSettings: "'FILL' 1" }}>
                         check_circle
                     </span>
                 </div>
                 <h1 className="text-3xl font-bold font-serif text-stone-800 dark:text-white">
-                    ¡Pedido confirmado! 🎉
+                    {verifyError ? '¡Pago recibido!' : '¡Pedido confirmado! 🎉'}
                 </h1>
                 <p className="text-stone-500 dark:text-stone-400 max-w-md leading-relaxed">
-                    Gracias por tu compra. Tu pedido <span className="font-bold text-stone-700 dark:text-stone-200">{orderId}</span> fue recibido con éxito. Te enviaremos un email a <span className="font-bold text-stone-700 dark:text-stone-200">{shipping.email}</span> con los detalles.
+                    {verifyError
+                        ? 'Tu pago fue procesado pero no pudimos confirmar tu orden automáticamente. Guardá tu número de pedido y contactanos si hay algún problema.'
+                        : 'Gracias por tu compra. Tu orden fue procesada correctamente y ya estamos preparando tu pedido.'}
                 </p>
+
+                {/* Order details card */}
+                {verifiedOrderId && (
+                    <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-2xl p-6 max-w-sm w-full text-left space-y-4 shadow-sm">
+                        <h4 className="font-bold text-stone-800 dark:text-white text-sm flex items-center gap-2">
+                            <span className="material-symbols-outlined !text-[18px] text-green-500">receipt_long</span>
+                            Detalles de tu orden
+                        </h4>
+                        <div className="space-y-3 text-sm">
+                            <div className="flex justify-between items-center">
+                                <span className="text-stone-500 dark:text-stone-400">N° de orden</span>
+                                <span className="font-mono font-bold text-stone-800 dark:text-stone-100 bg-stone-100 dark:bg-stone-800 px-3 py-1 rounded-lg text-xs">{verifiedOrderId}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-stone-500 dark:text-stone-400">Estado</span>
+                                <span className="inline-flex items-center gap-1.5 text-green-600 dark:text-green-400 font-semibold">
+                                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                    Pago confirmado
+                                </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-stone-500 dark:text-stone-400">Método</span>
+                                <span className="font-semibold text-stone-700 dark:text-stone-200">Mercado Pago</span>
+                            </div>
+                        </div>
+                        <div className="pt-3 border-t border-stone-100 dark:border-stone-800">
+                            <p className="text-xs text-stone-400 dark:text-stone-500 leading-relaxed">
+                                Guardá este número de orden como comprobante. Nos pondremos en contacto contigo para coordinar la entrega.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 <div className="flex flex-wrap gap-4 justify-center mt-4">
                     <Link
                         to="/"
@@ -582,6 +752,19 @@ export const Checkout: React.FC = () => {
                                 >
                                     ← Volver a datos de envío
                                 </button>
+
+                                {/* Botón de simulación — solo visible en desarrollo */}
+                                {import.meta.env.DEV && paymentMethod === 'mercadopago' && (
+                                    <button
+                                        type="button"
+                                        onClick={handleSimulatePayment}
+                                        disabled={processing}
+                                        className="w-full py-3 border-2 border-dashed border-amber-400 text-amber-600 dark:text-amber-400 font-bold text-xs rounded-full hover:bg-amber-50 dark:hover:bg-amber-900/20 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        <span className="material-symbols-outlined !text-[16px]">science</span>
+                                        [DEV] Simular pago aprobado
+                                    </button>
+                                )}
                             </form>
                         )}
                     </div>
