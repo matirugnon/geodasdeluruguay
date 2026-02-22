@@ -27,7 +27,7 @@ export const Home: React.FC = () => {
       if (shopSection) {
          shopSection.scrollIntoView({ behavior: 'smooth' });
       } else {
-         window.location.hash = '#/tienda';
+         window.location.href = '/tienda';
       }
    };
 

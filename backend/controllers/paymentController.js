@@ -1,6 +1,7 @@
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 const crypto = require('crypto');
 const Order = require('../models/Order');
+const { sendOrderConfirmationEmail, sendOwnerNotificationEmail } = require('../utils/mailer');
 
 const accessToken = process.env.MP_ACCESS_TOKEN;
 
@@ -63,6 +64,8 @@ const createPreference = async (req, res) => {
 
         const body = {
             items: mpItems,
+            // binary_mode fuerza resultado inmediato (approved/rejected), sin estados intermedios
+            binary_mode: true,
             payer: {
                 name: shipping.nombre,
                 email: shipping.email,
@@ -140,10 +143,13 @@ const webhook = async (req, res) => {
                 // Doble chequeo crítico: El total de MP DEBE ser igual al tracking
                 if (paymentInfo.transaction_amount === order.total) {
                     order.status = 'paid';
+                    order.paymentId = paymentId;
                     await order.save();
                     console.log('✅ Orden pagada y actualizada exitosamente:', orderId);
 
-                    // Aquí en el futuro se enviará el correo, restará stock, etc.
+                    // Enviar emails de confirmación (no bloquear la respuesta a MP)
+                    sendOrderConfirmationEmail(order).catch(e => console.error('Email error:', e));
+                    sendOwnerNotificationEmail(order).catch(e => console.error('Owner email error:', e));
                 } else {
                     console.error('Cuidado: Monto recibido en MP difiere de la Orden BD', {
                         mpAmount: paymentInfo.transaction_amount,
@@ -233,6 +239,10 @@ const verifyPayment = async (req, res) => {
                     order.paymentId = payment_id;
                     await order.save();
                     console.log('✅ Orden confirmada por verify-payment:', orderId);
+
+                    // Enviar emails de confirmación
+                    sendOrderConfirmationEmail(order).catch(e => console.error('Email error:', e));
+                    sendOwnerNotificationEmail(order).catch(e => console.error('Owner email error:', e));
                 }
             }
 
