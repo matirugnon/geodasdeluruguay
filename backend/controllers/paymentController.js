@@ -55,7 +55,10 @@ const createPreference = async (req, res) => {
             options: { timeout: 5000, idempotencyKey: idempotencyKey }
         });
 
-        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        // STOREFRONT_URL para redirects de pago (una sola URL limpia)
+        // Si no existe, toma la primera URL de FRONTEND_URL (que puede tener varias separadas por coma)
+        const frontendUrl = process.env.STOREFRONT_URL 
+            || (process.env.FRONTEND_URL || 'http://localhost:3000').split(',')[0].trim();
         const isLocalhost = frontendUrl.includes('localhost') || frontendUrl.includes('127.0.0.1');
 
         const body = {
