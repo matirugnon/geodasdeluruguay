@@ -10,19 +10,19 @@ const createPreference = async (req, res) => {
     try {
         const { items, shipping, deliveryMethod } = req.body;
 
-        // Mapeo de categorías locales a category_id de MercadoPago
+        // Mapeo de categorías locales a category_id de MercadoPago Uruguay (MLU)
         const getCategoryId = (category) => {
             const categoryMap = {
-                'Accesorios': 'MLB86668',  // Joyas
-                'Anillos': 'MLB86668',     // Joyas
-                'Collares': 'MLB86668',    // Joyas
-                'Pulseras': 'MLB86668',    // Joyas
-                'Amatistas': 'MLB1196',    // Joyas y relojes
-                'Agatas': 'MLB1196',       // Joyas y relojes
-                'Cuarzos': 'MLB1196',      // Joyas y relojes
-                'Geodas': 'MLB1196',       // Joyas y relojes
+                'Accesorios': 'MLU1168',  // Joyas y Relojes
+                'Anillos': 'MLU1168',     // Joyas y Relojes
+                'Collares': 'MLU1168',    // Joyas y Relojes
+                'Pulseras': 'MLU1168',    // Joyas y Relojes
+                'Amatistas': 'MLU1168',   // Joyas y Relojes
+                'Agatas': 'MLU1168',      // Joyas y Relojes
+                'Cuarzos': 'MLU1168',     // Joyas y Relojes
+                'Geodas': 'MLU1168',      // Joyas y Relojes
             };
-            return categoryMap[category] || 'MLB264'; // MLB264 = Otros
+            return categoryMap[category] || 'MLU1000'; // MLU1000 = Otros
         };
 
         const mpItems = items.map(item => ({
@@ -46,7 +46,7 @@ const createPreference = async (req, res) => {
                 id: 'shipping',
                 title: 'Costo de envío a domicilio',
                 description: 'Servicio de envío a domicilio en Uruguay',
-                category_id: 'MLB264', // Otros/Servicios
+                category_id: 'MLU1000', // Otros/Servicios
                 unit_price: shippingCost,
                 quantity: 1,
                 currency_id: 'UYU'
@@ -83,8 +83,6 @@ const createPreference = async (req, res) => {
 
         const body = {
             items: mpItems,
-            // binary_mode fuerza resultado inmediato (approved/rejected), sin estados intermedios
-            binary_mode: true,
             statement_descriptor: 'GEODAS URUGUAY',
             payer: {
                 name: shipping.nombre,
