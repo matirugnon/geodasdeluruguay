@@ -66,6 +66,7 @@ const createPreference = async (req, res) => {
             items: mpItems,
             // binary_mode fuerza resultado inmediato (approved/rejected), sin estados intermedios
             binary_mode: true,
+            statement_descriptor: 'GEODAS URUGUAY',
             payer: {
                 name: shipping.nombre,
                 email: shipping.email,
@@ -86,7 +87,13 @@ const createPreference = async (req, res) => {
             // auto_return solo funciona con URLs públicas (no localhost)
             ...(!isLocalhost && { auto_return: "approved" }),
             notification_url: `${process.env.BACKEND_URL || 'https://tuservidor.com'}/api/payments/webhook`,
-            external_reference: order._id.toString() // Referencia estricta mapeada a Mongo
+            external_reference: order._id.toString(), // Referencia estricta mapeada a Mongo
+            metadata: {
+                order_id: order._id.toString(),
+                delivery_method: deliveryMethod,
+                customer_name: shipping.nombre,
+                items_count: items.length,
+            }
         };
 
         const preference = new Preference(client);
