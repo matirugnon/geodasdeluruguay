@@ -10,9 +10,26 @@ const createPreference = async (req, res) => {
     try {
         const { items, shipping, deliveryMethod } = req.body;
 
+        // Mapeo de categorías locales a category_id de MercadoPago
+        const getCategoryId = (category) => {
+            const categoryMap = {
+                'Accesorios': 'MLB86668',  // Joyas
+                'Anillos': 'MLB86668',     // Joyas
+                'Collares': 'MLB86668',    // Joyas
+                'Pulseras': 'MLB86668',    // Joyas
+                'Amatistas': 'MLB1196',    // Joyas y relojes
+                'Agatas': 'MLB1196',       // Joyas y relojes
+                'Cuarzos': 'MLB1196',      // Joyas y relojes
+                'Geodas': 'MLB1196',       // Joyas y relojes
+            };
+            return categoryMap[category] || 'MLB264'; // MLB264 = Otros
+        };
+
         const mpItems = items.map(item => ({
             id: item.id || item._id,
             title: item.title,
+            description: item.description || item.title,  // Descripción del item
+            category_id: getCategoryId(item.category),    // Categoría de MercadoPago
             unit_price: Number(item.price),
             quantity: Number(item.quantity),
             currency_id: 'UYU'
@@ -28,6 +45,8 @@ const createPreference = async (req, res) => {
             mpItems.push({
                 id: 'shipping',
                 title: 'Costo de envío a domicilio',
+                description: 'Servicio de envío a domicilio en Uruguay',
+                category_id: 'MLB264', // Otros/Servicios
                 unit_price: shippingCost,
                 quantity: 1,
                 currency_id: 'UYU'
