@@ -185,7 +185,7 @@ export const Home: React.FC = () => {
                         <img
                            alt="Collar de oro con colgante de geoda blanca"
                            className="h-64 md:h-72 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
-                           src="public/collar_recorte.jpeg"
+                           src="collar_recorte.jpeg"
                         />
                      </div>
                      <h3 className="font-serif text-2xl tracking-widest uppercase mb-6 text-[#8C7E60] min-h-[3rem] flex items-center">
