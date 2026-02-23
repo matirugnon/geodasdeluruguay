@@ -140,12 +140,12 @@ export const ProductDetail: React.FC = () => {
           {/* LEFT — Image panel ──────────────────────────────────────── */}
           <div className="flex flex-col gap-3">
             {/* Main image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-[3/2] lg:aspect-[4/3] rounded-2xl overflow-hidden bg-stone-100">
+            <div className="relative w-full aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden bg-stone-50 flex items-center justify-center">
               {product.images?.[activeImage] ? (
                 <img
                   src={product.images[activeImage]}
                   alt={product.title}
-                  className="w-full h-full object-cover transition-opacity duration-300"
+                  className="w-full h-full object-contain p-4 transition-opacity duration-300"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-stone-300">

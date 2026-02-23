@@ -184,7 +184,7 @@ export const Home: React.FC = () => {
                         <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Collar de oro con colgante de geoda blanca"
-                           className="h-64 md:h-72 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
+                           className="h-72 md:h-80 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-105 transition-transform duration-500 ease-out"
                            src="collar_recorte.jpeg"
                         />
                      </div>
@@ -205,7 +205,7 @@ export const Home: React.FC = () => {
                         <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Anillo de oro con amatista rugosa"
-                           className="w-48 h-48 md:w-56 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
+                           className="h-72 md:h-80 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnSMhRgCqhmDYFYh3ESceU8A3AdIRHeEFxc5Abqrd13ZiRDfE0RwPi4kMH9Cq35BMXlejc0paIe1P0bOCL_Q8iOJHkmE8c29ymDelXBJAM1mlEi5U31f68lWmpAO3JI3Kh5T79kKJ6tCutDU1lYM1JQi7638TtmSC5Qcz_6VSJNAUtZGDHWWPScQ-vEaIB1E9LkCFckr_2eQPWwQNF1i1-clgxTMg0UqwSAD58nsdl89SLwtkOdr4QzAW4bKVmRFf45NKDW7BUNpQ"
                         />
                      </div>
@@ -226,7 +226,7 @@ export const Home: React.FC = () => {
                         <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Brazalete ancho de oro con piedra blanca"
-                           className="w-48 h-48 md:w-56 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
+                           className="h-72 md:h-80 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTaeVS6A1XDK8iUsulRqkPQFnZu65sRdzX-ICjYuUEU7_iWUo4GTfPI9u2m3p6B7sKA4iO51NyEQLar7ZtkFFv6SKUUweyOL_cbdkphian9iMmBGWzeqw01_5823q4hgX4Cac3TyH9xazEv9f-NwtsJSeFxruHCY5U8hYPknpnMRMiKQ_1_r7oUfAsLFRnIdXZw6-vdQpODgS02RKo40ou961Zoua6MMjor51oPwQcejCODG2vlgC4fJmxfg28o5qWo5-IT5zywHM"
                         />
                      </div>
@@ -247,7 +247,7 @@ export const Home: React.FC = () => {
                         <div className="absolute w-full h-full bg-[#F5F5F0] dark:bg-stone-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 blur-2xl"></div>
                         <img
                            alt="Geoda de amatista púrpura natural"
-                           className="w-48 h-48 md:w-56 md:h-56 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
+                           className="h-72 md:h-80 object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-90 transform group-hover:scale-110 transition-transform duration-500 ease-out relative z-10"
                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuApabR_HinlbryjIg1XoxoeJHVH2D4L6McnZ0DsOlrzjewK8OhbOjLvPkhHgGzhaET_8d9zsb4cPIfOK_MHKMMm7Qv5g_iPeo0vGXBg97-BYfO3geC1JsRv2Sqf7m-I2BkS_-PEJ22rgJ1CQJIJElGNvDl7NKyW5t8WDQ4hPX-EReRCg3av6lhQeI2rD3KR3xXeEqaefBK7PcJ28OeqesrOBd9E6__Cd5dz5xs-KXwXErs14uAGam3lDJ9SWmnFjEQHSd8i-SYXZBk"
                         />
                      </div>

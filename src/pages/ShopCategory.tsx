@@ -50,7 +50,7 @@ export const ShopCategory: React.FC = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [category]);
 
     useEffect(() => {
