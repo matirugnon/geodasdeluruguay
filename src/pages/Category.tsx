@@ -14,7 +14,6 @@ export const Category: React.FC = () => {
     const load = async () => {
       setLoading(true);
       if (id) {
-        // Simple heuristic: if id is 'amatistas', fetch category 'Amatistas'
         const catName = id.charAt(0).toUpperCase() + id.slice(1); 
         const items = await dataService.getProductsByCategory(catName);
         setProducts(items);
@@ -31,42 +30,49 @@ export const Category: React.FC = () => {
   });
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <nav className="flex mb-8 text-sm">
-         <span className="text-text-secondary">Inicio</span>
-         <span className="mx-2 text-text-secondary">/</span>
-         <span className="font-bold text-text-main capitalize">{id}</span>
-      </nav>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-[1280px] mx-auto px-6 md:px-12 py-10">
+        {/* Breadcrumb */}
+        <nav className="flex items-center mb-10 text-sm text-stone-400 font-sans">
+          <span>Inicio</span>
+          <span className="mx-2">/</span>
+          <span className="font-medium text-stone-700 capitalize">{id}</span>
+        </nav>
 
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-4xl font-display font-bold capitalize">{id}</h2>
-        <div className="flex items-center gap-2">
-           <span className="text-sm text-text-secondary">Ordenar por:</span>
-           <select 
-             className="bg-transparent border-none font-bold text-olive focus:ring-0 cursor-pointer"
-             value={sort}
-             onChange={(e) => setSort(e.target.value as any)}
-           >
-             <option value="default">Relevancia</option>
-             <option value="price-asc">Precio: Menor a Mayor</option>
-             <option value="price-desc">Precio: Mayor a Menor</option>
-           </select>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+          <h1 className="font-serif text-3xl text-stone-900 font-medium capitalize">{id}</h1>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-stone-400">Ordenar:</span>
+            <select
+              className="bg-transparent border border-stone-200 rounded px-3 py-1.5 text-sm font-medium text-stone-700 focus:ring-1 focus:ring-[#8C7E60] focus:border-[#8C7E60] cursor-pointer"
+              value={sort}
+              onChange={(e) => setSort(e.target.value as any)}
+            >
+              <option value="default">Relevancia</option>
+              <option value="price-asc">Precio: Menor a Mayor</option>
+              <option value="price-desc">Precio: Mayor a Menor</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      {loading ? (
-        <div className="py-20 text-center">Cargando cristales...</div>
-      ) : (
-        <>
-          {products.length === 0 ? (
-            <div className="py-20 text-center text-text-secondary">No hay productos en esta categoría aún.</div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-              {sortedProducts.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-          )}
-        </>
-      )}
+        {loading ? (
+          <div className="py-24 flex flex-col items-center gap-4">
+            <div className="w-7 h-7 border-2 border-stone-200 border-t-[#8C7E60] rounded-full animate-spin" />
+            <p className="text-stone-400 text-sm">Cargando productos...</p>
+          </div>
+        ) : (
+          <>
+            {products.length === 0 ? (
+              <div className="py-24 text-center text-stone-400">No hay productos en esta categoría aún.</div>
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                {sortedProducts.map(p => <ProductCard key={p.id} product={p} />)}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

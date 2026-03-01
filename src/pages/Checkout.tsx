@@ -66,8 +66,8 @@ interface FieldProps {
 }
 
 const Field: React.FC<FieldProps> = ({ label, value, onChange, error, placeholder, type = 'text', maxLength }) => (
-    <div className="flex flex-col gap-1">
-        <label className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+    <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-medium text-stone-500">
             {label}
         </label>
         <input
@@ -76,12 +76,12 @@ const Field: React.FC<FieldProps> = ({ label, value, onChange, error, placeholde
             onChange={e => onChange(e.target.value)}
             placeholder={placeholder}
             maxLength={maxLength}
-            className={`w-full px-4 py-3 rounded-xl border text-sm font-display text-stone-800 dark:text-stone-100
-        bg-white dark:bg-stone-800 placeholder-stone-300 dark:placeholder-stone-600
-        focus:outline-none focus:ring-2 transition-all
+            className={`w-full px-4 py-3 rounded border text-sm text-stone-800
+        bg-white placeholder-stone-300
+        focus:outline-none focus:ring-1 transition-colors duration-200
         ${error
-                    ? 'border-red-300 focus:ring-red-200 dark:border-red-700 dark:focus:ring-red-800'
-                    : 'border-stone-200 dark:border-stone-700 focus:ring-primary/30 focus:border-primary'
+                    ? 'border-red-300 focus:ring-red-200'
+                    : 'border-stone-200 focus:ring-[#8C7E60]/40 focus:border-[#8C7E60]'
                 }`}
         />
         {error && (
@@ -184,13 +184,13 @@ export const Checkout: React.FC = () => {
     // Redirect if cart is empty (and not on a result screen)
     if (items.length === 0 && !['success', 'transfer-success', 'failure', 'pending'].includes(step) && !isMpCallback) {
         return (
-            <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 gap-6">
-                <span className="material-symbols-outlined text-6xl text-stone-200 dark:text-stone-700">shopping_bag</span>
-                <h1 className="text-2xl font-bold font-serif text-stone-800 dark:text-white">Tu carrito está vacío</h1>
-                <p className="text-stone-500 dark:text-stone-400 text-sm">Agregá productos antes de continuar al checkout.</p>
+            <div className="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center text-center px-6 gap-6">
+                <span className="material-symbols-outlined text-6xl text-stone-200">shopping_bag</span>
+                <h1 className="text-2xl font-medium font-serif text-stone-800">Tu carrito está vacío</h1>
+                <p className="text-stone-500 text-sm">Agregá productos antes de continuar al checkout.</p>
                 <Link
                     to="/tienda"
-                    className="mt-2 px-6 py-3 bg-primary text-white rounded-full text-sm font-bold tracking-wide hover:bg-primary-dark transition-colors"
+                    className="mt-2 px-6 py-3 bg-[#8C7E60] text-white rounded text-sm font-medium hover:bg-[#756A50] transition-colors duration-200"
                 >
                     Explorar tienda
                 </Link>
@@ -272,18 +272,18 @@ export const Checkout: React.FC = () => {
 
     if (step === 'failure') {
         return (
-            <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
-                <div className="w-24 h-24 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center mb-2">
-                    <span className="material-symbols-outlined text-5xl text-red-500" style={{ fontVariationSettings: "'FILL' 1" }}>cancel</span>
+            <div className="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+                <div className="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined text-4xl text-red-500" style={{ fontVariationSettings: "'FILL' 1" }}>cancel</span>
                 </div>
-                <h1 className="text-3xl font-bold font-serif text-stone-800 dark:text-white">Pago no procesado</h1>
-                <p className="text-stone-500 dark:text-stone-400 max-w-md leading-relaxed">
+                <h1 className="text-2xl font-medium font-serif text-stone-800">Pago no procesado</h1>
+                <p className="text-stone-500 max-w-md leading-relaxed text-sm">
                     Tu pago no pudo ser procesado. Podés intentar de nuevo o elegir otro método de pago.
                 </p>
-                <div className="flex flex-wrap gap-4 justify-center mt-4">
+                <div className="flex flex-wrap gap-3 justify-center mt-4">
                     <Link
                         to="/tienda"
-                        className="px-6 py-3 bg-primary text-white rounded-full text-sm font-bold tracking-wide hover:bg-primary-dark transition-colors"
+                        className="px-6 py-3 bg-[#8C7E60] text-white rounded text-sm font-medium hover:bg-[#756A50] transition-colors duration-200"
                     >
                         Volver a la tienda
                     </Link>
@@ -296,25 +296,25 @@ export const Checkout: React.FC = () => {
 
     if (step === 'pending') {
         return (
-            <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
-                <div className="w-24 h-24 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-2">
-                    <span className="material-symbols-outlined text-5xl text-amber-500" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
+            <div className="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+                <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined text-4xl text-amber-500" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
                 </div>
-                <h1 className="text-3xl font-bold font-serif text-stone-800 dark:text-white">Pago pendiente</h1>
-                <p className="text-stone-500 dark:text-stone-400 max-w-md leading-relaxed">
+                <h1 className="text-2xl font-medium font-serif text-stone-800">Pago pendiente</h1>
+                <p className="text-stone-500 max-w-md leading-relaxed text-sm">
                     Tu pago está siendo procesado por Mercado Pago. Te notificaremos cuando se confirme.
                 </p>
                 {verifiedOrderId && (
-                    <div className="bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl px-6 py-3 flex items-center gap-3">
+                    <div className="bg-white border border-stone-200 rounded-md px-5 py-3 flex items-center gap-3">
                         <span className="material-symbols-outlined !text-[18px] text-amber-500">receipt_long</span>
-                        <span className="text-xs text-stone-500 dark:text-stone-400">N° de orden:</span>
-                        <span className="font-mono font-bold text-stone-800 dark:text-stone-100 text-sm">{verifiedOrderId}</span>
+                        <span className="text-xs text-stone-500">N° de orden:</span>
+                        <span className="font-mono font-semibold text-stone-800 text-sm">{verifiedOrderId}</span>
                     </div>
                 )}
-                <div className="flex flex-wrap gap-4 justify-center mt-4">
+                <div className="flex flex-wrap gap-3 justify-center mt-4">
                     <Link
                         to="/"
-                        className="px-6 py-3 bg-primary text-white rounded-full text-sm font-bold tracking-wide hover:bg-primary-dark transition-colors"
+                        className="px-6 py-3 bg-[#8C7E60] text-white rounded text-sm font-medium hover:bg-[#756A50] transition-colors duration-200"
                     >
                         Volver al inicio
                     </Link>
@@ -332,50 +332,50 @@ export const Checkout: React.FC = () => {
         const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
 
         return (
-            <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
-                <div className="w-24 h-24 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center mb-2">
-                    <span className="material-symbols-outlined text-5xl text-green-500" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <div className="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+                <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined text-4xl text-green-500" style={{ fontVariationSettings: "'FILL' 1" }}>
                         check_circle
                     </span>
                 </div>
-                <h1 className="text-3xl font-bold font-serif text-stone-800 dark:text-white">
+                <h1 className="text-2xl font-medium font-serif text-stone-800">
                     ¡Orden registrada!
                 </h1>
-                <p className="text-stone-500 dark:text-stone-400 max-w-lg leading-relaxed">
-                    Tu pedido <span className="font-bold text-stone-700 dark:text-stone-200">{transferOrderId}</span> fue creado. 
+                <p className="text-stone-500 max-w-lg leading-relaxed text-sm">
+                    Tu pedido <span className="font-semibold text-stone-700">{transferOrderId}</span> fue creado. 
                     Si aún no enviaste el comprobante, hacelo por WhatsApp para que confirmemos tu compra.
                 </p>
 
                 {/* Bank details reminder */}
-                <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-2xl p-5 max-w-sm w-full text-left space-y-2 shadow-sm">
-                    <h4 className="font-bold text-stone-800 dark:text-white text-sm flex items-center gap-2">
-                        <span className="material-symbols-outlined !text-[18px] text-primary">account_balance</span>
+                <div className="bg-white border border-stone-200 rounded-md p-5 max-w-sm w-full text-left space-y-2">
+                    <h4 className="font-semibold text-stone-800 text-sm flex items-center gap-2">
+                        <span className="material-symbols-outlined !text-[18px] text-[#8C7E60]">account_balance</span>
                         Datos de la cuenta
                     </h4>
                     <div className="text-sm space-y-1.5">
-                        <p className="text-stone-600 dark:text-stone-300"><span className="text-stone-400">Banco:</span> <span className="font-semibold">{TRANSFER_ACCOUNT.banco}</span></p>
-                        <p className="text-stone-600 dark:text-stone-300"><span className="text-stone-400">{TRANSFER_ACCOUNT.tipo} N°:</span> <span className="font-bold">{TRANSFER_ACCOUNT.cuenta}</span></p>
-                        <p className="text-stone-600 dark:text-stone-300"><span className="text-stone-400">Moneda:</span> <span className="font-semibold">{TRANSFER_ACCOUNT.moneda}</span></p>
-                        <p className="text-stone-600 dark:text-stone-300"><span className="text-stone-400">Titular:</span> <span className="font-bold">{TRANSFER_ACCOUNT.titular}</span></p>
-                        <p className="pt-2 border-t border-stone-100 dark:border-stone-800 text-stone-600 dark:text-stone-300">
-                            <span className="text-stone-400">Monto:</span> <span className="font-bold text-primary text-base">$ {finalTotal.toLocaleString('es-UY')}</span>
+                        <p className="text-stone-600"><span className="text-stone-400">Banco:</span> <span className="font-semibold">{TRANSFER_ACCOUNT.banco}</span></p>
+                        <p className="text-stone-600"><span className="text-stone-400">{TRANSFER_ACCOUNT.tipo} N°:</span> <span className="font-semibold">{TRANSFER_ACCOUNT.cuenta}</span></p>
+                        <p className="text-stone-600"><span className="text-stone-400">Moneda:</span> <span className="font-semibold">{TRANSFER_ACCOUNT.moneda}</span></p>
+                        <p className="text-stone-600"><span className="text-stone-400">Titular:</span> <span className="font-semibold">{TRANSFER_ACCOUNT.titular}</span></p>
+                        <p className="pt-2 border-t border-stone-100 text-stone-600">
+                            <span className="text-stone-400">Monto:</span> <span className="font-semibold text-[#8C7E60] text-base">$ {finalTotal.toLocaleString('es-UY')}</span>
                         </p>
                     </div>
                 </div>
 
-                <div className="flex flex-wrap gap-4 justify-center mt-4">
+                <div className="flex flex-wrap gap-3 justify-center mt-4">
                     <a
                         href={whatsappLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full text-sm font-bold tracking-wide transition-colors flex items-center gap-2"
+                        className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded text-sm font-medium transition-colors duration-200 flex items-center gap-2"
                     >
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                         Enviar comprobante por WhatsApp
                     </a>
                     <Link
                         to="/"
-                        className="px-6 py-3 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 rounded-full text-sm font-bold tracking-wide hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                        className="px-6 py-3 border border-stone-200 text-stone-700 rounded text-sm font-medium hover:bg-stone-50 transition-colors duration-200"
                     >
                         Volver al inicio
                     </Link>
@@ -390,24 +390,24 @@ export const Checkout: React.FC = () => {
         // Verifying state
         if (verifying) {
             return (
-                <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 gap-5">
-                    <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-                    <p className="text-stone-500 dark:text-stone-400 text-sm">Confirmando tu pago con Mercado Pago...</p>
+                <div className="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center text-center px-6 gap-5">
+                    <div className="w-10 h-10 border-2 border-[#8C7E60]/20 border-t-[#8C7E60] rounded-full animate-spin" />
+                    <p className="text-stone-500 text-sm">Confirmando tu pago con Mercado Pago...</p>
                 </div>
             );
         }
 
         return (
-            <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
-                <div className="w-24 h-24 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center mb-2 animate-[scale-in_0.4s_ease-out]">
-                    <span className="material-symbols-outlined text-5xl text-green-500" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <div className="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+                <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined text-4xl text-green-500" style={{ fontVariationSettings: "'FILL' 1" }}>
                         check_circle
                     </span>
                 </div>
-                <h1 className="text-3xl font-bold font-serif text-stone-800 dark:text-white">
-                    {verifyError ? '¡Pago recibido!' : '¡Pedido confirmado! 🎉'}
+                <h1 className="text-2xl font-medium font-serif text-stone-800">
+                    {verifyError ? '¡Pago recibido!' : '¡Pedido confirmado!'}
                 </h1>
-                <p className="text-stone-500 dark:text-stone-400 max-w-md leading-relaxed">
+                <p className="text-stone-500 max-w-md leading-relaxed text-sm">
                     {verifyError
                         ? 'Tu pago fue procesado pero no pudimos confirmar tu orden automáticamente. Guardá tu número de pedido y contactanos si hay algún problema.'
                         : 'Gracias por tu compra. Tu orden fue procesada correctamente y ya estamos preparando tu pedido.'}
@@ -415,46 +415,46 @@ export const Checkout: React.FC = () => {
 
                 {/* Order details card */}
                 {verifiedOrderId && (
-                    <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-2xl p-6 max-w-sm w-full text-left space-y-4 shadow-sm">
-                        <h4 className="font-bold text-stone-800 dark:text-white text-sm flex items-center gap-2">
+                    <div className="bg-white border border-stone-200 rounded-md p-6 max-w-sm w-full text-left space-y-4">
+                        <h4 className="font-semibold text-stone-800 text-sm flex items-center gap-2">
                             <span className="material-symbols-outlined !text-[18px] text-green-500">receipt_long</span>
                             Detalles de tu orden
                         </h4>
                         <div className="space-y-3 text-sm">
                             <div className="flex justify-between items-center">
-                                <span className="text-stone-500 dark:text-stone-400">N° de orden</span>
-                                <span className="font-mono font-bold text-stone-800 dark:text-stone-100 bg-stone-100 dark:bg-stone-800 px-3 py-1 rounded-lg text-xs">{verifiedOrderId}</span>
+                                <span className="text-stone-500">N° de orden</span>
+                                <span className="font-mono font-semibold text-stone-800 bg-stone-50 px-3 py-1 rounded text-xs">{verifiedOrderId}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-stone-500 dark:text-stone-400">Estado</span>
-                                <span className="inline-flex items-center gap-1.5 text-green-600 dark:text-green-400 font-semibold">
+                                <span className="text-stone-500">Estado</span>
+                                <span className="inline-flex items-center gap-1.5 text-green-600 font-semibold">
                                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                                     Pago confirmado
                                 </span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-stone-500 dark:text-stone-400">Método</span>
-                                <span className="font-semibold text-stone-700 dark:text-stone-200">Mercado Pago</span>
+                                <span className="text-stone-500">Método</span>
+                                <span className="font-semibold text-stone-700">Mercado Pago</span>
                             </div>
                         </div>
-                        <div className="pt-3 border-t border-stone-100 dark:border-stone-800">
-                            <p className="text-xs text-stone-400 dark:text-stone-500 leading-relaxed">
+                        <div className="pt-3 border-t border-stone-100">
+                            <p className="text-xs text-stone-400 leading-relaxed">
                                 Guardá este número de orden como comprobante. Nos pondremos en contacto contigo para coordinar la entrega.
                             </p>
                         </div>
                     </div>
                 )}
 
-                <div className="flex flex-wrap gap-4 justify-center mt-4">
+                <div className="flex flex-wrap gap-3 justify-center mt-4">
                     <Link
                         to="/"
-                        className="px-6 py-3 bg-primary text-white rounded-full text-sm font-bold tracking-wide hover:bg-primary-dark transition-colors"
+                        className="px-6 py-3 bg-[#8C7E60] text-white rounded text-sm font-medium hover:bg-[#756A50] transition-colors duration-200"
                     >
                         Volver al inicio
                     </Link>
                     <Link
                         to="/tienda"
-                        className="px-6 py-3 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 rounded-full text-sm font-bold tracking-wide hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                        className="px-6 py-3 border border-stone-200 text-stone-700 rounded text-sm font-medium hover:bg-stone-50 transition-colors duration-200"
                     >
                         Seguir comprando
                     </Link>
@@ -466,14 +466,14 @@ export const Checkout: React.FC = () => {
     // ── Layout ────────────────────────────────────────────────────────────────
 
     return (
-        <div className="min-h-screen bg-background-light dark:bg-background-dark font-display">
+        <div className="min-h-screen bg-[#F8F7F4] font-sans">
             {/* Top bar */}
-            <div className="w-full border-b border-stone-100 dark:border-stone-800 bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm sticky top-0 z-10">
+            <div className="w-full border-b border-stone-200 bg-white sticky top-0 z-10">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-                    <Link to="/" className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
-                        <span className="font-serif font-bold">Geodas del Uruguay</span>
+                    <Link to="/" className="flex items-center gap-2 text-stone-700">
+                        <span className="font-serif font-medium">Geodas del Uruguay</span>
                     </Link>
-                    <div className="flex items-center gap-2 text-xs text-stone-400 dark:text-stone-500">
+                    <div className="flex items-center gap-2 text-xs text-stone-400">
                         <span className="material-symbols-outlined !text-[16px]">lock</span>
                         Pago seguro
                     </div>
@@ -481,9 +481,9 @@ export const Checkout: React.FC = () => {
             </div>
 
             {/* Progress bar */}
-            <div className="w-full bg-stone-100 dark:bg-stone-800 h-1">
+            <div className="w-full bg-stone-100 h-0.5">
                 <div
-                    className="h-full bg-primary transition-all duration-500"
+                    className="h-full bg-[#8C7E60] transition-all duration-500"
                     style={{ width: step === 'shipping' ? '50%' : '100%' }}
                 />
             </div>
@@ -495,51 +495,51 @@ export const Checkout: React.FC = () => {
                     <div>
                         {/* Step indicator */}
                         <div className="flex items-center gap-3 mb-8">
-                            <div className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${step === 'shipping' ? 'bg-primary text-white' : 'bg-primary/20 text-primary'}`}>
+                            <div className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-medium ${step === 'shipping' ? 'bg-[#8C7E60] text-white' : 'bg-[#8C7E60]/15 text-[#8C7E60]'}`}>
                                 {step === 'payment' ? <span className="material-symbols-outlined !text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>check</span> : '1'}
                             </div>
-                            <span className={`text-sm font-semibold ${step === 'shipping' ? 'text-stone-800 dark:text-white' : 'text-stone-400'}`}>Datos de envío</span>
-                            <span className="text-stone-300 dark:text-stone-600 mx-1">→</span>
-                            <div className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${step === 'payment' ? 'bg-primary text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-400'}`}>2</div>
-                            <span className={`text-sm font-semibold ${step === 'payment' ? 'text-stone-800 dark:text-white' : 'text-stone-400'}`}>Pago</span>
+                            <span className={`text-sm font-medium ${step === 'shipping' ? 'text-stone-800' : 'text-stone-400'}`}>Datos de envío</span>
+                            <span className="text-stone-300 mx-1">/</span>
+                            <div className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-medium ${step === 'payment' ? 'bg-[#8C7E60] text-white' : 'bg-stone-100 text-stone-400'}`}>2</div>
+                            <span className={`text-sm font-medium ${step === 'payment' ? 'text-stone-800' : 'text-stone-400'}`}>Pago</span>
                         </div>
 
                         {/* ── STEP 1: Shipping ───────────────────────────────────────── */}
                         {step === 'shipping' && (
                             <form onSubmit={handleShippingSubmit} noValidate className="flex flex-col gap-6">
-                                <h2 className="text-2xl font-bold font-serif text-stone-900 dark:text-white">Datos personales & envío</h2>
+                                <h2 className="text-2xl font-medium font-serif text-stone-900">Datos personales & envío</h2>
 
                                 {/* Delivery Method Selector - FIRST so fields adapt */}
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                                    <label className="text-xs font-medium text-stone-500">
                                         Método de entrega
                                     </label>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <div
                                             onClick={() => setDeliveryMethod('pickup')}
-                                            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-stone-200 dark:border-stone-700 hover:border-primary/50'}`}
+                                            className={`p-4 rounded-md border cursor-pointer transition-colors duration-200 ${deliveryMethod === 'pickup' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
                                         >
                                             <div className="flex items-center gap-3 mb-1">
-                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'pickup' ? 'border-primary' : 'border-stone-300'}`}>
-                                                    {deliveryMethod === 'pickup' && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'pickup' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
+                                                    {deliveryMethod === 'pickup' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
                                                 </div>
-                                                <h4 className="font-bold text-sm text-stone-800 dark:text-stone-100">Retiro en Prado</h4>
+                                                <h4 className="font-medium text-sm text-stone-800">Retiro en Prado</h4>
                                             </div>
-                                            <p className="text-xs text-stone-500 dark:text-stone-400 pl-7">A coordinar (Sin costo extra)</p>
+                                            <p className="text-xs text-stone-500 pl-7">A coordinar (Sin costo extra)</p>
                                         </div>
 
                                         <div
                                             onClick={() => setDeliveryMethod('delivery')}
-                                            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${deliveryMethod === 'delivery' ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-stone-200 dark:border-stone-700 hover:border-primary/50'}`}
+                                            className={`p-4 rounded-md border cursor-pointer transition-colors duration-200 ${deliveryMethod === 'delivery' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
                                         >
                                             <div className="flex items-center gap-3 mb-1">
-                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'delivery' ? 'border-primary' : 'border-stone-300'}`}>
-                                                    {deliveryMethod === 'delivery' && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'delivery' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
+                                                    {deliveryMethod === 'delivery' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
                                                 </div>
-                                                <h4 className="font-bold text-sm text-stone-800 dark:text-stone-100">Envío a domicilio</h4>
+                                                <h4 className="font-medium text-sm text-stone-800">Envío a domicilio</h4>
                                             </div>
-                                            <p className="text-xs text-stone-500 dark:text-stone-400 pl-7">
-                                                {isFreeShippingEligible ? 'Gratis 🎉' : '+ $ 100 extra'}
+                                            <p className="text-xs text-stone-500 pl-7">
+                                                {isFreeShippingEligible ? 'Gratis' : '+ $ 100 extra'}
                                             </p>
                                         </div>
                                     </div>
@@ -568,7 +568,7 @@ export const Checkout: React.FC = () => {
 
                                 <button
                                     type="submit"
-                                    className="w-full py-4 mt-2 bg-primary hover:bg-primary-dark text-white font-bold uppercase tracking-widest text-xs rounded-full shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
+                                    className="w-full py-3.5 mt-2 bg-[#8C7E60] hover:bg-[#756A50] text-white font-medium text-sm rounded transition-colors duration-200 flex items-center justify-center gap-2"
                                 >
                                     Continuar al pago
                                     <span className="material-symbols-outlined !text-[18px]">arrow_forward</span>
@@ -580,26 +580,26 @@ export const Checkout: React.FC = () => {
                         {step === 'payment' && (
                             <form onSubmit={handlePaymentSubmit} noValidate className="flex flex-col gap-6">
                                 <div>
-                                    <h2 className="text-2xl font-bold font-serif text-stone-900 dark:text-white mb-1">Método de pago</h2>
-                                    <p className="text-xs text-stone-400 dark:text-stone-500">
+                                    <h2 className="text-2xl font-medium font-serif text-stone-900 mb-1">Método de pago</h2>
+                                    <p className="text-xs text-stone-400">
                                         Elegí cómo querés pagar tu pedido.
                                     </p>
                                 </div>
 
                                 {/* Payment Method Selector */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {/* Mercado Pago */}
                                     <div
                                         onClick={() => setPaymentMethod('mercadopago')}
-                                        className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === 'mercadopago' ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-stone-200 dark:border-stone-700 hover:border-primary/50'}`}
+                                        className={`p-5 rounded-md border cursor-pointer transition-colors duration-200 ${paymentMethod === 'mercadopago' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
                                     >
                                         <div className="flex items-center gap-3 mb-2">
-                                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'mercadopago' ? 'border-primary' : 'border-stone-300'}`}>
-                                                {paymentMethod === 'mercadopago' && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'mercadopago' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
+                                                {paymentMethod === 'mercadopago' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
                                             </div>
-                                            <h4 className="font-bold text-sm text-stone-800 dark:text-stone-100">Mercado Pago</h4>
+                                            <h4 className="font-medium text-sm text-stone-800">Mercado Pago</h4>
                                         </div>
-                                        <p className="text-xs text-stone-500 dark:text-stone-400 pl-7">Tarjeta, débito, crédito y más</p>
+                                        <p className="text-xs text-stone-500 pl-7">Tarjeta, débito, crédito y más</p>
                                         <div className="pl-7 mt-3 flex items-center gap-2">
                                             <span className="material-symbols-outlined !text-[20px] text-blue-500">credit_card</span>
                                             <span className="material-symbols-outlined !text-[20px] text-stone-400">lock</span>
@@ -609,85 +609,85 @@ export const Checkout: React.FC = () => {
                                     {/* Transferencia */}
                                     <div
                                         onClick={() => setPaymentMethod('transfer')}
-                                        className={`p-5 rounded-xl border-2 cursor-pointer transition-all relative overflow-hidden ${paymentMethod === 'transfer' ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-stone-200 dark:border-stone-700 hover:border-primary/50'}`}
+                                        className={`p-5 rounded-md border cursor-pointer transition-colors duration-200 relative overflow-hidden ${paymentMethod === 'transfer' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
                                     >
                                         {/* Badge 5% off */}
-                                        <div className="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-bl-lg">
+                                        <div className="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded-bl-md">
                                             5% OFF
                                         </div>
                                         <div className="flex items-center gap-3 mb-2">
-                                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-primary' : 'border-stone-300'}`}>
-                                                {paymentMethod === 'transfer' && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
+                                                {paymentMethod === 'transfer' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
                                             </div>
-                                            <h4 className="font-bold text-sm text-stone-800 dark:text-stone-100">Transferencia bancaria</h4>
+                                            <h4 className="font-medium text-sm text-stone-800">Transferencia bancaria</h4>
                                         </div>
-                                        <p className="text-xs text-stone-500 dark:text-stone-400 pl-7">Transferí y enviá el comprobante</p>
+                                        <p className="text-xs text-stone-500 pl-7">Transferí y enviá el comprobante</p>
                                         <div className="pl-7 mt-3 flex items-center gap-2">
                                             <span className="material-symbols-outlined !text-[20px] text-green-500">account_balance</span>
-                                            <span className="text-xs text-green-600 dark:text-green-400 font-bold">¡Ahorrá un 5%!</span>
+                                            <span className="text-xs text-green-600 font-semibold">¡Ahorrá un 5%!</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Payment details area */}
                                 {paymentMethod === 'mercadopago' && (
-                                    <div className="p-8 border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/50 rounded-2xl flex flex-col items-center justify-center text-center gap-4">
-                                        <div className="flex gap-2 text-stone-300 dark:text-stone-600">
+                                    <div className="p-8 border border-stone-200 bg-[#F5F3EF] rounded-md flex flex-col items-center justify-center text-center gap-4">
+                                        <div className="flex gap-2 text-stone-300">
                                             <span className="material-symbols-outlined text-4xl">lock</span>
                                             <span className="material-symbols-outlined text-4xl">account_balance</span>
                                         </div>
-                                        <p className="text-sm text-stone-500 dark:text-stone-400">Serás redirigido a la plataforma segura de Mercado Pago.</p>
+                                        <p className="text-sm text-stone-500">Serás redirigido a la plataforma segura de Mercado Pago.</p>
                                     </div>
                                 )}
 
                                 {paymentMethod === 'transfer' && (
-                                    <div className="p-6 border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/50 rounded-2xl space-y-4">
+                                    <div className="p-5 border border-stone-200 bg-[#F5F3EF] rounded-md space-y-4">
                                         {/* Bank Account Card */}
-                                        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl p-5 space-y-3">
-                                            <h4 className="font-bold text-stone-800 dark:text-white text-sm flex items-center gap-2">
-                                                <span className="material-symbols-outlined !text-[18px] text-primary">account_balance</span>
+                                        <div className="bg-white border border-stone-200 rounded-md p-5 space-y-3">
+                                            <h4 className="font-semibold text-stone-800 text-sm flex items-center gap-2">
+                                                <span className="material-symbols-outlined !text-[18px] text-[#8C7E60]">account_balance</span>
                                                 Transferí a esta cuenta
                                             </h4>
                                             <div className="space-y-2 text-sm">
                                                 <div className="flex justify-between">
                                                     <span className="text-stone-500">Banco</span>
-                                                    <span className="font-semibold text-stone-800 dark:text-stone-200">{TRANSFER_ACCOUNT.banco}</span>
+                                                    <span className="font-semibold text-stone-800">{TRANSFER_ACCOUNT.banco}</span>
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="text-stone-500">Tipo</span>
-                                                    <span className="font-semibold text-stone-800 dark:text-stone-200">{TRANSFER_ACCOUNT.tipo}</span>
+                                                    <span className="font-semibold text-stone-800">{TRANSFER_ACCOUNT.tipo}</span>
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="text-stone-500">N° de cuenta</span>
-                                                    <span className="font-bold text-stone-800 dark:text-stone-200 text-base">{TRANSFER_ACCOUNT.cuenta}</span>
+                                                    <span className="font-semibold text-stone-800 text-base">{TRANSFER_ACCOUNT.cuenta}</span>
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="text-stone-500">Moneda</span>
-                                                    <span className="font-semibold text-stone-800 dark:text-stone-200">{TRANSFER_ACCOUNT.moneda}</span>
+                                                    <span className="font-semibold text-stone-800">{TRANSFER_ACCOUNT.moneda}</span>
                                                 </div>
-                                                <div className="flex justify-between pt-2 border-t border-stone-100 dark:border-stone-800">
+                                                <div className="flex justify-between pt-2 border-t border-stone-100">
                                                     <span className="text-stone-500">Titular</span>
-                                                    <span className="font-bold text-stone-800 dark:text-stone-200">{TRANSFER_ACCOUNT.titular}</span>
+                                                    <span className="font-semibold text-stone-800">{TRANSFER_ACCOUNT.titular}</span>
                                                 </div>
-                                                <div className="flex justify-between pt-2 border-t border-stone-100 dark:border-stone-800">
-                                                    <span className="text-stone-500 font-semibold">Monto a transferir</span>
-                                                    <span className="font-bold text-primary text-lg">$ {finalTotal.toLocaleString('es-UY')}</span>
+                                                <div className="flex justify-between pt-2 border-t border-stone-100">
+                                                    <span className="text-stone-500 font-medium">Monto a transferir</span>
+                                                    <span className="font-semibold text-[#8C7E60] text-lg">$ {finalTotal.toLocaleString('es-UY')}</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Instructions */}
-                                        <div className="flex items-start gap-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-xl p-3">
+                                        <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-md p-3">
                                             <span className="material-symbols-outlined !text-[20px] text-blue-500 mt-0.5">info</span>
-                                            <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                                            <p className="text-xs text-blue-700 leading-relaxed">
                                                 Realizá la transferencia por el monto indicado y luego tocá el botón de abajo para enviarnos el comprobante por WhatsApp.
                                             </p>
                                         </div>
 
                                         {transferDiscount > 0 && (
-                                            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-3 flex items-center gap-3">
+                                            <div className="bg-green-50 border border-green-200 rounded-md p-3 flex items-center gap-3">
                                                 <span className="material-symbols-outlined text-green-500 !text-[20px]">savings</span>
-                                                <p className="text-xs text-green-700 dark:text-green-300 font-semibold">
+                                                <p className="text-xs text-green-700 font-semibold">
                                                     Ahorrás $ {transferDiscount.toLocaleString('es-UY')} con transferencia bancaria
                                                 </p>
                                             </div>
@@ -699,10 +699,10 @@ export const Checkout: React.FC = () => {
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className={`w-full py-4 mt-2 text-white font-bold uppercase tracking-widest text-xs rounded-full shadow-md hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 ${
+                                    className={`w-full py-3.5 mt-2 text-white font-medium text-sm rounded disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center gap-2 ${
                                         paymentMethod === 'transfer' 
                                             ? 'bg-green-500 hover:bg-green-600 disabled:bg-green-500/60' 
-                                            : 'bg-primary hover:bg-primary-dark disabled:bg-primary/60'
+                                            : 'bg-[#8C7E60] hover:bg-[#756A50] disabled:bg-[#8C7E60]/60'
                                     }`}
                                 >
                                     {processing ? (
@@ -726,7 +726,7 @@ export const Checkout: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => setStep('shipping')}
-                                    className="w-full text-center text-xs text-stone-400 hover:text-stone-600 underline underline-offset-2 transition-colors"
+                                    className="w-full text-center text-xs text-stone-400 hover:text-stone-600 underline underline-offset-2 transition-colors duration-200"
                                 >
                                     ← Volver a datos de envío
                                 </button>
@@ -735,68 +735,68 @@ export const Checkout: React.FC = () => {
                     </div>
 
                     {/* ── Right: Order Summary ─────────────────────────────────────── */}
-                    <aside className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-6 sticky top-24">
-                        <h3 className="font-bold font-serif text-stone-900 dark:text-white mb-5 text-lg">Resumen del pedido</h3>
+                    <aside className="bg-white rounded-md border border-stone-200 p-6 sticky top-24">
+                        <h3 className="font-medium font-serif text-stone-900 mb-5 text-lg">Resumen del pedido</h3>
 
                         <ul className="flex flex-col gap-4 mb-5">
                             {items.map(item => (
                                 <li key={item.id} className="flex gap-3 items-start">
                                     <div className="relative flex-shrink-0">
-                                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-stone-100">
+                                        <div className="w-14 h-14 rounded-md overflow-hidden bg-[#F5F3EF]">
                                             {item.images[0] && (
                                                 <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover" />
                                             )}
                                         </div>
-                                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-stone-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-stone-600 text-white text-[10px] font-medium rounded-full flex items-center justify-center">
                                             {item.quantity}
                                         </span>
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-bold text-stone-800 dark:text-stone-100 font-serif truncate">{item.title}</p>
+                                        <p className="text-sm font-medium text-stone-800 font-serif truncate">{item.title}</p>
                                         <p className="text-xs text-stone-400">{item.type || item.category}</p>
                                     </div>
-                                    <p className="text-sm font-bold text-stone-700 dark:text-stone-300 whitespace-nowrap">
+                                    <p className="text-sm font-semibold text-stone-700 whitespace-nowrap">
                                         $ {(item.price * item.quantity).toLocaleString('es-UY')}
                                     </p>
                                 </li>
                             ))}
                         </ul>
 
-                        <div className="border-t border-stone-100 dark:border-stone-800 pt-4 flex flex-col gap-2">
-                            <div className="flex justify-between text-sm text-stone-500 dark:text-stone-400">
+                        <div className="border-t border-stone-100 pt-4 flex flex-col gap-2">
+                            <div className="flex justify-between text-sm text-stone-500">
                                 <span>Subtotal</span>
                                 <span>$ {subtotal.toLocaleString('es-UY')}</span>
                             </div>
-                            <div className="flex justify-between text-sm text-stone-500 dark:text-stone-400">
+                            <div className="flex justify-between text-sm text-stone-500">
                                 <span>Envío</span>
-                                <span className={isFreeShippingEligible && deliveryMethod === 'delivery' ? 'text-primary font-semibold' : ''}>
+                                <span className={isFreeShippingEligible && deliveryMethod === 'delivery' ? 'text-[#8C7E60] font-semibold' : ''}>
                                     {deliveryMethod === 'pickup'
                                         ? 'Retiro en Prado (Gratis)'
-                                        : (isFreeShippingEligible ? 'Gratis 🎉' : `$ ${shippingCost.toLocaleString('es-UY')}`)
+                                        : (isFreeShippingEligible ? 'Gratis' : `$ ${shippingCost.toLocaleString('es-UY')}`)
                                     }
                                 </span>
                             </div>
                             {transferDiscount > 0 && (
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-green-600 dark:text-green-400 flex items-center gap-1">
+                                    <span className="text-green-600 flex items-center gap-1">
                                         <span className="material-symbols-outlined !text-[14px]">savings</span>
                                         Dto. transferencia (5%)
                                     </span>
-                                    <span className="text-green-600 dark:text-green-400 font-semibold">- $ {transferDiscount.toLocaleString('es-UY')}</span>
+                                    <span className="text-green-600 font-semibold">- $ {transferDiscount.toLocaleString('es-UY')}</span>
                                 </div>
                             )}
-                            <div className="flex justify-between font-bold text-stone-900 dark:text-white text-base pt-2 border-t border-stone-100 dark:border-stone-800 mt-1">
+                            <div className="flex justify-between font-semibold text-stone-900 text-base pt-2 border-t border-stone-100 mt-1">
                                 <span className="font-serif">Total</span>
                                 <span>$ {finalTotal.toLocaleString('es-UY')}</span>
                             </div>
                             {!isFreeShippingEligible && deliveryMethod === 'delivery' && (
-                                <p className="text-[11px] text-stone-400 dark:text-stone-500 text-center mt-1">
+                                <p className="text-[11px] text-stone-400 text-center mt-1">
                                     Agregá $ {(5000 - subtotal).toLocaleString('es-UY')} más para envío gratis
                                 </p>
                             )}
                             {paymentMethod !== 'transfer' && (
-                                <p className="text-[11px] text-green-600 dark:text-green-400 text-center mt-1 font-semibold">
-                                    💡 Pagando por transferencia ahorrás $ {Math.round(subtotalWithShipping * 0.05).toLocaleString('es-UY')}
+                                <p className="text-[11px] text-green-600 text-center mt-1 font-medium">
+                                    Pagando por transferencia ahorrás $ {Math.round(subtotalWithShipping * 0.05).toLocaleString('es-UY')}
                                 </p>
                             )}
                         </div>

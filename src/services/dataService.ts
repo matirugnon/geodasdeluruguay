@@ -225,9 +225,11 @@ export const dataService = {
     try {
       const response = await fetch(`${API_URL}/products?keyword=${encodeURIComponent(query)}`);
       if (!response.ok) return [];
-      const products = await response.json();
+      const data = await response.json();
+      // Handle both flat array and paginated { products: [...] } response
+      const products = Array.isArray(data) ? data : (data.products || []);
       // Mapear _id de MongoDB a id para el frontend
-      return products.map((p: any) => ({ ...p, id: p._id }));
+      return products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
     } catch (error) {
       console.error('Error searching products:', error);
       return [];

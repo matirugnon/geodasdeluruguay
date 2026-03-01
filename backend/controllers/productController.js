@@ -13,6 +13,18 @@ const getProducts = async (req, res) => {
             filters.category = new RegExp(`^${req.query.category.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
         }
 
+        // Si hay keyword, buscar en title, description, category y tags
+        if (req.query.keyword) {
+            const keyword = req.query.keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(keyword, 'i');
+            filters.$or = [
+                { title: regex },
+                { description: regex },
+                { category: regex },
+                { tags: regex }
+            ];
+        }
+
         // Pagination params
         const page = parseInt(req.query.page) || 0;   // 0 = return all (backward compat)
         const limit = parseInt(req.query.limit) || 0;  // 0 = return all

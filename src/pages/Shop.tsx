@@ -115,86 +115,76 @@ export const Shop: React.FC = () => {
         : 'Explorá nuestra colección de cristales, geodas y accesorios naturales de Uruguay. Envío a todo el país.';
 
     return (
-        <div className="min-h-screen bg-[#FDFBF7] dark:bg-[#1A1917] transition-colors duration-300">
+        <div className="min-h-screen bg-white">
             <SEOHead
                 title={shopTitle}
                 description={shopDesc}
                 canonical={`${SITE_URL}/tienda${categorySlug ? `/${categorySlug}` : ''}`}
             />
+
             {/* Page Header */}
-            <header className="pt-24 pb-12 px-6 md:px-12 max-w-7xl mx-auto text-center">
-                <motion.h1
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#8C7E60] mb-4"
-                >
+            <header className="pt-16 pb-10 px-6 md:px-12 max-w-[1280px] mx-auto text-center">
+                <h1 className="font-serif text-3xl md:text-4xl text-stone-900 mb-3 font-medium">
                     Nuestra Tienda
-                </motion.h1>
-                <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="w-24 h-[1px] bg-[#D4C4A8] mx-auto mb-6"
-                />
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-[#8C8C8C] font-light max-w-2xl mx-auto italic"
-                >
+                </h1>
+                <p className="text-stone-500 font-sans text-base font-light max-w-xl mx-auto">
                     Piezas únicas formadas por la naturaleza, curadas con elegancia para tu hogar.
-                </motion.p>
+                </p>
             </header>
 
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12 pb-24">
+            <div className="max-w-[1320px] mx-auto px-6 md:px-12 pb-24">
                 <div className="flex flex-col lg:flex-row gap-12">
 
                     {/* Desktop Sidebar Filters */}
-                    <aside className="hidden lg:block w-64 space-y-8 flex-shrink-0">
-                        <div>
-                            <h3 className="font-serif text-xl text-[#8C7E60] mb-6 tracking-wide uppercase text-sm font-bold">Categorías</h3>
-                            <div className="space-y-4">
+                    <aside className="hidden lg:block w-56 flex-shrink-0">
+                        <div className="sticky top-24">
+                            <h3 className="text-[11px] font-semibold text-stone-400 uppercase tracking-[0.15em] mb-5">Categorías</h3>
+                            <div className="space-y-3">
                                 {PRODUCT_CATEGORIES.map(category => (
                                     <label key={category} className="flex items-center group cursor-pointer">
-                                        <div className="relative flex items-center justify-center">
-                                            <input
-                                                type="checkbox"
-                                                className="peer appearance-none w-5 h-5 border border-[#D4C4A8] rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer"
-                                                checked={selectedCategories.includes(category)}
-                                                onChange={() => toggleCategory(category)}
-                                            />
-                                            <span className="material-symbols-outlined text-white text-[16px] absolute opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
-                                                check
-                                            </span>
-                                        </div>
-                                        <span className={`ml-3 text-sm font-sans transition-colors ${selectedCategories.includes(category) ? 'text-[#8C7E60] font-medium' : 'text-[#8C8C8C] group-hover:text-[#8C7E60]'}`}>
+                                        <input
+                                            type="checkbox"
+                                            className="appearance-none w-4 h-4 border border-stone-300 rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer flex-shrink-0"
+                                            checked={selectedCategories.includes(category)}
+                                            onChange={() => toggleCategory(category)}
+                                        />
+                                        {selectedCategories.includes(category) && (
+                                            <span className="material-symbols-outlined text-white text-[14px] absolute ml-[1px] pointer-events-none">check</span>
+                                        )}
+                                        <span className={`ml-3 text-sm font-sans transition-colors duration-150 ${selectedCategories.includes(category) ? 'text-stone-800 font-medium' : 'text-stone-500 group-hover:text-stone-700'}`}>
                                             {category}
                                         </span>
                                     </label>
                                 ))}
                             </div>
-                        </div>
 
-                        {selectedCategories.length > 0 && (
-                            <button
-                                onClick={clearFilters}
-                                className="text-[#8C7E60] text-xs font-bold uppercase tracking-widest border-b border-[#8C7E60] pb-1 hover:text-[#5A5243] hover:border-[#5A5243] transition-colors"
-                            >
-                                Limpiar Filtros
-                            </button>
-                        )}
+                            {selectedCategories.length > 0 && (
+                                <button
+                                    onClick={clearFilters}
+                                    className="mt-5 text-xs font-medium text-[#8C7E60] hover:text-[#756A50] underline underline-offset-2 transition-colors duration-150"
+                                >
+                                    Limpiar filtros
+                                </button>
+                            )}
+
+                            <div className="mt-6 pt-4 border-t border-stone-100">
+                                <p className="text-xs text-stone-400">
+                                    {totalProducts} productos
+                                </p>
+                            </div>
+                        </div>
                     </aside>
 
                     {/* Mobile Filter Trigger */}
-                    <div className="lg:hidden flex justify-between items-center mb-4">
+                    <div className="lg:hidden flex justify-between items-center mb-2">
                         <button
                             onClick={() => setIsMobileFilterOpen(true)}
-                            className="flex items-center gap-2 bg-[#8C7E60] text-white px-6 py-2 rounded-full shadow-md text-sm tracking-widest"
+                            className="flex items-center gap-2 border border-stone-300 text-stone-700 px-5 py-2.5 rounded text-sm font-medium"
                         >
-                            <span className="material-symbols-outlined text-[18px]">tune</span>
-                            FILTRAR
+                            <span className="material-symbols-outlined !text-[18px]">tune</span>
+                            Filtrar
                         </button>
-                        <p className="text-xs text-[#8C8C8C] font-light">
+                        <p className="text-xs text-stone-400">
                             {totalProducts} productos
                         </p>
                     </div>
@@ -203,26 +193,26 @@ export const Shop: React.FC = () => {
                     <main className="flex-grow" ref={gridRef}>
                         {isLoading ? (
                             <div className="flex flex-col items-center justify-center py-24 gap-4">
-                                <div className="w-8 h-8 border-2 border-[#D4C4A8] border-t-[#8C7E60] rounded-full animate-spin" />
-                                <p className="text-[#8C8C8C] font-light italic">Descubriendo tesoros...</p>
+                                <div className="w-7 h-7 border-2 border-stone-200 border-t-[#8C7E60] rounded-full animate-spin" />
+                                <p className="text-stone-400 text-sm">Cargando productos...</p>
                             </div>
                         ) : products.length === 0 ? (
                             <div className="text-center py-24">
-                                <p className="text-[#8C8C8C] font-light italic text-lg mb-4">No encontramos productos en esta categoría.</p>
-                                <button onClick={clearFilters} className="text-[#8C7E60] underline underline-offset-4">Ver todo el catálogo</button>
+                                <p className="text-stone-400 text-lg mb-4">No encontramos productos en esta categoría.</p>
+                                <button onClick={clearFilters} className="text-[#8C7E60] font-medium underline underline-offset-2 text-sm">Ver todo el catálogo</button>
                             </div>
                         ) : (
                             <>
-                                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-7">
+                                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                                     <AnimatePresence mode="popLayout">
                                         {products.map((product) => (
                                             <motion.div
                                                 key={product.id}
                                                 layout
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                exit={{ opacity: 0, scale: 0.9 }}
-                                                transition={{ duration: 0.3 }}
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                transition={{ duration: 0.2 }}
                                             >
                                                 <ProductCard product={product} />
                                             </motion.div>
@@ -232,37 +222,34 @@ export const Shop: React.FC = () => {
 
                                 {/* Pagination */}
                                 {totalPages > 1 && (
-                                    <nav aria-label="Paginación" className="mt-12 mb-4 flex flex-col items-center gap-4">
-                                        {/* Page info */}
-                                        <p className="text-xs text-[#8C8C8C] font-light tracking-wide">
+                                    <nav aria-label="Paginación" className="mt-14 flex flex-col items-center gap-4">
+                                        <p className="text-xs text-stone-400">
                                             Página {currentPage} de {totalPages} — {totalProducts} productos
                                         </p>
 
-                                        <div className="flex items-center gap-1 sm:gap-1.5">
-                                            {/* Previous */}
+                                        <div className="flex items-center gap-1.5">
                                             <button
                                                 onClick={() => goToPage(currentPage - 1)}
                                                 disabled={currentPage === 1}
-                                                className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[#D4C4A8]/60 text-[#8C7E60] hover:bg-[#8C7E60] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#8C7E60] transition-all duration-200"
+                                                className="flex items-center justify-center w-9 h-9 rounded border border-stone-200 text-stone-600 hover:bg-stone-50 hover:border-stone-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150"
                                                 aria-label="Página anterior"
                                             >
                                                 <span className="material-symbols-outlined !text-[18px]">chevron_left</span>
                                             </button>
 
-                                            {/* Page numbers */}
                                             {getPageNumbers().map((page, idx) => (
                                                 page === '...' ? (
-                                                    <span key={`ellipsis-${idx}`} className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-[#8C8C8C] text-sm select-none">
-                                                        ···
+                                                    <span key={`ellipsis-${idx}`} className="w-9 h-9 flex items-center justify-center text-stone-400 text-sm select-none">
+                                                        ...
                                                     </span>
                                                 ) : (
                                                     <button
                                                         key={page}
                                                         onClick={() => goToPage(page)}
-                                                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                                                        className={`w-9 h-9 rounded text-sm font-medium transition-colors duration-150 ${
                                                             page === currentPage
-                                                                ? 'bg-[#8C7E60] text-white shadow-md'
-                                                                : 'border border-[#D4C4A8]/40 text-[#8C7E60] hover:bg-[#8C7E60]/10'
+                                                                ? 'bg-[#8C7E60] text-white'
+                                                                : 'border border-stone-200 text-stone-600 hover:bg-stone-50'
                                                         }`}
                                                         aria-label={`Página ${page}`}
                                                         aria-current={page === currentPage ? 'page' : undefined}
@@ -272,11 +259,10 @@ export const Shop: React.FC = () => {
                                                 )
                                             ))}
 
-                                            {/* Next */}
                                             <button
                                                 onClick={() => goToPage(currentPage + 1)}
                                                 disabled={currentPage === totalPages}
-                                                className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[#D4C4A8]/60 text-[#8C7E60] hover:bg-[#8C7E60] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#8C7E60] transition-all duration-200"
+                                                className="flex items-center justify-center w-9 h-9 rounded border border-stone-200 text-stone-600 hover:bg-stone-50 hover:border-stone-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150"
                                                 aria-label="Página siguiente"
                                             >
                                                 <span className="material-symbols-outlined !text-[18px]">chevron_right</span>
@@ -299,39 +285,34 @@ export const Shop: React.FC = () => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsMobileFilterOpen(false)}
-                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
+                            className="fixed inset-0 bg-black/30 z-[100]"
                         />
                         <motion.div
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed right-0 top-0 h-full w-full max-w-[300px] bg-white dark:bg-[#1A1917] z-[101] shadow-2xl p-8 flex flex-col"
+                            className="fixed right-0 top-0 h-full w-full max-w-[300px] bg-white z-[101] shadow-xl p-8 flex flex-col"
                         >
-                            <div className="flex justify-between items-center mb-10">
-                                <h3 className="font-serif text-2xl text-[#8C7E60]">Filtros</h3>
-                                <button onClick={() => setIsMobileFilterOpen(false)} className="text-[#8C8C8C]">
-                                    <span className="material-symbols-outlined text-[32px]">close</span>
+                            <div className="flex justify-between items-center mb-8">
+                                <h3 className="font-serif text-xl text-stone-800">Filtros</h3>
+                                <button onClick={() => setIsMobileFilterOpen(false)} className="text-stone-400 hover:text-stone-600 transition-colors">
+                                    <span className="material-symbols-outlined">close</span>
                                 </button>
                             </div>
 
-                            <div className="flex-grow space-y-6">
-                                <p className="text-[#8C8C8C] text-xs font-bold uppercase tracking-[0.2em] mb-4">Por Categoría</p>
+                            <div className="flex-grow space-y-5">
+                                <p className="text-[11px] font-semibold text-stone-400 uppercase tracking-[0.15em] mb-3">Categoría</p>
                                 <div className="space-y-4">
                                     {PRODUCT_CATEGORIES.map(category => (
                                         <label key={category} className="flex items-center group cursor-pointer">
-                                            <div className="relative flex items-center justify-center">
-                                                <input
-                                                    type="checkbox"
-                                                    className="peer appearance-none w-6 h-6 border border-[#D4C4A8] rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer"
-                                                    checked={selectedCategories.includes(category)}
-                                                    onChange={() => toggleCategory(category)}
-                                                />
-                                                <span className="material-symbols-outlined text-white text-[18px] absolute opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
-                                                    check
-                                                </span>
-                                            </div>
-                                            <span className={`ml-4 text-base font-sans transition-colors ${selectedCategories.includes(category) ? 'text-[#8C7E60] font-medium' : 'text-stone-600 dark:text-stone-300'}`}>
+                                            <input
+                                                type="checkbox"
+                                                className="appearance-none w-5 h-5 border border-stone-300 rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer"
+                                                checked={selectedCategories.includes(category)}
+                                                onChange={() => toggleCategory(category)}
+                                            />
+                                            <span className={`ml-3 text-base font-sans transition-colors ${selectedCategories.includes(category) ? 'text-stone-800 font-medium' : 'text-stone-600'}`}>
                                                 {category}
                                             </span>
                                         </label>
@@ -339,21 +320,21 @@ export const Shop: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="pt-8 border-t border-[#D4C4A8]/20 space-y-4">
+                            <div className="pt-6 border-t border-stone-100 space-y-3">
                                 <button
                                     onClick={() => {
                                         clearFilters();
                                         setIsMobileFilterOpen(false);
                                     }}
-                                    className="w-full py-4 text-[#8C7E60] font-medium border border-[#8C7E60] rounded-full text-sm tracking-widest uppercase font-sans"
+                                    className="w-full py-3.5 text-stone-600 font-medium border border-stone-300 rounded text-sm"
                                 >
-                                    Limpiar Todo
+                                    Limpiar todo
                                 </button>
                                 <button
                                     onClick={() => setIsMobileFilterOpen(false)}
-                                    className="w-full py-4 bg-[#8C7E60] text-white rounded-full text-sm tracking-widest uppercase font-bold font-sans shadow-lg"
+                                    className="w-full py-3.5 bg-[#8C7E60] text-white rounded text-sm font-medium"
                                 >
-                                    Aplicar Filtros
+                                    Aplicar
                                 </button>
                             </div>
                         </motion.div>

@@ -20,11 +20,9 @@ export const ProductDetail: React.FC = () => {
       if (!slug) return;
       setActiveImage(0);
 
-      // Fetch product by slug (backend resolves slug → product)
       const p = await dataService.getProductBySlug(slug);
       if (!p) { setProduct(null); return; }
 
-      // If the URL slug doesn't match the stored slug, redirect to canonical
       if (slug !== p.slug) {
         navigate(productUrl(p.slug), { replace: true });
         return;
@@ -39,8 +37,8 @@ export const ProductDetail: React.FC = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-[#c5a059] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="w-7 h-7 border-2 border-stone-200 border-t-[#8C7E60] rounded-full animate-spin" />
       </div>
     );
   }
@@ -55,14 +53,12 @@ export const ProductDetail: React.FC = () => {
     setTimeout(() => setAddedFeedback(false), 1800);
   };
 
-  // SEO: canonical URL and structured data
   const canonicalPath = productUrl(product.slug);
   const canonicalUrl = `${SITE_URL}${canonicalPath}`;
   const seoDescription = product.description
     ? product.description.slice(0, 160)
     : `${product.title} — ${product.category}. Cristal natural de Uruguay. $${product.price} UYU.`;
 
-  // JSON-LD Product Schema
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -85,7 +81,6 @@ export const ProductDetail: React.FC = () => {
     ...(product.specs?.weight && { weight: { '@type': 'QuantitativeValue', value: product.specs.weight, unitCode: 'GRM' } }),
   };
 
-  // JSON-LD BreadcrumbList
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -102,7 +97,7 @@ export const ProductDetail: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FDFDFD] text-[#1c1917] font-display">
+    <div className="min-h-screen bg-white">
       <SEOHead
         title={product.title}
         description={seoDescription}
@@ -111,50 +106,50 @@ export const ProductDetail: React.FC = () => {
         type="product"
         jsonLd={[productJsonLd, breadcrumbJsonLd]}
       />
-      {/* ── Breadcrumb ──────────────────────────────────────────────── */}
-      <div className="max-w-[1280px] mx-auto px-6 sm:px-10 pt-6 pb-2">
-        <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-stone-400">
-          <Link to="/" className="hover:text-primary transition-colors">Inicio</Link>
-          <span>·</span>
-          <Link to="/tienda" className="hover:text-primary transition-colors">Tienda</Link>
-          <span>·</span>
+
+      {/* Breadcrumb */}
+      <div className="max-w-[1280px] mx-auto px-6 md:px-12 pt-8 pb-2">
+        <nav className="flex items-center gap-2 text-xs text-stone-400 font-sans">
+          <Link to="/" className="hover:text-[#8C7E60] transition-colors duration-150">Inicio</Link>
+          <span>/</span>
+          <Link to="/tienda" className="hover:text-[#8C7E60] transition-colors duration-150">Tienda</Link>
           {product.category && (
             <>
+              <span>/</span>
               <Link
                 to={`/tienda/${product.category.toLowerCase()}`}
-                className="hover:text-primary transition-colors"
+                className="hover:text-[#8C7E60] transition-colors duration-150"
               >
                 {product.category}
               </Link>
-              <span>·</span>
             </>
           )}
-          <span className="text-stone-600 truncate max-w-[180px]">{product.title}</span>
+          <span>/</span>
+          <span className="text-stone-600 truncate max-w-[200px]">{product.title}</span>
         </nav>
       </div>
 
-      {/* ── Main two-column grid ─────────────────────────────────────── */}
-      <div className="max-w-[1280px] mx-auto px-6 sm:px-10 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[55%_1fr] gap-10 lg:gap-14 items-start">
+      {/* Main two-column layout */}
+      <div className="max-w-[1280px] mx-auto px-6 md:px-12 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[55%_1fr] gap-10 lg:gap-16 items-start">
 
-          {/* LEFT — Image panel ──────────────────────────────────────── */}
+          {/* LEFT — Image panel */}
           <div className="flex flex-col gap-3">
-            {/* Main image */}
-            <div className="relative w-full aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden bg-stone-50 flex items-center justify-center">
+            <div className="relative w-full aspect-square lg:aspect-[4/5] rounded-md overflow-hidden bg-[#F5F3EF] flex items-center justify-center">
               {product.images?.[activeImage] ? (
                 <img
                   src={product.images[activeImage]}
                   alt={product.title}
-                  className="w-full h-full object-contain p-4 transition-opacity duration-300"
+                  className="w-full h-full object-contain p-6 transition-opacity duration-300"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-stone-300">
-                  <span className="material-symbols-outlined text-6xl">image</span>
+                  <span className="material-symbols-outlined !text-[56px]">image</span>
                 </div>
               )}
 
               {product.isNew && (
-                <span className="absolute top-4 left-4 bg-primary text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">
+                <span className="absolute top-4 left-4 bg-[#8C7E60] text-white text-[10px] font-medium uppercase tracking-wider px-3 py-1 rounded">
                   Nuevo
                 </span>
               )}
@@ -167,8 +162,8 @@ export const ProductDetail: React.FC = () => {
                   <button
                     key={idx}
                     onClick={() => setActiveImage(idx)}
-                    className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-200 ${activeImage === idx
-                        ? 'ring-2 ring-primary ring-offset-1'
+                    className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden transition-all duration-200 ${activeImage === idx
+                        ? 'ring-2 ring-[#8C7E60] ring-offset-1'
                         : 'opacity-50 hover:opacity-80'
                       }`}
                   >
@@ -179,58 +174,58 @@ export const ProductDetail: React.FC = () => {
             )}
           </div>
 
-          {/* RIGHT — Info panel ──────────────────────────────────────── */}
+          {/* RIGHT — Info panel */}
           <div className="flex flex-col gap-5 lg:sticky lg:top-24">
             {/* Category + type */}
             <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase tracking-[0.35em] text-primary font-semibold">
+              <span className="text-[11px] uppercase tracking-[0.2em] text-[#8C7E60] font-medium">
                 {product.category}
               </span>
               {product.type && (
                 <>
-                  <span className="text-stone-300 text-xs">·</span>
-                  <span className="text-[10px] uppercase tracking-widest text-stone-400">{product.type}</span>
+                  <span className="text-stone-300 text-xs">/</span>
+                  <span className="text-[11px] uppercase tracking-wider text-stone-400">{product.type}</span>
                 </>
               )}
             </div>
 
             {/* Title */}
-            <h1 className="text-2xl sm:text-3xl font-light font-serif leading-snug tracking-tight text-stone-900">
+            <h1 className="font-serif text-2xl sm:text-3xl font-medium leading-snug text-stone-900">
               {product.title}
             </h1>
 
             {/* Price */}
-            <p className="text-2xl font-light tracking-widest text-stone-500">
+            <p className="text-xl font-sans font-semibold text-stone-800">
               $ {product.price.toLocaleString('es-UY')}
             </p>
 
             {/* Divider */}
-            <div className="w-10 h-px bg-stone-200" />
+            <div className="w-full h-px bg-stone-100" />
 
             {/* Description */}
-            <p className="text-sm text-stone-500 leading-relaxed font-light max-w-sm">
+            <p className="text-sm text-stone-500 leading-relaxed font-light max-w-md">
               {product.description}
             </p>
 
             {/* Specs */}
             {(product.specs?.origin || product.specs?.weight || product.specs?.dimensions) && (
-              <div className="flex flex-wrap gap-5 py-3 border-y border-stone-100">
+              <div className="flex flex-wrap gap-6 py-4 border-y border-stone-100">
                 {product.specs.origin && (
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[9px] uppercase tracking-widest text-stone-300 font-semibold">Origen</span>
-                    <span className="text-xs text-stone-600">{product.specs.origin}</span>
+                    <span className="text-[10px] uppercase tracking-wider text-stone-400 font-medium">Origen</span>
+                    <span className="text-sm text-stone-700">{product.specs.origin}</span>
                   </div>
                 )}
                 {product.specs.weight && (
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[9px] uppercase tracking-widest text-stone-300 font-semibold">Peso</span>
-                    <span className="text-xs text-stone-600">{product.specs.weight}g</span>
+                    <span className="text-[10px] uppercase tracking-wider text-stone-400 font-medium">Peso</span>
+                    <span className="text-sm text-stone-700">{product.specs.weight}g</span>
                   </div>
                 )}
                 {product.specs.dimensions && (
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[9px] uppercase tracking-widest text-stone-300 font-semibold">Medidas</span>
-                    <span className="text-xs text-stone-600">{product.specs.dimensions}</span>
+                    <span className="text-[10px] uppercase tracking-wider text-stone-400 font-medium">Medidas</span>
+                    <span className="text-sm text-stone-700">{product.specs.dimensions}</span>
                   </div>
                 )}
               </div>
@@ -242,7 +237,7 @@ export const ProductDetail: React.FC = () => {
                 {product.tags.map(tag => (
                   <span
                     key={tag}
-                    className="text-[9px] uppercase tracking-widest text-stone-400 border border-stone-200 px-2.5 py-1 rounded-full"
+                    className="text-[10px] uppercase tracking-wider text-stone-400 border border-stone-200 px-2.5 py-1 rounded"
                   >
                     {tag}
                   </span>
@@ -250,14 +245,13 @@ export const ProductDetail: React.FC = () => {
               </div>
             )}
 
-            {/* ── CTAs ──────────────────────────────────────────────── */}
-            <div className="flex flex-col gap-3 pt-2">
-              {/* Primary — Add to Cart */}
+            {/* CTAs */}
+            <div className="flex flex-col gap-3 pt-3">
               <button
                 onClick={handleAddToCart}
-                className={`w-full h-13 py-4 rounded-full flex items-center justify-center gap-2.5 font-bold text-[11px] uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all duration-300 ${addedFeedback
+                className={`w-full py-3.5 rounded flex items-center justify-center gap-2 text-sm font-medium transition-colors duration-200 ${addedFeedback
                     ? 'bg-stone-800 text-white'
-                    : 'bg-primary hover:bg-primary-dark text-white hover:shadow-md'
+                    : 'bg-[#8C7E60] hover:bg-[#756A50] text-white'
                   }`}
               >
                 <span
@@ -266,15 +260,14 @@ export const ProductDetail: React.FC = () => {
                 >
                   {addedFeedback ? 'check_circle' : 'shopping_bag'}
                 </span>
-                {addedFeedback ? '¡Agregado al carrito!' : 'Agregar al carrito'}
+                {addedFeedback ? 'Agregado al carrito' : 'Agregar al carrito'}
               </button>
 
-              {/* Secondary — WhatsApp */}
               <a
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-4 rounded-full flex items-center justify-center gap-2.5 border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white font-bold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 active:scale-[0.98]"
+                className="w-full py-3.5 rounded flex items-center justify-center gap-2 border border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white text-sm font-medium transition-colors duration-200"
               >
                 <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
@@ -282,41 +275,40 @@ export const ProductDetail: React.FC = () => {
                 Consultar por WhatsApp
               </a>
 
-              {/* Back link */}
               <button
                 onClick={() => navigate(-1)}
-                className="text-center text-[10px] uppercase tracking-widest text-stone-300 hover:text-stone-500 transition-colors pt-1"
+                className="text-center text-xs text-stone-400 hover:text-stone-600 transition-colors duration-150 pt-1"
               >
                 ← Volver
               </button>
             </div>
 
             {/* Trust strip */}
-            <div className="flex items-center gap-6 pt-4 border-t border-stone-100">
-              <div className="flex items-center gap-1.5 text-stone-300">
-                <span className="material-symbols-outlined !text-[14px]">verified</span>
-                <span className="text-[9px] uppercase tracking-widest">Auténtica</span>
+            <div className="flex flex-wrap items-center gap-5 pt-4 border-t border-stone-100">
+              <div className="flex items-center gap-1.5 text-stone-400">
+                <span className="material-symbols-outlined !text-[15px]">verified</span>
+                <span className="text-[10px] uppercase tracking-wider">Auténtica</span>
               </div>
-              <div className="flex items-center gap-1.5 text-stone-300">
-                <span className="material-symbols-outlined !text-[14px]">local_shipping</span>
-                <span className="text-[9px] uppercase tracking-widest">Envío disponible</span>
+              <div className="flex items-center gap-1.5 text-stone-400">
+                <span className="material-symbols-outlined !text-[15px]">local_shipping</span>
+                <span className="text-[10px] uppercase tracking-wider">Envío disponible</span>
               </div>
-              <div className="flex items-center gap-1.5 text-stone-300">
-                <span className="material-symbols-outlined !text-[14px]">auto_awesome</span>
-                <span className="text-[9px] uppercase tracking-widest">Origen natural</span>
+              <div className="flex items-center gap-1.5 text-stone-400">
+                <span className="material-symbols-outlined !text-[15px]">auto_awesome</span>
+                <span className="text-[10px] uppercase tracking-wider">Origen natural</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── Related products ──────────────────────────────────────────── */}
+        {/* Related products */}
         {relatedProducts.length > 0 && (
           <section className="mt-20 pt-12 border-t border-stone-100">
-            <div className="flex items-baseline justify-between mb-7">
-              <h2 className="text-xs uppercase tracking-[0.3em] text-stone-400 font-semibold">Otras piezas</h2>
+            <div className="flex items-baseline justify-between mb-8">
+              <h2 className="font-serif text-lg text-stone-800 font-medium">Otras piezas</h2>
               <Link
                 to="/tienda"
-                className="text-[10px] uppercase tracking-widest text-stone-300 hover:text-primary transition-colors underline underline-offset-2"
+                className="text-xs text-stone-400 hover:text-[#8C7E60] transition-colors duration-150 underline underline-offset-2"
               >
                 Ver todas
               </Link>
@@ -328,7 +320,7 @@ export const ProductDetail: React.FC = () => {
                   to={productUrl(r.slug)}
                   className="group flex flex-col gap-2"
                 >
-                  <div className="aspect-square rounded-xl overflow-hidden bg-stone-100">
+                  <div className="aspect-square rounded-md overflow-hidden bg-[#F5F3EF]">
                     {r.images?.[0] && (
                       <img
                         src={r.images[0]}
@@ -338,10 +330,10 @@ export const ProductDetail: React.FC = () => {
                       />
                     )}
                   </div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-stone-600 truncate group-hover:text-primary transition-colors">
+                  <p className="text-xs font-medium text-stone-700 truncate group-hover:text-[#8C7E60] transition-colors duration-150">
                     {r.title}
                   </p>
-                  <p className="text-[10px] text-stone-400">$ {r.price.toLocaleString('es-UY')}</p>
+                  <p className="text-xs text-stone-400">$ {r.price.toLocaleString('es-UY')}</p>
                 </Link>
               ))}
             </div>
