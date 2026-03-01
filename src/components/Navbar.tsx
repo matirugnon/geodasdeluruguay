@@ -77,7 +77,6 @@ export const Navbar: React.FC = () => {
           <nav className="hidden md:flex items-center gap-10">
             <Link to="/" className={navLinkClass}>Inicio</Link>
             <Link to="/tienda" className={navLinkClass}>Tienda</Link>
-            <Link to="/tips" className={navLinkClass}>Tips</Link>
           </nav>
 
           {/* Actions */}
