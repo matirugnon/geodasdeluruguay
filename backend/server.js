@@ -37,7 +37,7 @@ const allowedOrigins = [
     'http://localhost:5175',
     'https://geodasdeluruguay.vercel.app',
     'https://admin-geodas.vercel.app',
-    'https://www.geodasdeluruguay.com/'
+    'https://www.geodasdeluruguay.com'
 ];
 
 const corsOptions = {
