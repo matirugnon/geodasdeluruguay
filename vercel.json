@@ -4,6 +4,14 @@
       "source": "/(.*)",
       "headers": [
         {
+          "key": "X-Frame-Options",
+          "value": "ALLOWALL"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors https://matias.rugnon.com https://portfolio.matirugnon.us"
+        },
+        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
         },
