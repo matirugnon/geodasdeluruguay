@@ -23,7 +23,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <article
-      className="group flex flex-col bg-white rounded-lg overflow-hidden h-full border border-stone-300/90 [@media(hover:hover)]:hover:border-stone-400 transition-all duration-200 [@media(hover:hover)]:hover:shadow-[0_6px_24px_rgba(0,0,0,0.07)] cursor-pointer [touch-action:manipulation] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#8C7E60]/35"
+      className="group flex flex-col bg-white rounded-md overflow-hidden h-full border border-stone-200/80 [@media(hover:hover)]:hover:border-stone-300 transition-all duration-200 [@media(hover:hover)]:hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] cursor-pointer [touch-action:manipulation]"
       onClick={() => navigate(productUrl(product.slug))}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -37,18 +37,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       {/* Image */}
       <div className="relative aspect-[4/5] overflow-hidden bg-[#F5F3EF]">
-        {product.images[0] ? (
-          <img
-            src={product.images[0]}
-            alt={product.title}
-            loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-stone-400">
-            <span className="material-symbols-outlined !text-[40px]">image</span>
-          </div>
-        )}
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]"
+          style={{ backgroundImage: `url('${product.images[0]}')` }}
+        />
 
         {/* New badge */}
         {product.isNew && (
@@ -60,7 +52,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Quick add button */}
         <button
           onClick={handleAdd}
-          className={`absolute bottom-3 right-3 min-h-[44px] px-4 flex items-center gap-1.5 rounded-md text-sm font-semibold transition-all duration-200 z-10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#8C7E60]/35 ${added
+          className={`absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold transition-all duration-200 z-10 ${added
               ? 'bg-stone-800 text-white'
               : 'bg-white text-stone-700 hover:bg-[#8C7E60] hover:text-white opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:translate-y-0 translate-y-1 [@media(hover:none)]:opacity-100 [@media(hover:none)]:translate-y-0 shadow-sm'
             }`}
@@ -76,22 +68,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Content */}
       <div className="flex flex-col flex-grow p-4 sm:p-5">
         {/* Category label */}
-        <span className="text-xs sm:text-sm font-semibold text-[#6F6148] uppercase tracking-[0.08em] mb-2">
+        <span className="text-[10px] sm:text-[11px] font-medium text-[#8C7E60] uppercase tracking-[0.12em] mb-1.5">
           {product.type || product.category || 'Pieza'}
         </span>
 
         {/* Title */}
-        <h3 className="text-base sm:text-lg font-semibold text-stone-900 leading-snug font-serif hover:text-[#8C7E60] transition-colors duration-200 line-clamp-2 mb-3">
+        <h3 className="text-sm sm:text-[15px] md:text-base font-semibold text-stone-800 leading-snug font-serif hover:text-[#8C7E60] transition-colors duration-200 line-clamp-2 mb-3">
           {product.title}
         </h3>
 
         {/* Price + Button */}
         <div className="mt-auto pt-3 border-t border-stone-100">
-          <span className="block text-xl sm:text-2xl font-bold text-stone-900 tracking-tight mb-3">
+          <span className="block text-lg sm:text-xl md:text-2xl font-bold text-stone-900 tracking-tight mb-3">
             $ {product.price.toLocaleString('es-UY')}
           </span>
           <span
-            className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 py-2.5 bg-[#8C7E60] hover:bg-[#756A50] text-white text-sm sm:text-base font-medium rounded-md transition-colors duration-200 tracking-wide"
+            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 bg-[#8C7E60] hover:bg-[#756A50] text-white text-xs sm:text-sm font-medium rounded transition-colors duration-200 tracking-wide"
           >
             Ver Detalle
             <span className="material-symbols-outlined !text-[16px] transition-transform duration-200 group-hover:translate-x-0.5">
