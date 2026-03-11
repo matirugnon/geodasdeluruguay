@@ -1,281 +1,300 @@
-# 🪨 Geodas del Uruguay - E-commerce Platform
+# Geodas del Uruguay
 
-<div align="center">
+E-commerce full-stack para la venta de geodas, minerales y accesorios en Uruguay.
 
-![Geodas del Uruguay](https://img.shields.io/badge/Status-Production-success)
-![React](https://img.shields.io/badge/React-19.2-blue)
-![Node.js](https://img.shields.io/badge/Node.js-Express-green)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+- Frontend: React + TypeScript + Vite
+- Backend: Node.js + Express + MongoDB (Mongoose)
+- Media: Cloudinary
+- Pagos: Mercado Pago + transferencia bancaria
 
-**Plataforma de comercio electrónico para un emprendimiento local uruguayo dedicado a la venta de geodas, minerales y cristales.**
+## Estado actual
 
-🔗 [Instagram: @geodasdeluruguay](https://www.instagram.com/geodasdeluruguay/?hl=es-la)
+Este repositorio contiene:
 
-</div>
+- Tienda pública (`/`, `/tienda`, `/producto/:slug`, `/tips`, `/checkout`)
+- API REST para catálogo, tips, auth admin, uploads, pagos y SEO
+- Checkout productivo con Mercado Pago (redirect + webhook + verificación)
+- Flujo alternativo por transferencia (con 5% de descuento)
 
----
+Nota: en este repo no existe una ruta UI `/admin`; la administración se hace por endpoints protegidos y/o cliente admin externo.
 
-## 📋 Descripción del Proyecto
-
-GeodasdelUruguay es una aplicación web full-stack desarrollada como solución digital para un emprendimiento local uruguayo especializado en la comercialización de geodas, minerales y cristales naturales. La plataforma permite a los clientes explorar el catálogo de productos, conocer tips sobre cuidado de minerales, y gestionar el inventario de forma eficiente.
-
-### 🎯 Motivación
-
-Este proyecto nace de un trabajo de consultoría personalizada con la emprendedora detrás de Geodas del Uruguay. El objetivo principal fue digitalizar su negocio, proporcionándole una presencia web profesional que le permita:
-
-- 📱 Mostrar su catálogo de productos de forma atractiva y organizada
-- 🔍 Facilitar la búsqueda y exploración de productos por categorías
-- 📚 Compartir conocimiento sobre geodas y minerales a través de tips educativos
-- 🛠️ Administrar su inventario de manera simple y eficiente
-- 🌐 Expandir su alcance más allá de las redes sociales
-
-### 💼 Trabajo de Consultoría
-
-El desarrollo incluyó:
-- Sesiones de análisis de requisitos con la emprendedora
-- Diseño de la arquitectura de información basada en sus necesidades
-- Capacitación para el uso del panel administrativo
-- Implementación de funcionalidades específicas para su modelo de negocio
-- Optimización SEO para mejorar la visibilidad online
-
----
-
-## 🚀 Stack Tecnológico
+## Stack
 
 ### Frontend
-- **React 19.2** - Biblioteca UI con hooks modernos
-- **TypeScript** - Tipado estático para mayor robustez
-- **React Router DOM** - Navegación SPA
-- **Tailwind CSS** - Estilos utilitarios y diseño responsive
-- **Vite** - Build tool y dev server ultrarrápido
+
+- React 19
+- TypeScript
+- React Router DOM 7
+- Tailwind CSS
+- Vite 6
+- Framer Motion
 
 ### Backend
-- **Node.js** - Runtime de JavaScript
-- **Express 4.18** - Framework web minimalista
-- **MongoDB** - Base de datos NoSQL
-- **Mongoose** - ODM para MongoDB
-- **JWT** - Autenticación y autorización
-- **Bcrypt.js** - Hashing de contraseñas
-- **Cloudinary** - Gestión y hosting de imágenes
-- **Multer** - Manejo de uploads de archivos
 
-### DevOps & Deployment
-- **Vercel** - Hosting y deployment automático
-- **MongoDB Atlas** - Base de datos en la nube
-- **Git** - Control de versiones
+- Node.js + Express 4
+- MongoDB + Mongoose
+- JWT + bcryptjs
+- Multer + Cloudinary
+- Mercado Pago SDK
+- Nodemailer
 
----
+## Estructura
 
-## 📁 Estructura del Proyecto
-
-```
-geodas-del-uruguay/
-├── backend/                # 🔧 API Server (Express + MongoDB)
-│   ├── config/             # Configuración de DB
-│   ├── controllers/        # Lógica de negocio
-│   ├── middleware/         # Auth middleware
-│   ├── models/             # Modelos de Mongoose (User, Product, Category, Tip)
-│   ├── routes/             # Rutas API REST
-│   └── server.js           # Entry point del servidor
-│
-├── src/                    # 💻 Frontend (React + TypeScript)
-│   ├── components/         # Componentes reutilizables
-│   │   ├── Navbar.tsx      # Barra de navegación
-│   │   ├── Footer.tsx      # Pie de página
-│   │   ├── ProductCard.tsx # Card de producto
-│   │   └── ...
-│   ├── pages/              # Páginas de la aplicación
-│   │   ├── Home.tsx        # Página principal
-│   │   ├── Shop.tsx        # Catálogo de productos
-│   │   ├── ProductDetail.tsx
-│   │   ├── Tips.tsx        # Blog de consejos
-│   │   ├── Admin.tsx       # Panel administrativo
-│   │   └── ...
-│   ├── services/           # Servicios y API calls
-│   │   └── dataService.ts  # Integración con backend
-│   ├── App.tsx             # Componente raíz
-│   ├── index.tsx           # Entry point
-│   └── types.ts            # Tipos TypeScript
-│
-├── docs/                   # 📚 Documentación
-│   ├── seo.md              # Estrategia SEO
-│   ├── SECURITY_AUDIT.md   # Auditoría de seguridad
-│   └── metadata.json       # Metadata del proyecto
-│
-├── index.html              # HTML template
-├── vite.config.ts          # Configuración de Vite
-├── tsconfig.json           # Configuración TypeScript
-├── vercel.json             # Configuración de deployment
-├── package.json            # Dependencias del proyecto
-├── .gitignore              # Archivos ignorados por Git
-├── README.md               # Este archivo
-├── CONTRIBUTING.md         # Guía de contribución
-├── LICENSE                 # Licencia MIT
-└── SECURITY.md             # Guía de seguridad
+```txt
+geodasdeluruguay/
+├─ backend/
+│  ├─ config/
+│  ├─ controllers/
+│  ├─ middleware/
+│  ├─ models/
+│  ├─ routes/
+│  ├─ utils/
+│  ├─ .env.example
+│  ├─ createAdmin.js
+│  ├─ seeder.js
+│  └─ server.js
+├─ src/
+│  ├─ components/
+│  ├─ context/
+│  ├─ pages/
+│  ├─ services/
+│  └─ utils/
+├─ docs/
+├─ docker-compose.yml
+├─ vercel.json
+└─ README.md
 ```
 
-> 💡 **Nota**: El proyecto sigue una **arquitectura modular y organizada**. Todo el código frontend está en `src/`, la documentación técnica en `docs/`, y el backend en su propia carpeta separada. Ver [CONTRIBUTING.md](CONTRIBUTING.md) para más detalles sobre la estructura.
+## Requisitos
 
----
+- Node.js 18+ (recomendado)
+- MongoDB local o Atlas
+- Cuenta de Cloudinary
+- Cuenta de Mercado Pago (credenciales de integración)
 
-## 🔧 Instalación y Configuración
+## Variables de entorno
 
-### Prerrequisitos
-- Node.js (v16 o superior)
-- MongoDB (local o Atlas)
-- Cuenta de Cloudinary (para imágenes)
+### Backend (`backend/.env`)
 
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/tu-usuario/geodas-del-uruguay.git
-cd geodas-del-uruguay
-```
-
-### 2. Instalar dependencias
-
-**Frontend:**
-```bash
-npm install
-```
-
-**Backend:**
-```bash
-cd backend
-npm install
-```
-
-### 3. Configurar variables de entorno
-
-Crea un archivo `.env` en la carpeta `backend/` con las siguientes variables:
+Basado en `backend/.env.example` y en el código actual:
 
 ```env
-# MongoDB
-MONGO_URI=tu_mongodb_connection_string
+# Database
+MONGO_URI=
 
-# JWT Secret
-JWT_SECRET=tu_secret_key_super_segura
+# Auth
+JWT_SECRET=
 
-# Cloudinary (para imágenes)
-CLOUDINARY_CLOUD_NAME=tu_cloud_name
-CLOUDINARY_API_KEY=tu_api_key
-CLOUDINARY_API_SECRET=tu_api_secret
-
-# Server
+# Backend
 NODE_ENV=development
 PORT=5000
+
+# CORS / URLs
+FRONTEND_URL=http://localhost:5173
+STOREFRONT_URL=http://localhost:5173
+BACKEND_URL=http://localhost:5000
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# Mercado Pago
+MP_ACCESS_TOKEN=
+MP_PUBLIC_KEY=
+
+# Email (opcional pero recomendado)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+STORE_NAME=Geodas del Uruguay
+STORE_EMAIL=
+OWNER_EMAIL=
 ```
 
-### 4. Ejecutar el proyecto
+### Frontend (opcional)
 
-**Modo desarrollo (Frontend + Backend):**
+Solo si necesitás sobreescribir el proxy/default:
+
+```env
+VITE_API_URL=
+```
+
+## Instalación
+
+1. Instalar dependencias del frontend:
+
 ```bash
-npm run dev
+npm install
 ```
 
-**Solo Backend:**
+2. Instalar dependencias del backend:
+
 ```bash
 cd backend
-npm run dev
+npm install
+cd ..
 ```
 
-**Solo Frontend:**
+3. Configurar `backend/.env`.
+
+## Desarrollo
+
+### Opción A: dos terminales
+
+Terminal 1 (frontend):
+
 ```bash
 npm run dev
 ```
 
-### 5. Sembrar la base de datos (opcional)
+Terminal 2 (backend):
+
+```bash
+npm run dev:backend
+```
+
+### Opción B: todo junto
+
+```bash
+npm run dev:all
+```
+
+## Scripts
+
+### Raíz
+
+- `npm run dev`: frontend Vite
+- `npm run dev:backend`: backend con nodemon
+- `npm run dev:all`: frontend + backend concurrente
+- `npm run build`: build frontend
+- `npm run preview`: preview build frontend
+
+### `backend/`
+
+- `npm run dev`: backend con nodemon
+- `npm start`: backend en modo producción
+- `npm run seed`: limpia y carga datos iniciales
+
+## Seed y usuario admin
+
+Para poblar datos de ejemplo:
+
 ```bash
 cd backend
 npm run seed
 ```
 
----
+Credenciales admin creadas por seed:
 
-## 🌟 Características Principales
+- `username`: `admin`
+- `password`: `admin123`
 
-### Para Clientes
-- 🏠 **Página de inicio** con productos destacados
-- 🛍️ **Catálogo completo** de productos con búsqueda y filtros
-- 📂 **Categorías** organizadas (Geodas, Cuarzos, Amatistas, etc.)
-- 🔎 **Vista detallada** de cada producto con múltiples imágenes
-- 💡 **Sección de Tips** con información educativa sobre minerales
-- 📱 **Diseño responsive** optimizado para móviles
+## Pasarela de pagos (implementada)
 
-### Para Administradores
-- 🔐 **Panel de administración** con autenticación segura
-- ➕ **Crear, editar y eliminar** productos
-- 🏷️ **Gestión de categorías** y tips
-- 🖼️ **Upload de imágenes** a Cloudinary
-- 📊 **Dashboard** para visualizar el inventario
+### Mercado Pago
 
----
+Flujo actual:
 
-## 🚀 Deployment
+1. Frontend crea preferencia: `POST /api/payments/create-preference`
+2. Backend guarda orden en estado `pending`
+3. Cliente paga en Mercado Pago (redirect `checkout_url`)
+4. Mercado Pago notifica webhook: `POST /api/payments/webhook`
+5. Backend valida estado/monto y marca orden `paid`
+6. Frontend puede verificar retorno: `GET /api/payments/verify-payment?payment_id=...`
 
-El proyecto está configurado para desplegarse en **Vercel**:
+Detalles relevantes:
 
-1. Conecta tu repositorio de GitHub con Vercel
-2. Configura las variables de entorno en el dashboard de Vercel
-3. El deploy se hará automáticamente en cada push a `main`
+- Moneda: `UYU`
+- `external_reference` se vincula con `_id` de `Order`
+- Se usa idempotency key al crear preferencia
+- Emails de confirmación al cliente/dueño cuando se confirma pago
 
-El archivo `vercel.json` ya incluye la configuración necesaria para el routing SPA.
+### Transferencia bancaria
 
----
+Flujo alternativo:
 
-## 📝 Scripts Disponibles
+1. Frontend crea orden: `POST /api/payments/create-transfer-order`
+2. Orden queda en `awaiting_transfer`
+3. Cliente envía comprobante por WhatsApp
+4. Confirmación manual posterior
 
-### Frontend
-- `npm run dev` - Inicia el servidor de desarrollo
-- `npm run build` - Construye la aplicación para producción
-- `npm run preview` - Preview de la build de producción
+Reglas implementadas:
 
-### Backend
-- `npm run dev` - Servidor con hot-reload (nodemon)
-- `npm start` - Servidor en modo producción
-- `npm run seed` - Poblar la base de datos con datos de ejemplo
+- 5% de descuento por transferencia
+- Costo de envío por transferencia:
+  - `delivery`: $100 UYU (gratis desde $5000)
+  - `pickup`: $0
 
----
+## API (resumen)
 
-## 🔐 Seguridad
+- `GET /api/health`
+- `GET /api/products`
+- `GET /api/products/:idOrSlug`
+- `GET /api/products/admin` (protegida)
+- `POST /api/products` (protegida)
+- `PUT /api/products/:id` (protegida)
+- `DELETE /api/products/:id` (protegida)
+- `GET /api/categories`
+- `GET /api/tips`
+- `GET /api/tips/:slugOrId`
+- `POST /api/tips` (protegida)
+- `PUT /api/tips/:id` (protegida)
+- `DELETE /api/tips/:id` (protegida)
+- `POST /api/admin/login`
+- `GET /api/admin/verify`
+- `POST /api/admin/logout`
+- `POST /api/upload` (protegida)
+- `POST /api/payments/create-preference`
+- `POST /api/payments/create-transfer-order`
+- `POST /api/payments/webhook`
+- `GET /api/payments/verify-payment`
+- `GET /api/seo/sitemap.xml`
+- `GET /api/seo/robots.txt`
 
-- ✅ Autenticación JWT con cookies HTTP-only
-- ✅ Passwords hasheados con bcrypt
-- ✅ Variables de entorno para datos sensibles
-- ✅ CORS configurado apropiadamente
-- ✅ Validación de datos en backend
-- ✅ Protección de rutas de administración
+## Deploy
 
----
+Configuración actual:
 
-## 🤝 Contribuciones
+- Frontend: Vercel
+- Backend: Render (`https://geodas-backend.onrender.com`)
+- Rewrites en `vercel.json`:
+  - `/api/*` -> backend Render
+  - `/sitemap.xml` y `/robots.txt` -> backend SEO endpoints
 
-Este es un proyecto privado desarrollado para un cliente específico. Si encuentras algún bug o tienes sugerencias, no dudes en abrir un issue.
+Importante para Mercado Pago:
 
----
+- `BACKEND_URL` debe ser una URL pública accesible para webhook.
+- `STOREFRONT_URL` debe apuntar al dominio real del frontend para redirects de pago.
 
-## 📄 Licencia
+## Docker (opcional)
 
-MIT License - Ver archivo [LICENSE](LICENSE) para más detalles.
+Levantar servicios con Docker Compose:
 
----
+```bash
+docker compose up --build
+```
 
-## 👤 Autor
+Servicios:
 
-Desarrollado con ❤️ para **Geodas del Uruguay**
+- Frontend en `5173`
+- Backend en `5000`
 
-📷 Instagram: [@geodasdeluruguay](https://www.instagram.com/geodasdeluruguay/?hl=es-la)
+## Seguridad
 
----
+- JWT para endpoints protegidos
+- Rate limit básico en login admin (5 intentos / 15 min por IP)
+- CORS con allowlist explícita en `backend/server.js`
+- Headers de seguridad en Express
+- Variables sensibles por entorno
 
-## 🙏 Agradecimientos
+## Documentación adicional
 
-Gracias a la emprendedora de Geodas del Uruguay por confiar en este proyecto y por su dedicación a compartir la belleza de los minerales naturales.
+- `docs/seo.md`
+- `docs/SECURITY_AUDIT.md`
+- `docs/metadata.json`
 
----
+## Licencia
 
-<div align="center">
-
-**¿Te gustó el proyecto? Dale una ⭐ al repositorio!**
-
-</div>
+MIT (`LICENSE`).
