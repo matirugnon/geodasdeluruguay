@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Geodas del Uruguay — Cristales y Piedras Naturales</title>
     <meta name="description" content="Cristales, geodas y piedras naturales de Uruguay. Amatistas, cuarzos, ágatas y accesorios energéticos. Envío a todo el país." />
-    <meta name="theme-color" content="#c5a059" />
+    <meta name="theme-color" content="#7f6242" />
     <link rel="icon" type="image/ico" href="favicon.ico" />
     <link rel="canonical" href="https://geodasdeluruguay.vercel.app" />
 
@@ -23,8 +23,9 @@
                 extend: {
                     colors: {
                         // Home / Global Gold Theme
-                        "primary": "#c5a059",
-                        "primary-dark": "#b08d4b",
+                        "primary": "#7f6242",
+                        "primary-dark": "#654c31",
+                        "primary-soft": "#ebe1d4",
                         "background-light": "#fafaf9",
                         "background-dark": "#1c1917",
                         "stone-dark": "#292524",
@@ -70,9 +71,9 @@
                         "surface-dark": "#2c3320",
                     },
                     fontFamily: {
-                        "display": ["Manrope", "sans-serif"],
-                        "serif": ["Playfair Display", "serif", "ui-serif", "Georgia"],
-                        "sans": ["Montserrat", "ui-sans-serif", "system-ui", "sans-serif"],
+                        "display": ["Work Sans", "sans-serif"],
+                        "serif": ["Newsreader", "Playfair Display", "serif", "ui-serif", "Georgia"],
+                        "sans": ["Work Sans", "Noto Sans", "ui-sans-serif", "system-ui", "sans-serif"],
                         "newsreader": ["Newsreader", "serif"],
                         "noto-sans": ["Noto Sans", "sans-serif"],
                         "noto-serif": ["Noto Serif", "serif"],
@@ -107,6 +108,17 @@
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+              linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 22%),
+              radial-gradient(circle at top left, rgba(127, 98, 66, 0.08), transparent 24%);
+            z-index: -1;
         }
 
         .bg-pattern {
@@ -153,7 +165,7 @@
 </head>
 
 <body
-    class="bg-background-light dark:bg-background-dark font-display text-stone-800 dark:text-stone-100 overflow-x-hidden flex flex-col min-h-screen">
+    class="bg-transparent font-sans text-stone-800 overflow-x-hidden flex flex-col min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
 </body>

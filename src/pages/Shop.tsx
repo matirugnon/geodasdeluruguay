@@ -115,104 +115,123 @@ export const Shop: React.FC = () => {
         : 'Explorá nuestra colección de cristales, geodas y accesorios naturales de Uruguay. Envío a todo el país.';
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="content-shell section-shell-lg">
             <SEOHead
                 title={shopTitle}
                 description={shopDesc}
                 canonical={`${SITE_URL}/tienda${categorySlug ? `/${categorySlug}` : ''}`}
             />
 
-            {/* Page Header */}
-            <header className="pt-16 pb-10 px-6 md:px-12 max-w-[1280px] mx-auto text-center">
-                <h1 className="font-serif text-3xl md:text-4xl text-stone-900 mb-3 font-medium">
-                    Nuestra Tienda
-                </h1>
-                <p className="text-stone-500 font-sans text-base font-light max-w-xl mx-auto">
-                    Piezas únicas formadas por la naturaleza, curadas con elegancia para tu hogar.
-                </p>
-            </header>
+            <section className="surface-panel rounded-[2.3rem] px-6 py-8 sm:px-8 lg:px-10">
+                <div className="max-w-4xl">
+                    <div className="max-w-3xl">
+                        <span className="section-kicker">Tienda</span>
+                        <h1 className="section-title">
+                            {categoryName ? `${categoryName} con presencia natural y lectura sobria.` : 'Catálogo curado de geodas, cristales y accesorios.'}
+                        </h1>
+                        <p className="section-copy mt-5">
+                            Un catálogo ordenado para elegir con claridad: piezas naturales, compra simple y una presentación más cercana a una tienda confiable que a una vitrina improvisada.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-            <div className="max-w-[1320px] mx-auto px-6 md:px-12 pb-24">
-                <div className="flex flex-col lg:flex-row gap-12">
+            <div className="section-shell">
+                <div className="mb-6 flex flex-col gap-4 lg:hidden">
+                    <button
+                        onClick={() => setIsMobileFilterOpen(true)}
+                        className="btn-secondary w-full justify-center"
+                    >
+                        Filtrar categorías
+                    </button>
+                    <div className="flex flex-wrap gap-2">
+                        {selectedCategories.length > 0 ? selectedCategories.map((category) => (
+                            <span key={category} className="eyebrow-chip">{category}</span>
+                        )) : (
+                            <span className="eyebrow-chip">Todas las categorías</span>
+                        )}
+                    </div>
+                </div>
 
-                    {/* Desktop Sidebar Filters */}
-                    <aside className="hidden lg:block w-56 flex-shrink-0">
-                        <div className="sticky top-24">
-                            <h3 className="text-[11px] font-semibold text-stone-400 uppercase tracking-[0.15em] mb-5">Categorías</h3>
+                <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+                    <aside className="hidden lg:block">
+                        <div className="surface-panel sticky top-28 rounded-[1.8rem] p-6">
+                            <div className="mb-5">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400">Filtrar</p>
+                                <h2 className="mt-2 font-serif text-2xl text-stone-900">Categorías</h2>
+                            </div>
+
                             <div className="space-y-3">
-                                {PRODUCT_CATEGORIES.map(category => (
-                                    <label key={category} className="flex items-center group cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            className="appearance-none w-4 h-4 border border-stone-300 rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer flex-shrink-0"
-                                            checked={selectedCategories.includes(category)}
-                                            onChange={() => toggleCategory(category)}
-                                        />
-                                        {selectedCategories.includes(category) && (
-                                            <span className="material-symbols-outlined text-white text-[14px] absolute ml-[1px] pointer-events-none">check</span>
-                                        )}
-                                        <span className={`ml-3 text-sm font-sans transition-colors duration-150 ${selectedCategories.includes(category) ? 'text-stone-800 font-medium' : 'text-stone-500 group-hover:text-stone-700'}`}>
-                                            {category}
-                                        </span>
-                                    </label>
-                                ))}
+                                {PRODUCT_CATEGORIES.map((category) => {
+                                    const selected = selectedCategories.includes(category);
+                                    return (
+                                        <label
+                                            key={category}
+                                            className={`flex cursor-pointer items-center justify-between rounded-[1rem] border px-4 py-3 transition-colors duration-150 ${
+                                                selected
+                                                    ? 'border-[var(--brand)] bg-[rgba(127,98,66,0.08)]'
+                                                    : 'border-[rgba(198,184,162,0.75)] bg-white/78 hover:border-[var(--brand)]'
+                                            }`}
+                                        >
+                                            <span className={`text-sm ${selected ? 'font-semibold text-stone-900' : 'text-stone-600'}`}>{category}</span>
+                                            <input
+                                                type="checkbox"
+                                                className="h-4 w-4 accent-[var(--brand)]"
+                                                checked={selected}
+                                                onChange={() => toggleCategory(category)}
+                                            />
+                                        </label>
+                                    );
+                                })}
                             </div>
 
                             {selectedCategories.length > 0 && (
-                                <button
-                                    onClick={clearFilters}
-                                    className="mt-5 text-xs font-medium text-[#8C7E60] hover:text-[#756A50] underline underline-offset-2 transition-colors duration-150"
-                                >
+                                <button onClick={clearFilters} className="btn-ghost mt-5 text-sm font-medium">
                                     Limpiar filtros
                                 </button>
                             )}
-
-                            <div className="mt-6 pt-4 border-t border-stone-100">
-                                <p className="text-xs text-stone-400">
-                                    {totalProducts} productos
-                                </p>
-                            </div>
                         </div>
                     </aside>
 
-                    {/* Mobile Filter Trigger */}
-                    <div className="lg:hidden flex justify-between items-center mb-2">
-                        <button
-                            onClick={() => setIsMobileFilterOpen(true)}
-                            className="flex items-center gap-2 border border-stone-300 text-stone-700 px-5 py-2.5 rounded text-sm font-medium"
-                        >
-                            <span className="material-symbols-outlined !text-[18px]">tune</span>
-                            Filtrar
-                        </button>
-                        <p className="text-xs text-stone-400">
-                            {totalProducts} productos
-                        </p>
-                    </div>
+                    <main className="space-y-6" ref={gridRef}>
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                            <div className="flex flex-wrap gap-2">
+                                {selectedCategories.length > 0 ? selectedCategories.map((category) => (
+                                    <span key={category} className="eyebrow-chip">{category}</span>
+                                )) : (
+                                    <span className="eyebrow-chip">Todas las categorías</span>
+                                )}
+                            </div>
+                            <p className="text-sm text-stone-500">{totalProducts} productos visibles</p>
+                        </div>
 
-                    {/* Main Content: Product Grid */}
-                    <main className="flex-grow" ref={gridRef}>
                         {isLoading ? (
-                            <div className="flex flex-col items-center justify-center py-24 gap-4">
-                                <div className="w-7 h-7 border-2 border-stone-200 border-t-[#8C7E60] rounded-full animate-spin" />
-                                <p className="text-stone-400 text-sm">Cargando productos...</p>
+                            <div className="surface-panel-soft rounded-[1.8rem] py-20 text-center">
+                                <div className="mx-auto h-8 w-8 rounded-full border-2 border-[var(--brand)]/20 border-t-[var(--brand)] animate-spin" />
+                                <p className="mt-4 text-sm text-stone-500">Cargando catálogo...</p>
                             </div>
                         ) : products.length === 0 ? (
-                            <div className="text-center py-24">
-                                <p className="text-stone-400 text-lg mb-4">No encontramos productos en esta categoría.</p>
-                                <button onClick={clearFilters} className="text-[#8C7E60] font-medium underline underline-offset-2 text-sm">Ver todo el catálogo</button>
+                            <div className="surface-panel-soft rounded-[1.8rem] px-6 py-20 text-center">
+                                <h2 className="font-serif text-3xl text-stone-900">No encontramos productos en esta selección</h2>
+                                <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-stone-500">
+                                    La estructura del catálogo sigue activa. Podés limpiar filtros o volver a ver todas las piezas visibles.
+                                </p>
+                                <button onClick={clearFilters} className="btn-primary mt-6">
+                                    Ver todo el catálogo
+                                </button>
                             </div>
                         ) : (
                             <>
-                                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                                     <AnimatePresence mode="popLayout">
                                         {products.map((product) => (
                                             <motion.div
                                                 key={product.id}
                                                 layout
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                exit={{ opacity: 0 }}
-                                                transition={{ duration: 0.2 }}
+                                                initial={{ opacity: 0, y: 8 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -8 }}
+                                                transition={{ duration: 0.18 }}
                                             >
                                                 <ProductCard product={product} />
                                             </motion.div>
@@ -220,36 +239,34 @@ export const Shop: React.FC = () => {
                                     </AnimatePresence>
                                 </div>
 
-                                {/* Pagination */}
                                 {totalPages > 1 && (
-                                    <nav aria-label="Paginación" className="mt-14 flex flex-col items-center gap-4">
-                                        <p className="text-xs text-stone-400">
-                                            Página {currentPage} de {totalPages} — {totalProducts} productos
+                                    <nav aria-label="Paginación" className="surface-panel-soft flex flex-col items-center gap-4 rounded-[1.7rem] px-6 py-6">
+                                        <p className="text-sm text-stone-500">
+                                            Página {currentPage} de {totalPages}
                                         </p>
 
-                                        <div className="flex items-center gap-1.5">
+                                        <div className="flex flex-wrap items-center justify-center gap-2">
                                             <button
                                                 onClick={() => goToPage(currentPage - 1)}
                                                 disabled={currentPage === 1}
-                                                className="flex items-center justify-center w-9 h-9 rounded border border-stone-200 text-stone-600 hover:bg-stone-50 hover:border-stone-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150"
-                                                aria-label="Página anterior"
+                                                className="btn-secondary disabled:cursor-not-allowed disabled:opacity-40"
                                             >
-                                                <span className="material-symbols-outlined !text-[18px]">chevron_left</span>
+                                                Anterior
                                             </button>
 
                                             {getPageNumbers().map((page, idx) => (
                                                 page === '...' ? (
-                                                    <span key={`ellipsis-${idx}`} className="w-9 h-9 flex items-center justify-center text-stone-400 text-sm select-none">
+                                                    <span key={`ellipsis-${idx}`} className="px-2 text-sm text-stone-400">
                                                         ...
                                                     </span>
                                                 ) : (
                                                     <button
                                                         key={page}
                                                         onClick={() => goToPage(page)}
-                                                        className={`w-9 h-9 rounded text-sm font-medium transition-colors duration-150 ${
+                                                        className={`inline-flex h-11 min-w-11 items-center justify-center rounded-full px-4 text-sm font-medium transition-colors duration-150 ${
                                                             page === currentPage
-                                                                ? 'bg-[#8C7E60] text-white'
-                                                                : 'border border-stone-200 text-stone-600 hover:bg-stone-50'
+                                                                ? 'bg-[var(--brand)] text-white'
+                                                                : 'border border-[rgba(198,184,162,0.75)] bg-white/78 text-stone-700 hover:border-[var(--brand)] hover:text-[var(--brand)]'
                                                         }`}
                                                         aria-label={`Página ${page}`}
                                                         aria-current={page === currentPage ? 'page' : undefined}
@@ -262,10 +279,9 @@ export const Shop: React.FC = () => {
                                             <button
                                                 onClick={() => goToPage(currentPage + 1)}
                                                 disabled={currentPage === totalPages}
-                                                className="flex items-center justify-center w-9 h-9 rounded border border-stone-200 text-stone-600 hover:bg-stone-50 hover:border-stone-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150"
-                                                aria-label="Página siguiente"
+                                                className="btn-secondary disabled:cursor-not-allowed disabled:opacity-40"
                                             >
-                                                <span className="material-symbols-outlined !text-[18px]">chevron_right</span>
+                                                Siguiente
                                             </button>
                                         </div>
                                     </nav>
@@ -276,7 +292,6 @@ export const Shop: React.FC = () => {
                 </div>
             </div>
 
-            {/* Mobile Filter Drawer */}
             <AnimatePresence>
                 {isMobileFilterOpen && (
                     <>
@@ -285,56 +300,61 @@ export const Shop: React.FC = () => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsMobileFilterOpen(false)}
-                            className="fixed inset-0 bg-black/30 z-[100]"
+                            className="fixed inset-0 z-[100] bg-[rgba(30,23,18,0.36)] backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed right-0 top-0 h-full w-full max-w-[300px] bg-white z-[101] shadow-xl p-8 flex flex-col"
+                            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+                            className="fixed right-0 top-0 z-[101] flex h-full w-full max-w-[320px] flex-col border-l border-[rgba(198,184,162,0.82)] bg-[rgba(255,252,246,0.97)] p-6 shadow-[0_24px_48px_rgba(31,24,18,0.18)]"
                         >
-                            <div className="flex justify-between items-center mb-8">
-                                <h3 className="font-serif text-xl text-stone-800">Filtros</h3>
-                                <button onClick={() => setIsMobileFilterOpen(false)} className="text-stone-400 hover:text-stone-600 transition-colors">
-                                    <span className="material-symbols-outlined">close</span>
+                            <div className="mb-8 flex items-center justify-between">
+                                <div>
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400">Filtrar</p>
+                                    <h3 className="mt-2 font-serif text-2xl text-stone-900">Categorías</h3>
+                                </div>
+                                <button onClick={() => setIsMobileFilterOpen(false)} className="text-sm text-stone-500">
+                                    Cerrar
                                 </button>
                             </div>
 
-                            <div className="flex-grow space-y-5">
-                                <p className="text-[11px] font-semibold text-stone-400 uppercase tracking-[0.15em] mb-3">Categoría</p>
-                                <div className="space-y-4">
-                                    {PRODUCT_CATEGORIES.map(category => (
-                                        <label key={category} className="flex items-center group cursor-pointer">
+                            <div className="flex-grow space-y-3">
+                                {PRODUCT_CATEGORIES.map((category) => {
+                                    const selected = selectedCategories.includes(category);
+                                    return (
+                                        <label
+                                            key={category}
+                                            className={`flex cursor-pointer items-center justify-between rounded-[1rem] border px-4 py-3 transition-colors duration-150 ${
+                                                selected
+                                                    ? 'border-[var(--brand)] bg-[rgba(127,98,66,0.08)]'
+                                                    : 'border-[rgba(198,184,162,0.75)] bg-white/78'
+                                            }`}
+                                        >
+                                            <span className={`text-sm ${selected ? 'font-semibold text-stone-900' : 'text-stone-600'}`}>{category}</span>
                                             <input
                                                 type="checkbox"
-                                                className="appearance-none w-5 h-5 border border-stone-300 rounded-sm checked:bg-[#8C7E60] checked:border-[#8C7E60] transition-all cursor-pointer"
-                                                checked={selectedCategories.includes(category)}
+                                                className="h-4 w-4 accent-[var(--brand)]"
+                                                checked={selected}
                                                 onChange={() => toggleCategory(category)}
                                             />
-                                            <span className={`ml-3 text-base font-sans transition-colors ${selectedCategories.includes(category) ? 'text-stone-800 font-medium' : 'text-stone-600'}`}>
-                                                {category}
-                                            </span>
                                         </label>
-                                    ))}
-                                </div>
+                                    );
+                                })}
                             </div>
 
-                            <div className="pt-6 border-t border-stone-100 space-y-3">
+                            <div className="mt-6 space-y-3 border-t border-[rgba(198,184,162,0.55)] pt-5">
                                 <button
                                     onClick={() => {
                                         clearFilters();
                                         setIsMobileFilterOpen(false);
                                     }}
-                                    className="w-full py-3.5 text-stone-600 font-medium border border-stone-300 rounded text-sm"
+                                    className="btn-secondary w-full justify-center"
                                 >
                                     Limpiar todo
                                 </button>
-                                <button
-                                    onClick={() => setIsMobileFilterOpen(false)}
-                                    className="w-full py-3.5 bg-[#8C7E60] text-white rounded text-sm font-medium"
-                                >
-                                    Aplicar
+                                <button onClick={() => setIsMobileFilterOpen(false)} className="btn-primary w-full justify-center">
+                                    Aplicar filtros
                                 </button>
                             </div>
                         </motion.div>

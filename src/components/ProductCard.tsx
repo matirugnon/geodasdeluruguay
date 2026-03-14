@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArrowRight, Check, ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
@@ -23,7 +24,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <article
-      className="group flex flex-col bg-white rounded-md overflow-hidden h-full border border-stone-200/80 [@media(hover:hover)]:hover:border-stone-300 transition-all duration-200 [@media(hover:hover)]:hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] cursor-pointer [touch-action:manipulation]"
+      className="group info-card flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.6rem] [touch-action:manipulation]"
       onClick={() => navigate(productUrl(product.slug))}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -35,60 +36,77 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       tabIndex={0}
       aria-label={`Ver detalle de ${product.title}`}
     >
-      {/* Image */}
-      <div className="relative aspect-[4/5] overflow-hidden bg-[#F5F3EF]">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]"
-          style={{ backgroundImage: `url('${product.images[0]}')` }}
-        />
-
-        {/* New badge */}
-        {product.isNew && (
-          <div className="absolute top-3 left-3 bg-[#8C7E60] text-white px-2.5 py-1 rounded text-[10px] font-semibold uppercase tracking-wider z-10">
-            Nuevo
+      <div className="relative aspect-[4/5] overflow-hidden bg-[rgba(245,240,232,0.88)]">
+        {product.images[0] ? (
+          <img
+            src={product.images[0]}
+            alt={product.title}
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-[rgba(235,225,212,0.45)] text-stone-400">
+            <ShoppingBag className="h-10 w-10" />
           </div>
         )}
 
-        {/* Quick add button */}
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          {product.isNew && (
+            <span className="rounded-full bg-[var(--brand)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
+              Nuevo
+            </span>
+          )}
+          {product.stock > 0 && (
+            <span className="rounded-full bg-white/85 px-3 py-1 text-[11px] font-medium text-stone-700 backdrop-blur">
+              Disponible
+            </span>
+          )}
+        </div>
+
         <button
           onClick={handleAdd}
-          className={`absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold transition-all duration-200 z-10 ${added
-              ? 'bg-stone-800 text-white'
-              : 'bg-white text-stone-700 hover:bg-[#8C7E60] hover:text-white opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:translate-y-0 translate-y-1 [@media(hover:none)]:opacity-100 [@media(hover:none)]:translate-y-0 shadow-sm'
-            }`}
+          className={`absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-all duration-200 ${
+            added
+              ? 'bg-stone-900 text-white'
+              : 'bg-white/92 text-stone-800 shadow-[0_8px_18px_rgba(31,24,18,0.14)] hover:bg-[var(--brand)] hover:text-white'
+          }`}
           aria-label="Agregar al carrito"
         >
-          <span className="material-symbols-outlined !text-[16px]" style={{ fontVariationSettings: added ? "'FILL' 1" : "'FILL' 0" }}>
-            {added ? 'check' : 'shopping_bag'}
-          </span>
-          {added ? '¡Listo!' : 'Agregar'}
+          {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
+          {added ? 'Agregado' : 'Sumar'}
         </button>
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-grow p-4 sm:p-5">
-        {/* Category label */}
-        <span className="text-[10px] sm:text-[11px] font-medium text-[#8C7E60] uppercase tracking-[0.12em] mb-1.5">
-          {product.type || product.category || 'Pieza'}
-        </span>
-
-        {/* Title */}
-        <h3 className="text-sm sm:text-[15px] md:text-base font-semibold text-stone-800 leading-snug font-serif hover:text-[#8C7E60] transition-colors duration-200 line-clamp-2 mb-3">
-          {product.title}
-        </h3>
-
-        {/* Price + Button */}
-        <div className="mt-auto pt-3 border-t border-stone-100">
-          <span className="block text-lg sm:text-xl md:text-2xl font-bold text-stone-900 tracking-tight mb-3">
-            $ {product.price.toLocaleString('es-UY')}
-          </span>
-          <span
-            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 bg-[#8C7E60] hover:bg-[#756A50] text-white text-xs sm:text-sm font-medium rounded transition-colors duration-200 tracking-wide"
-          >
-            Ver Detalle
-            <span className="material-symbols-outlined !text-[16px] transition-transform duration-200 group-hover:translate-x-0.5">
-              arrow_forward
+      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--brand)]">
+              {product.type || product.category || 'Pieza'}
             </span>
+            <span className="text-xs text-stone-400">{product.category}</span>
+          </div>
+
+          <h3 className="font-serif text-lg leading-snug text-stone-900 transition-colors duration-200 group-hover:text-[var(--brand)]">
+            {product.title}
+          </h3>
+
+          {product.description && (
+            <p className="line-clamp-2 text-sm leading-6 text-stone-500">
+              {product.description}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-auto flex items-end justify-between gap-4 border-t border-[rgba(198,184,162,0.45)] pt-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.16em] text-stone-400">Precio</p>
+            <p className="mt-1 text-2xl font-semibold tracking-tight text-stone-900">
+              $ {product.price.toLocaleString('es-UY')}
+            </p>
+          </div>
+
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-[var(--brand)]">
+            Ver detalle
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </span>
         </div>
       </div>

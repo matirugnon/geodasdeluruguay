@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { dataService } from '../services/dataService';
 import { Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
@@ -30,22 +30,29 @@ export const Category: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-[1280px] mx-auto px-6 md:px-12 py-10">
-        {/* Breadcrumb */}
-        <nav className="flex items-center mb-10 text-sm text-stone-400 font-sans">
-          <span>Inicio</span>
-          <span className="mx-2">/</span>
-          <span className="font-medium text-stone-700 capitalize">{id}</span>
-        </nav>
+    <div className="content-shell section-shell-lg">
+      <nav className="mb-8 flex items-center gap-2 text-sm text-stone-400">
+        <Link className="transition-colors duration-150 hover:text-[var(--brand)]" to="/">Inicio</Link>
+        <span>/</span>
+        <span className="font-medium capitalize text-stone-700">{id}</span>
+      </nav>
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
-          <h1 className="font-serif text-3xl text-stone-900 font-medium capitalize">{id}</h1>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-stone-400">Ordenar:</span>
+      <section className="surface-panel rounded-[2rem] px-6 py-8 sm:px-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <span className="section-kicker">Colección</span>
+            <h1 className="section-subtitle capitalize">{id}</h1>
+            <p className="section-copy mt-4 max-w-2xl">
+              Explorá una selección cuidada de piezas con presencia decorativa y carácter mineral auténtico.
+            </p>
+          </div>
+
+          <div className="rounded-[1.25rem] border border-[rgba(198,184,162,0.72)] bg-white/75 p-4">
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-stone-400">
+              Orden
+            </label>
             <select
-              className="bg-transparent border border-stone-200 rounded px-3 py-1.5 text-sm font-medium text-stone-700 focus:ring-1 focus:ring-[#8C7E60] focus:border-[#8C7E60] cursor-pointer"
+              className="form-select min-w-[220px] text-sm"
               value={sort}
               onChange={(e) => setSort(e.target.value as any)}
             >
@@ -55,24 +62,30 @@ export const Category: React.FC = () => {
             </select>
           </div>
         </div>
+      </section>
 
+      <section className="section-shell">
         {loading ? (
-          <div className="py-24 flex flex-col items-center gap-4">
-            <div className="w-7 h-7 border-2 border-stone-200 border-t-[#8C7E60] rounded-full animate-spin" />
-            <p className="text-stone-400 text-sm">Cargando productos...</p>
+          <div className="surface-panel-soft flex flex-col items-center gap-4 rounded-[1.75rem] py-20">
+            <div className="h-8 w-8 rounded-full border-2 border-[var(--brand)]/20 border-t-[var(--brand)] animate-spin" />
+            <p className="text-sm text-stone-500">Cargando piezas...</p>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="surface-panel-soft rounded-[1.75rem] px-6 py-20 text-center">
+            <h2 className="font-serif text-3xl text-stone-900">No hay piezas disponibles por ahora</h2>
+            <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-500">
+              Esta categoría no tiene productos visibles en este momento. Podés seguir explorando el resto del catálogo.
+            </p>
+            <Link className="btn-primary mt-6" to="/tienda">Ir a la tienda</Link>
           </div>
         ) : (
-          <>
-            {products.length === 0 ? (
-              <div className="py-24 text-center text-stone-400">No hay productos en esta categoría aún.</div>
-            ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {sortedProducts.map(p => <ProductCard key={p.id} product={p} />)}
-              </div>
-            )}
-          </>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {sortedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         )}
-      </div>
+      </section>
     </div>
   );
 };

@@ -16,8 +16,11 @@ const Shop = lazy(() => import('./pages/Shop').then(m => ({ default: m.Shop })))
 const Checkout = lazy(() => import('./pages/Checkout').then(m => ({ default: m.Checkout })));
 
 const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+  <div className="site-shell min-h-screen flex items-center justify-center">
+    <div className="surface-panel-soft flex items-center gap-3 rounded-full px-5 py-3 text-sm text-stone-600">
+      <div className="h-5 w-5 rounded-full border-2 border-[#7f6242]/20 border-t-[#7f6242] animate-spin" />
+      Preparando la experiencia...
+    </div>
   </div>
 );
 
@@ -46,7 +49,7 @@ const AppLayout: React.FC = () => {
   const isStandalone = STANDALONE_PATHS.some(p => pathname.startsWith(p));
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="site-shell flex min-h-screen flex-col">
       {!isStandalone && <Navbar />}
       <CartDrawer />
       <Suspense fallback={<PageLoader />}>
