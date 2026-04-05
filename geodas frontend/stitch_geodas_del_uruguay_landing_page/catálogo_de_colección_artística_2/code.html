@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin: Gestor de Inventario - Geodas del Uruguay</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a4d411", // Lime green accent
+                        "primary-dark": "#8cb60e",
+                        "olive": "#4a5d23", // Dark olive for specific buttons
+                        "olive-light": "#6d823f",
+                        "background-light": "#fcf9f4", // Stone-50-ish
+                        "background-dark": "#1d2210",
+                        "stone-surface": "#f5f5f4",
+                        "text-main": "#161811",
+                        "text-secondary": "#5c6645",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif", "serif"],
+                        "sans": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }.no-scrollbar {
+            -ms-overflow-style: none;scrollbar-width: none;}
+    </style>
+</head>
+<body class="bg-background-light text-text-main font-sans antialiased h-screen flex overflow-hidden">
+<aside class="w-64 bg-white border-r border-stone-200 flex flex-col z-20 flex-shrink-0">
+<div class="h-16 flex items-center gap-3 px-6 border-b border-stone-100">
+<div class="text-primary size-6">
+<span class="material-symbols-outlined text-2xl">diamond</span>
+</div>
+<h1 class="text-lg font-bold tracking-tight text-text-main font-display">Geodas Admin</h1>
+</div>
+<nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-stone-50 hover:text-olive transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl text-gray-400 group-hover:text-olive">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-olive/10 text-olive rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl material-symbols-filled">inventory_2</span>
+                Inventario
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-stone-50 hover:text-olive transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl text-gray-400 group-hover:text-olive">auto_stories</span>
+                Diario Místico
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-stone-50 hover:text-olive transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl text-gray-400 group-hover:text-olive">shopping_bag</span>
+                Pedidos
+                <span class="ml-auto bg-primary text-white text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+</a>
+<div class="pt-4 mt-4 border-t border-stone-100">
+<p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Sistema</p>
+<a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-stone-50 hover:text-olive transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl text-gray-400 group-hover:text-olive">settings</span>
+                    Configuración
+                </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-stone-50 hover:text-olive transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl text-gray-400 group-hover:text-olive">group</span>
+                    Usuarios
+                </a>
+</div>
+</nav>
+<div class="p-4 border-t border-stone-100">
+<div class="flex items-center gap-3 px-2">
+<div class="size-9 rounded-full bg-olive text-white flex items-center justify-center font-bold font-display">
+                    MA
+                </div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-text-main">M. Artigas</span>
+<span class="text-xs text-text-secondary">Administrador</span>
+</div>
+<button class="ml-auto text-gray-400 hover:text-red-500">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col h-full min-w-0 bg-stone-50/50">
+<header class="h-16 bg-white border-b border-stone-200 flex items-center justify-between px-8 flex-shrink-0">
+<div class="flex items-center gap-4 w-96">
+<div class="relative w-full group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-olive transition-colors">
+<span class="material-symbols-outlined text-xl">search</span>
+</span>
+<input class="w-full pl-10 pr-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-olive/20 focus:border-olive transition-all placeholder-gray-400 text-text-main" placeholder="Buscar por nombre, SKU o categoría..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-gray-400 hover:text-olive hover:bg-stone-50 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-gray-400 hover:text-olive hover:bg-stone-50 rounded-full transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-8">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="text-2xl font-bold font-display text-text-main mb-1">Gestor de Inventario</h2>
+<p class="text-sm text-text-secondary">Administra tu catálogo, precios y disponibilidad.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-white border border-stone-200 text-text-secondary hover:text-olive hover:border-olive font-medium text-sm rounded-lg shadow-sm transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Exportar
+                    </button>
+<button class="px-4 py-2 bg-olive hover:bg-olive-light text-white font-medium text-sm rounded-lg shadow-md transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">add</span>
+                        Añadir Nueva Pieza
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+<div class="lg:col-span-3 bg-white p-1 rounded-xl border border-stone-200 shadow-sm flex items-center gap-1 overflow-x-auto">
+<button class="px-4 py-2 rounded-lg bg-stone-100 text-text-main text-sm font-medium whitespace-nowrap">Todos los Productos</button>
+<button class="px-4 py-2 rounded-lg hover:bg-stone-50 text-text-secondary text-sm font-medium whitespace-nowrap">Publicados (45)</button>
+<button class="px-4 py-2 rounded-lg hover:bg-stone-50 text-text-secondary text-sm font-medium whitespace-nowrap">Borradores (3)</button>
+<button class="px-4 py-2 rounded-lg hover:bg-stone-50 text-text-secondary text-sm font-medium whitespace-nowrap">Sin Stock (2)</button>
+<div class="h-6 w-px bg-stone-200 mx-2"></div>
+<div class="flex items-center gap-2 px-2">
+<span class="text-xs font-semibold text-gray-400 uppercase">Filtros:</span>
+<select class="text-sm border-none bg-transparent text-text-secondary focus:ring-0 cursor-pointer font-medium p-0 pr-6">
+<option>Categoría: Todas</option>
+<option>Amatistas</option>
+<option>Cuarzos</option>
+</select>
+<select class="text-sm border-none bg-transparent text-text-secondary focus:ring-0 cursor-pointer font-medium p-0 pr-6">
+<option>Precio: Cualquiera</option>
+<option>Menor a $1000</option>
+</select>
+</div>
+</div>
+<div class="bg-olive/5 border border-olive/20 rounded-xl p-4 flex items-center justify-between">
+<div>
+<p class="text-xs font-semibold text-olive uppercase tracking-wide">Valor Total</p>
+<p class="text-xl font-bold text-text-main">$ 245.890</p>
+</div>
+<div class="size-10 rounded-full bg-olive text-white flex items-center justify-center">
+<span class="material-symbols-outlined">payments</span>
+</div>
+</div>
+</div>
+<div class="bg-white border border-stone-200 rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-stone-50 border-b border-stone-200 text-xs uppercase font-semibold text-text-secondary tracking-wider">
+<th class="px-6 py-4 w-10">
+<input class="rounded border-gray-300 text-olive focus:ring-olive bg-white" type="checkbox"/>
+</th>
+<th class="px-6 py-4">Producto</th>
+<th class="px-6 py-4">Categoría</th>
+<th class="px-6 py-4">Precio (UYU)</th>
+<th class="px-6 py-4">Estado</th>
+<th class="px-6 py-4 text-center">Publicado</th>
+<th class="px-6 py-4 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-stone-100">
+<tr class="group hover:bg-stone-50/50 transition-colors">
+<td class="px-6 py-4">
+<input class="rounded border-gray-300 text-olive focus:ring-olive bg-white" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-100 overflow-hidden border border-stone-200 flex-shrink-0">
+<img alt="Thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs51rpTI4GIA2atJxMreXDCw6ltculOmzdcaDyVqzcWN8ywCHuhkA3Pj3LRofBYe_6GJricPrssBHJdWjYbeBY-ZLLhfQeylXcVCHDfV5CBq9rS8P5X-gWviHtTvyvzC-JVCVQxl047YfdVx4ee0aTGqKl5JNB03YGz8pDVoaY5qPP9Njkrbj3cBx7lbNtS85fiSsTYOzZyvPSItUgy7kQ91CNuAgfc6NLQ4spnuaetRILU4xIgEwbnQaqzrWAOY4L2Pq56mXNRQdD"/>
+</div>
+<div>
+<div class="font-bold text-text-main text-sm">Geoda Catedral #42</div>
+<div class="text-xs text-text-secondary">SKU: GEO-CAT-042</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                                        Amatista
+                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-text-main">$ 4.500</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs font-medium text-green-700">
+<span class="size-1.5 rounded-full bg-green-600"></span>
+                                        En Stock (1)
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<button aria-checked="true" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-olive" role="switch">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+</button>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-gray-400 hover:text-olive hover:bg-stone-100 rounded-lg transition-colors" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-stone-50/50 transition-colors">
+<td class="px-6 py-4">
+<input class="rounded border-gray-300 text-olive focus:ring-olive bg-white" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-100 overflow-hidden border border-stone-200 flex-shrink-0">
+<img alt="Thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChuSp1xuD29Vb87psKnb62mXLQ_vzlUwm93AKfFmWwquhz9FpHsJ3c55Cj9OTNz4XTUDDR6x2T8vYtOhmEhb9DoQZyfS1d5x0Bv9QhlPdGC5pab5JNRcSPqsmQnqWZtiO_0LHnS5sb4S5RVy_GzxoWLPAnV7MdGqXlIqYb1F0QYxqpKIpAqnbfsEjTPdImbc8N21yapSeRo9A_csUo9AHmclVm0dIt9hdqFnHIBd3hx5S_TGYI_nfR_xrmbpUdJq96H2fK_FglVeU8"/>
+</div>
+<div>
+<div class="font-bold text-text-main text-sm">Drusa Amatista Pequeña</div>
+<div class="text-xs text-text-secondary">SKU: DRU-SMA-019</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                                        Amatista
+                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-text-main">$ 1.200</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs font-medium text-green-700">
+<span class="size-1.5 rounded-full bg-green-600"></span>
+                                        En Stock (12)
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<button aria-checked="true" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-olive" role="switch">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+</button>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-gray-400 hover:text-olive hover:bg-stone-100 rounded-lg transition-colors" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-stone-50/50 transition-colors bg-stone-50/30">
+<td class="px-6 py-4">
+<input class="rounded border-gray-300 text-olive focus:ring-olive bg-white" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-100 overflow-hidden border border-stone-200 flex-shrink-0 grayscale opacity-80">
+<img alt="Thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAejIH726Ly-BAX9y_uinRojQCN7lsgHwpHPS6SH3q0ktWsbOzk3bOzTQ4nKQSJ62WOVLcZN0Ym25gF8LGBSXAsUD7tMinMZoQuVWFF2jfNcchkFDYjQLRYfshSXdQT-8gBZ6aAaTokHvyNmG_sM1BlLBtnecSYYjPZA_xxpe1yE7Uh7K9TNdkn44awtfxqEbNyjtyIBxZ8m29_qEnNKay1L9NCDybJNL9NIk3uXWAOdJN3MKG5AgGsWIslrkQfTH6OH97Rmr-TLIAh"/>
+</div>
+<div>
+<div class="font-bold text-gray-500 text-sm">Geoda Corazón #08</div>
+<div class="text-xs text-text-secondary">SKU: GEO-HRT-008</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                        Geoda
+                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-gray-500">$ 3.800</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs font-medium text-yellow-700">
+<span class="size-1.5 rounded-full bg-yellow-500"></span>
+                                        Bajo Stock (1)
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<button aria-checked="false" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200" role="switch">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+</button>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-gray-400 hover:text-olive hover:bg-stone-100 rounded-lg transition-colors" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-stone-50/50 transition-colors">
+<td class="px-6 py-4">
+<input class="rounded border-gray-300 text-olive focus:ring-olive bg-white" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-100 overflow-hidden border border-stone-200 flex-shrink-0">
+<img alt="Thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2gvPytLv2XUR_lZJN30-BHlpHbBOO4X7BzZs-O49r9rOj-Gz-erCGnuyoHlMoadlLiaCJhqRhrO1dbmBt3yH8EBifcfapHuYYhWWK-PuAYrwTIaweKjh-NJOmp97QnUGoMZwjgrEKaKI6VIS0wRhWVT1e2igg4rgTWY5noA4n7m24l5EI8-lZ16CZhg20FqMhVbt4Wh2R3952njObQ402HCg0i2i8ezWb8Sl_AavPyW5d_hGX1YoJgwnYn5pLmdDqBFyHUzY6PiBs"/>
+</div>
+<div>
+<div class="font-bold text-text-main text-sm">Torre Pulida Artigas</div>
+<div class="text-xs text-text-secondary">SKU: TOW-POL-101</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                        Pulidos
+                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-text-main">$ 2.900</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs font-medium text-green-700">
+<span class="size-1.5 rounded-full bg-green-600"></span>
+                                        En Stock (4)
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<button aria-checked="true" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-olive" role="switch">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+</button>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-gray-400 hover:text-olive hover:bg-stone-100 rounded-lg transition-colors" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-stone-50/50 transition-colors">
+<td class="px-6 py-4">
+<input class="rounded border-gray-300 text-olive focus:ring-olive bg-white" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-100 overflow-hidden border border-stone-200 flex-shrink-0">
+<img alt="Thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQfRjVd0ax4B40tmtfKknhd5XHqCIOVPkW3-QcqJneMVGMgWS0Dda_8_AI8e0Qs-Em541iedt1vSux717xhPgrCV2G5uy7kKL__Zf977NMrmnwp6quO0OU-yzeSuaT-mlzFbDAcfKTL5nqsLVJPiv-AT4Wez-ISemYzJrEWksD6586ajljFv7rih4W8mUlIAWEgNtrArBiUK7LuRIJv9QLLV00XAvsimemWZeVunhYWYiiq6l97pvS1keZC6FXvxeq45OqBuKH4-TY"/>
+</div>
+<div>
+<div class="font-bold text-text-main text-sm">Amatista Bruta Gigante</div>
+<div class="text-xs text-text-secondary">SKU: RAW-BIG-002</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-stone-200 text-stone-700 border border-stone-300">
+                                        Bruto
+                                    </span>
+</td>
+<td class="px-6 py-4 font-medium text-text-main">$ 8.900</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs font-medium text-green-700">
+<span class="size-1.5 rounded-full bg-green-600"></span>
+                                        En Stock (1)
+                                    </div>
+</td>
+<td class="px-6 py-4 text-center">
+<button aria-checked="true" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-olive" role="switch">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+</button>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-gray-400 hover:text-olive hover:bg-stone-100 rounded-lg transition-colors" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-stone-50 border-t border-stone-200 px-6 py-4 flex items-center justify-between">
+<div class="text-sm text-text-secondary">
+                        Mostrando <span class="font-bold">1-5</span> de <span class="font-bold">48</span> productos
+                    </div>
+<div class="flex items-center gap-2">
+<button class="p-2 border border-stone-300 rounded hover:bg-white hover:text-olive disabled:opacity-50 text-gray-500 transition-colors" disabled="">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="px-3 py-1 rounded bg-olive text-white text-sm font-medium">1</button>
+<button class="px-3 py-1 rounded hover:bg-stone-200 text-text-secondary text-sm font-medium">2</button>
+<button class="px-3 py-1 rounded hover:bg-stone-200 text-text-secondary text-sm font-medium">3</button>
+<span class="px-2 text-text-secondary text-sm">...</span>
+</div>
+<button class="p-2 border border-stone-300 rounded hover:bg-white hover:text-olive text-gray-500 transition-colors">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<footer class="mt-8 text-center text-xs text-gray-400">
+                © 2024 Geodas del Uruguay Admin Dashboard. v1.2.0
+            </footer>
+</main>
+</div>
+
+</body></html>

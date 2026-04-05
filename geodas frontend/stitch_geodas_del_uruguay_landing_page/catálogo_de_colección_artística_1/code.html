@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Catálogo de Colección Artística - Geodas del Uruguay</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a4d411", // Lime green accent
+                        "primary-dark": "#8cb60e",
+                        "olive": "#4a5d23", // Dark olive for specific buttons
+                        "background-light": "#fcf9f4", // Modified slightly to match orange-50/30 vibe
+                        "background-dark": "#1d2210",
+                        "text-main": "#161811",
+                        "text-secondary": "#5c6645",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif", "serif"],
+                        "sans": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main font-display antialiased min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 w-full bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-[#e5e7eb] dark:border-[#2f3522]">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex h-16 items-center justify-between">
+<!-- Logo Section -->
+<div class="flex items-center gap-3">
+<div class="text-primary size-8">
+<span class="material-symbols-outlined text-3xl">diamond</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-text-main dark:text-white">Geodas del Uruguay</h1>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors dark:text-gray-200" href="#">Inicio</a>
+<a class="text-sm font-medium hover:text-primary transition-colors dark:text-gray-200 border-b-2 border-primary" href="#">Colecciones</a>
+<a class="text-sm font-medium hover:text-primary transition-colors dark:text-gray-200" href="#">Sobre Nosotros</a>
+<a class="text-sm font-medium hover:text-primary transition-colors dark:text-gray-200" href="#">Contacto</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-2">
+<button class="p-2 text-text-main hover:bg-black/5 rounded-full dark:text-white dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="p-2 text-text-main hover:bg-black/5 rounded-full dark:text-white dark:hover:bg-white/10 transition-colors relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute top-1 right-1 size-2 bg-primary rounded-full"></span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="flex mb-8">
+<ol class="inline-flex items-center space-x-2 md:space-x-3">
+<li class="inline-flex items-center">
+<a class="inline-flex items-center text-sm font-medium text-text-secondary hover:text-primary dark:text-gray-400 dark:hover:text-white" href="#">
+                        Inicio
+                    </a>
+</li>
+<li>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-text-secondary text-sm mx-1">chevron_right</span>
+<a class="text-sm font-medium text-text-secondary hover:text-primary dark:text-gray-400 dark:hover:text-white" href="#">Colecciones</a>
+</div>
+</li>
+<li aria-current="page">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-text-secondary text-sm mx-1">chevron_right</span>
+<span class="text-sm font-medium text-text-main dark:text-white">Amatistas</span>
+</div>
+</li>
+</ol>
+</nav>
+<!-- Page Heading -->
+<section class="mb-12 max-w-4xl">
+<h2 class="text-4xl md:text-5xl font-black italic text-text-main dark:text-white mb-4 leading-tight">
+                Nuestra Colección de Amatistas
+            </h2>
+<p class="text-lg text-text-secondary dark:text-gray-300 max-w-2xl leading-relaxed">
+                Extraídas de las profundidades del suelo de Artigas, cada pieza cuenta una historia de millones de años. 
+                Descubre la energía mística y los tonos profundos que solo la naturaleza uruguaya puede crear.
+            </p>
+</section>
+<!-- Filters (Chips) -->
+<div class="sticky top-16 z-30 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur py-4 mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 border-b border-black/5 dark:border-white/5">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
+<button class="group flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full hover:border-primary/50 transition-all shadow-sm">
+<span class="text-sm font-medium text-text-main dark:text-white whitespace-nowrap">Ordenar por</span>
+<span class="material-symbols-outlined text-lg group-hover:text-primary">sort</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2 bg-olive text-white border border-transparent rounded-full shadow-sm transition-all">
+<span class="text-sm font-medium whitespace-nowrap">Precio</span>
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full hover:border-primary/50 transition-all shadow-sm">
+<span class="text-sm font-medium text-text-main dark:text-white whitespace-nowrap">Tamaño</span>
+<span class="material-symbols-outlined text-lg text-text-secondary group-hover:text-primary">expand_more</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full hover:border-primary/50 transition-all shadow-sm">
+<span class="text-sm font-medium text-text-main dark:text-white whitespace-nowrap">Peso</span>
+<span class="material-symbols-outlined text-lg text-text-secondary group-hover:text-primary">expand_more</span>
+</button>
+</div>
+<span class="text-sm text-text-secondary dark:text-gray-400 hidden sm:block">Mostrando 12 resultados</span>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+<!-- Card 1 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Deep purple amethyst geode cathedral standing on wood" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCs51rpTI4GIA2atJxMreXDCw6ltculOmzdcaDyVqzcWN8ywCHuhkA3Pj3LRofBYe_6GJricPrssBHJdWjYbeBY-ZLLhfQeylXcVCHDfV5CBq9rS8P5X-gWviHtTvyvzC-JVCVQxl047YfdVx4ee0aTGqKl5JNB03YGz8pDVoaY5qPP9Njkrbj3cBx7lbNtS85fiSsTYOzZyvPSItUgy7kQ91CNuAgfc6NLQ4spnuaetRILU4xIgEwbnQaqzrWAOY4L2Pq56mXNRQdD');"></div>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-black/80 backdrop-blur px-2 py-1 rounded text-xs font-bold text-olive dark:text-primary uppercase tracking-wider">
+                        Pieza Única
+                    </div>
+<button class="absolute top-3 right-3 p-2 bg-white/50 hover:bg-white text-text-main rounded-full backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Catedral</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Geoda Catedral #42</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xs text-text-secondary line-through">$ 5.200</span>
+<span class="text-xl font-bold text-olive dark:text-primary">$ 4.500</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Small cluster of purple amethyst crystals on a stand" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuChuSp1xuD29Vb87psKnb62mXLQ_vzlUwm93AKfFmWwquhz9FpHsJ3c55Cj9OTNz4XTUDDR6x2T8vYtOhmEhb9DoQZyfS1d5x0Bv9QhlPdGC5pab5JNRcSPqsmQnqWZtiO_0LHnS5sb4S5RVy_GzxoWLPAnV7MdGqXlIqYb1F0QYxqpKIpAqnbfsEjTPdImbc8N21yapSeRo9A_csUo9AHmclVm0dIt9hdqFnHIBd3hx5S_TGYI_nfR_xrmbpUdJq96H2fK_FglVeU8');"></div>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Drusa</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Drusa Amatista Pequeña</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold text-olive dark:text-primary">$ 1.200</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Raw dark purple geode section on wooden base" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAejIH726Ly-BAX9y_uinRojQCN7lsgHwpHPS6SH3q0ktWsbOzk3bOzTQ4nKQSJ62WOVLcZN0Ym25gF8LGBSXAsUD7tMinMZoQuVWFF2jfNcchkFDYjQLRYfshSXdQT-8gBZ6aAaTokHvyNmG_sM1BlLBtnecSYYjPZA_xxpe1yE7Uh7K9TNdkn44awtfxqEbNyjtyIBxZ8m29_qEnNKay1L9NCDybJNL9NIk3uXWAOdJN3MKG5AgGsWIslrkQfTH6OH97Rmr-TLIAh');"></div>
+<div class="absolute top-3 left-3 bg-primary text-olive px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">
+                        Nuevo
+                    </div>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Geoda</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Geoda Corazón #08</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold text-olive dark:text-primary">$ 3.800</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Polished amethyst point tower crystal healing stone" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2gvPytLv2XUR_lZJN30-BHlpHbBOO4X7BzZs-O49r9rOj-Gz-erCGnuyoHlMoadlLiaCJhqRhrO1dbmBt3yH8EBifcfapHuYYhWWK-PuAYrwTIaweKjh-NJOmp97QnUGoMZwjgrEKaKI6VIS0wRhWVT1e2igg4rgTWY5noA4n7m24l5EI8-lZ16CZhg20FqMhVbt4Wh2R3952njObQ402HCg0i2i8ezWb8Sl_AavPyW5d_hGX1YoJgwnYn5pLmdDqBFyHUzY6PiBs');"></div>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Obelisco</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Torre Pulida Artigas</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold text-olive dark:text-primary">$ 2.900</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Light lavender amethyst cluster on white background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCG5yxsGEYG1Qu5sV9OV_iRHqCaevvurivDgkyNAkPhGEVD0iMXCuHP_DexYrMXAEmK-f8U68y32h7s6o2CjG-fK1WwrrPI0wobJf7zIgF2dNUM2dTcgL1CTIaHsHgIqQ1eme2JtstwfCjfPL1GyyNP3kcNKlMVdsdNyzR7OtFCGlX6o4LkD5v5XqUzeh8Z6Q0w43oGPc271HS3UKXhGgJFA35-EKX_cy0lRWyaTnx1bJJHymA7yCc8uGh_gX_y8koV8vbtXHuPUfgo');"></div>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Drusa</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Drusa Lavanda #12</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold text-olive dark:text-primary">$ 1.800</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Large rough amethyst rock specimen dark crystals" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDQfRjVd0ax4B40tmtfKknhd5XHqCIOVPkW3-QcqJneMVGMgWS0Dda_8_AI8e0Qs-Em541iedt1vSux717xhPgrCV2G5uy7kKL__Zf977NMrmnwp6quO0OU-yzeSuaT-mlzFbDAcfKTL5nqsLVJPiv-AT4Wez-ISemYzJrEWksD6586ajljFv7rih4W8mUlIAWEgNtrArBiUK7LuRIJv9QLLV00XAvsimemWZeVunhYWYiiq6l97pvS1keZC6FXvxeq45OqBuKH4-TY');"></div>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-black/80 backdrop-blur px-2 py-1 rounded text-xs font-bold text-olive dark:text-primary uppercase tracking-wider">
+                        Premium
+                    </div>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Bruto</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Amatista Bruta Gigante</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold text-olive dark:text-primary">$ 8.900</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 7 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Cut polished amethyst slice showing concentric rings" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB52G4RDFx87uNMFcq1WxLUhfGshHQ4nLexp9ye4Pq42zkTnwFky6ft37H2I3ygq4229oF_MAlwYJa7EarZouaD0fgasKgvumTJi9ONPwDDVrEYIs7shSP55iD2k75XX9LdX1FqyRm311mk6jcR4cXqDocJm2JGgJdEM8vJN0FHsh3sfCHHuSdYp2tnGkzd0Y8Ta61eeXcK_i_VKQoYuuMI3T42ezHbpW4sV8aTiqz-dsD_q9bS16Y61nLWDb0sK8gQI_aLgkT9kyiG');"></div>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Laja</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Rodaja Pulida</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold text-olive dark:text-primary">$ 950</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+<!-- Card 8 -->
+<article class="group flex flex-col bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-black/5 dark:border-white/5">
+<div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Deep purple amethyst geode with calcite inclusion" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCFgKKJr0_zeqJ1hKvThmd5DNKkiLxCAJxUV7jYqLFiP_uKBWzi8DOK-joL1N6Mna2O_FFMq4SFVVM3NN6SNOcZ162Po1bn582dC9lSVrKoYmp3UwxP9KgO7tS39YNzZAFhh8_29SAlSqN9HpFPQHKfXk1QB_bP1SfAlpQ7BCd8wDRtwEhjgyyCy16S9qPcMcIxsiqwfHgCAcdh8OXZOBAYsfvXgu5mM91Jq7wP_s4Zo7f0KosMVPVgdXnCvS3OPj-h9LfLEC7TfJKE');"></div>
+</div>
+<div class="flex flex-col flex-grow p-5">
+<div class="mb-1 text-xs font-medium text-text-secondary uppercase tracking-widest">Catedral</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-2 font-display">Geoda con Calcita</h3>
+<div class="mt-auto pt-4 flex items-end justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-xl font-bold text-olive dark:text-primary">$ 5.800</span>
+</div>
+<button class="px-4 py-2 bg-olive hover:bg-primary hover:text-olive text-white text-sm font-bold rounded-lg transition-colors duration-300 shadow-sm flex items-center gap-1">
+                            Ver Detalle
+                        </button>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination -->
+<div class="mt-16 flex justify-center">
+<nav aria-label="Pagination" class="flex items-center gap-2">
+<button class="flex items-center justify-center size-10 rounded-lg border border-transparent hover:bg-olive hover:text-white text-text-secondary transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="flex items-center justify-center size-10 rounded-lg bg-olive text-white font-bold shadow-sm">1</button>
+<button class="flex items-center justify-center size-10 rounded-lg border border-black/5 hover:border-olive hover:text-olive text-text-secondary transition-all">2</button>
+<button class="flex items-center justify-center size-10 rounded-lg border border-black/5 hover:border-olive hover:text-olive text-text-secondary transition-all">3</button>
+<span class="flex items-center justify-center size-10 text-text-secondary">...</span>
+<button class="flex items-center justify-center size-10 rounded-lg border border-transparent hover:bg-olive hover:text-white text-text-secondary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</nav>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-background-dark border-t border-[#e5e7eb] dark:border-[#2f3522] py-12 mt-auto">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="md:col-span-2">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-2xl">diamond</span>
+<span class="text-lg font-bold font-display dark:text-white">Geodas del Uruguay</span>
+</div>
+<p class="text-text-secondary dark:text-gray-400 text-sm max-w-sm">
+                        Llevando la energía milenaria de Artigas a tu hogar. Piezas seleccionadas a mano, respetando la naturaleza y su origen.
+                    </p>
+</div>
+<div>
+<h4 class="font-bold text-text-main dark:text-white mb-4">Explorar</h4>
+<ul class="space-y-2 text-sm text-text-secondary dark:text-gray-400">
+<li><a class="hover:text-primary transition-colors" href="#">Amatistas</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Ágatas</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Cuarzos</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Nuevas Llegadas</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-text-main dark:text-white mb-4">Contacto</h4>
+<ul class="space-y-2 text-sm text-text-secondary dark:text-gray-400">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">mail</span>
+                            info@geodasuruguay.com
+                        </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">location_on</span>
+                            Artigas, Uruguay
+                        </li>
+</ul>
+</div>
+</div>
+<div class="border-t border-black/5 dark:border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-text-secondary dark:text-gray-500">© 2024 Geodas del Uruguay. Todos los derechos reservados.</p>
+<div class="flex gap-4">
+<a class="text-text-secondary hover:text-primary transition-colors" href="#">
+<!-- Social icon placeholder -->
+<span class="sr-only">Instagram</span>
+<svg class="size-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

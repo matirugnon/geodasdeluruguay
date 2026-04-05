@@ -1,0 +1,163 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Geodas del Uruguay" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]: Geodas del Uruguay
+      - generic [ref=e9]:
+        - button "Abrir carrito" [ref=e10] [cursor=pointer]:
+          - generic [ref=e11]: shopping_bag
+          - generic [ref=e12]: "1"
+        - button "menu" [ref=e13] [cursor=pointer]:
+          - generic [ref=e14]: menu
+  - main [ref=e55]:
+    - generic [ref=e58]:
+      - heading "GEODAS DEL URUGUAY" [level=1] [ref=e59]:
+        - text: GEODAS DEL
+        - text: URUGUAY
+      - paragraph [ref=e60]: Conectá con la energía de la tierra
+      - button "Ver Tienda" [ref=e62] [cursor=pointer]
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - heading "Nuestra Colección" [level=2] [ref=e65]
+        - paragraph [ref=e66]: Piezas seleccionadas con cuidado para vos
+      - generic [ref=e67]:
+        - generic [ref=e68] [cursor=pointer]:
+          - generic [ref=e69]:
+            - link "Collar de amatista geoda - Violeta" [ref=e70]:
+              - /url: /producto/collar-de-amatista-geoda-violeta
+              - img "Collar de amatista geoda - Violeta" [ref=e71]
+            - button "shopping_bag" [ref=e72]:
+              - generic [ref=e73]: shopping_bag
+          - link "Collar de amatista geoda - Violeta $ 25" [ref=e74]:
+            - /url: /producto/collar-de-amatista-geoda-violeta
+            - heading "Collar de amatista geoda - Violeta" [level=3] [ref=e75]
+            - paragraph [ref=e76]: $ 25
+        - generic [ref=e77] [cursor=pointer]:
+          - generic [ref=e78]:
+            - link "Cristal de Prueba" [ref=e79]:
+              - /url: /producto/cristal-de-prueba
+              - img "Cristal de Prueba" [ref=e80]
+            - button "shopping_bag" [ref=e81]:
+              - generic [ref=e82]: shopping_bag
+          - link "Cristal de Prueba $ 67" [ref=e83]:
+            - /url: /producto/cristal-de-prueba
+            - heading "Cristal de Prueba" [level=3] [ref=e84]
+            - paragraph [ref=e85]: $ 67
+        - generic [ref=e86] [cursor=pointer]:
+          - generic [ref=e87]:
+            - link "aaaaaaa" [ref=e88]:
+              - /url: /producto/aaaaaaa
+              - img "aaaaaaa" [ref=e89]
+            - button "shopping_bag" [ref=e90]:
+              - generic [ref=e91]: shopping_bag
+          - link "aaaaaaa $ 1.111" [ref=e92]:
+            - /url: /producto/aaaaaaa
+            - heading "aaaaaaa" [level=3] [ref=e93]
+            - paragraph [ref=e94]: $ 1.111
+        - generic [ref=e95] [cursor=pointer]:
+          - generic [ref=e96]:
+            - link "prueba external" [ref=e97]:
+              - /url: /producto/prueba-external
+              - img "prueba external" [ref=e98]
+            - button "shopping_bag" [ref=e99]:
+              - generic [ref=e100]: shopping_bag
+          - link "prueba external $ 3" [ref=e101]:
+            - /url: /producto/prueba-external
+            - heading "prueba external" [level=3] [ref=e102]
+            - paragraph [ref=e103]: $ 3
+      - link "Ver todo el catálogo arrow_forward" [ref=e105] [cursor=pointer]:
+        - /url: /tienda
+        - text: Ver todo el catálogo
+        - generic [ref=e106]: arrow_forward
+    - generic [ref=e108]:
+      - generic [ref=e109]:
+        - heading "Categorías" [level=2] [ref=e110]
+        - paragraph [ref=e111]: Explorá nuestra selección por categoría
+      - generic [ref=e112]:
+        - link "Collares Collares Ver colección arrow_forward" [ref=e113] [cursor=pointer]:
+          - /url: /tienda/collares
+          - img "Collares" [ref=e115]
+          - heading "Collares" [level=3] [ref=e116]
+          - generic [ref=e117]:
+            - text: Ver colección
+            - generic [ref=e118]: arrow_forward
+        - link "Anillos Anillos Ver colección arrow_forward" [ref=e119] [cursor=pointer]:
+          - /url: /tienda/anillos
+          - img "Anillos" [ref=e121]
+          - heading "Anillos" [level=3] [ref=e122]
+          - generic [ref=e123]:
+            - text: Ver colección
+            - generic [ref=e124]: arrow_forward
+        - link "Brazaletes Brazaletes Ver colección arrow_forward" [ref=e125] [cursor=pointer]:
+          - /url: /tienda/brazaletes
+          - img "Brazaletes" [ref=e127]
+          - heading "Brazaletes" [level=3] [ref=e128]
+          - generic [ref=e129]:
+            - text: Ver colección
+            - generic [ref=e130]: arrow_forward
+        - link "Piedras Naturales Piedras Naturales Ver colección arrow_forward" [ref=e131] [cursor=pointer]:
+          - /url: /tienda/piedras
+          - img "Piedras Naturales" [ref=e133]
+          - heading "Piedras Naturales" [level=3] [ref=e134]
+          - generic [ref=e135]:
+            - text: Ver colección
+            - generic [ref=e136]: arrow_forward
+    - generic [ref=e139]:
+      - generic [ref=e140]:
+        - generic [ref=e141]: local_shipping
+        - heading "Envíos a todo el país" [level=3] [ref=e142]
+        - paragraph [ref=e143]: Empaque seguro y protegido hasta la puerta de tu casa.
+      - generic [ref=e144]:
+        - generic [ref=e145]: verified
+        - heading "Piezas auténticas" [level=3] [ref=e146]
+        - paragraph [ref=e147]: Cada pieza es natural y única, seleccionada con cuidado.
+      - generic [ref=e148]:
+        - generic [ref=e149]: credit_card
+        - heading "Múltiples medios de pago" [level=3] [ref=e150]
+        - paragraph [ref=e151]: Mercado Pago, transferencia bancaria o efectivo.
+  - contentinfo [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - generic [ref=e22]: diamond
+            - generic [ref=e23]: Geodas del Uruguay
+          - paragraph [ref=e24]: Piedras y cristales naturales seleccionados en Uruguay.
+        - generic [ref=e25]:
+          - heading "Tienda" [level=4] [ref=e26]
+          - list [ref=e27]:
+            - listitem [ref=e28]:
+              - link "Ver todo" [ref=e29] [cursor=pointer]:
+                - /url: /tienda
+            - listitem [ref=e30]:
+              - link "Piedras" [ref=e31] [cursor=pointer]:
+                - /url: /tienda/piedras
+            - listitem [ref=e32]:
+              - link "Collares" [ref=e33] [cursor=pointer]:
+                - /url: /tienda/collares
+        - generic [ref=e34]:
+          - heading "Ayuda" [level=4] [ref=e35]
+          - list [ref=e36]:
+            - listitem [ref=e37]:
+              - link "Contacto" [ref=e38] [cursor=pointer]:
+                - /url: https://wa.me/59891458797
+            - listitem [ref=e39]:
+              - link "Tips & Blog" [ref=e40] [cursor=pointer]:
+                - /url: /tips
+        - generic [ref=e41]:
+          - heading "Seguinos" [level=4] [ref=e42]
+          - generic [ref=e43]:
+            - link "Instagram" [ref=e44] [cursor=pointer]:
+              - /url: https://www.instagram.com/geodasdeluruguay/?hl=es-la
+              - img [ref=e45]
+            - link "WhatsApp" [ref=e47] [cursor=pointer]:
+              - /url: https://wa.me/59891458797
+              - img [ref=e48]
+      - generic [ref=e50]:
+        - paragraph [ref=e51]: © 2026 Geodas del Uruguay
+        - generic [ref=e52]:
+          - link "Privacidad" [ref=e53] [cursor=pointer]:
+            - /url: "#"
+          - link "Términos" [ref=e54] [cursor=pointer]:
+            - /url: "#"

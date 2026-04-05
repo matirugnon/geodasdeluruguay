@@ -1,0 +1,63 @@
+- generic [ref=e285]:
+  - generic [ref=e287]:
+    - link "Geodas del Uruguay" [ref=e288] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e289]: Geodas del Uruguay
+    - generic [ref=e290]:
+      - generic [ref=e291]: lock
+      - text: Pago seguro
+  - main [ref=e294]:
+    - generic [ref=e295]:
+      - generic [ref=e296]:
+        - generic [ref=e297]:
+          - generic [ref=e298]: "1"
+          - generic [ref=e299]: Datos de envío
+          - generic [ref=e300]: /
+          - generic [ref=e301]: "2"
+          - generic [ref=e302]: Pago
+        - generic [ref=e303]:
+          - heading "Datos personales & envío" [level=2] [ref=e304]
+          - generic [ref=e305]:
+            - generic [ref=e306]: Método de entrega
+            - generic [ref=e307]:
+              - generic [ref=e308] [cursor=pointer]:
+                - heading "Retiro en Prado" [level=4] [ref=e312]
+                - paragraph [ref=e313]: A coordinar (Sin costo extra)
+              - generic [ref=e314] [cursor=pointer]:
+                - heading "Envío a domicilio" [level=4] [ref=e317]
+                - paragraph [ref=e318]: + $ 100 extra
+          - generic [ref=e319]:
+            - generic [ref=e321]:
+              - generic [ref=e322]: Nombre completo
+              - textbox "María García" [ref=e323]
+            - generic [ref=e324]:
+              - generic [ref=e325]: Email
+              - textbox "maria@email.com" [ref=e326]
+            - generic [ref=e327]:
+              - generic [ref=e328]: Teléfono
+              - textbox "+598 99 000 000" [ref=e329]
+          - button "Continuar al pago arrow_forward" [ref=e330] [cursor=pointer]:
+            - text: Continuar al pago
+            - generic [ref=e331]: arrow_forward
+      - complementary [ref=e332]:
+        - heading "Resumen del pedido" [level=3] [ref=e333]
+        - list [ref=e334]:
+          - listitem [ref=e335]:
+            - generic [ref=e336]:
+              - img "Collar de amatista geoda - Violeta" [ref=e338]
+              - generic [ref=e339]: "1"
+            - generic [ref=e340]:
+              - paragraph [ref=e341]: Collar de amatista geoda - Violeta
+              - paragraph [ref=e342]: Pieza
+            - paragraph [ref=e343]: $ 25
+        - generic [ref=e344]:
+          - generic [ref=e345]:
+            - generic [ref=e346]: Subtotal
+            - generic [ref=e347]: $ 25
+          - generic [ref=e348]:
+            - generic [ref=e349]: Envío
+            - generic [ref=e350]: Retiro en Prado (Gratis)
+          - generic [ref=e351]:
+            - generic [ref=e352]: Total
+            - generic [ref=e353]: $ 25
+          - paragraph [ref=e354]: Pagando por transferencia ahorrás $ 1

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Geodas del Uruguay - Home</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c5a059", 
+                        "background-light": "#fafaf9", 
+                        "background-dark": "#1c1917", 
+                        "stone-dark": "#292524",
+                        "dried-green": "#7c8057",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem", 
+                        "xl": "1.5rem", 
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+        }
+        .bg-pattern {
+            background-color: #fafaf9;
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC9iKrOV4KRp9PnCpj136EXPMs5QmHH5R9fs28ZatkHd7yYiZI66lMtfxWFhSUn9Xk_Bp7DGP_HmpZeVC04kUowdJQGo-7dEI810o3d3cr89FfZvNm6KA_WuF5NrD3V13peO2D0oOhceeA6X_ffEBsB91mQDTBpBg0mWVkzJoBaM9ZUswdcM58I-SJmaFOIdF6AASv2r3wWtoKNJbdzqjbr9a0wX-ANQOdBIx-IAJPF4R6EXm1WvQH2hgSwedlKR-yghB1W9M_NB3sa)
+        }.scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-stone-800 dark:text-stone-100 overflow-x-hidden flex flex-col min-h-screen">
+<header class="sticky top-0 z-50 w-full backdrop-blur-md bg-stone-100/90 dark:bg-stone-900/90 border-b border-stone-200/50 dark:border-stone-800/50 shadow-sm transition-all duration-300 supports-[backdrop-filter]:bg-stone-100/60 dark:supports-[backdrop-filter]:bg-stone-900/60">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">diamond</span>
+<span class="text-xl font-serif font-bold tracking-tight text-stone-900 dark:text-white">Geodas del Uruguay</span>
+</div>
+<nav class="hidden md:flex gap-10">
+<a class="text-base font-serif font-medium text-stone-700 hover:text-primary transition-colors dark:text-stone-300 dark:hover:text-primary tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full" href="#">Inicio</a>
+<a class="text-base font-serif font-medium text-stone-700 hover:text-primary transition-colors dark:text-stone-300 dark:hover:text-primary tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full" href="#">Tienda</a>
+<a class="text-base font-serif font-medium text-stone-700 hover:text-primary transition-colors dark:text-stone-300 dark:hover:text-primary tracking-wide relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full" href="#">Tips</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center relative group">
+<div class="flex items-center bg-transparent group-focus-within:bg-stone-200/50 dark:group-focus-within:bg-stone-800/50 rounded-full transition-all duration-300 border border-transparent group-focus-within:border-stone-200 dark:group-focus-within:border-stone-700 pr-1">
+<input class="w-0 group-hover:w-48 focus:w-48 transition-all duration-500 ease-out bg-transparent border-none focus:ring-0 p-0 pl-4 py-2 text-stone-600 dark:text-stone-300 text-sm placeholder-stone-400 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer focus:cursor-text" placeholder="Buscar cristales..." type="text"/>
+<button class="p-2 text-stone-600 hover:text-primary transition-colors rounded-full dark:text-stone-300">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+<div class="absolute top-full right-0 mt-4 w-80 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-stone-100 dark:border-stone-800 overflow-hidden opacity-0 invisible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-300 transform origin-top-right translate-y-2 group-focus-within:translate-y-0 z-50">
+<div class="p-3">
+<h3 class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2 px-2">Sugerencias</h3>
+<a class="flex items-center gap-3 p-2 hover:bg-stone-50 dark:hover:bg-stone-800/50 rounded-xl transition-colors group/item" href="#">
+<div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 relative">
+<img alt="Geoda" class="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuvaexz6cWFeoEIiXrrxl3Vf5fSz09A5H_FY55F6YX6F0WO_MBIOZSN26HHID4lM-Tq5stQChs5dOI3eTXAfY90_3KJJO1BVhQm9l0iYJdviHPb0Q1B9w9PVA6ziKm9FnJFGHLBqmqjkqm7XjKupK_i9tiuvhsp3Krmk2iy-74Y4C3mkAB1B2Vfwtyx7u66iplwTxV_6BB-d7TzFi2Yp-fEgnSJFER4m8VtQGQXBsSIYRWVX6LOhWz4Ed8OXp3fyxElgRcuI7iOwjm"/>
+</div>
+<div>
+<p class="text-sm font-bold text-stone-800 dark:text-stone-200 font-serif leading-tight">Geoda Catedral</p>
+<p class="text-xs text-stone-500 dark:text-stone-400">Amatista Premium</p>
+</div>
+</a>
+<a class="flex items-center gap-3 p-2 hover:bg-stone-50 dark:hover:bg-stone-800/50 rounded-xl transition-colors group/item" href="#">
+<div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 relative">
+<img alt="Collar" class="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACW_8UzVNwwzd-NBhs4wKGp3oKZh5JbX20gGMA50uaT35jJFH3kFUBPTYsdgV6oi8LqeHkw7VWhQWYCNBi1U8TwmHDIuzltBcSU4cXPEBWof1suEeXka8pjQpdd7T-PpFR4huUTnrXOs3DrMc_hmZL2YogA5vMkUD4fohQ9oiEKc9zcYfRF6qKM8Fim7p4DM9ppLpKtadx8472xeDe7m8s8i_mjgkaELyB1cObiNeg95J-D6O8B265rHsa9HwHP86OwrFmsCAEatWP"/>
+</div>
+<div>
+<p class="text-sm font-bold text-stone-800 dark:text-stone-200 font-serif leading-tight">Collar Cuarzo</p>
+<p class="text-xs text-stone-500 dark:text-stone-400">Joyería Artesanal</p>
+</div>
+</a>
+</div>
+<div class="bg-stone-50 dark:bg-stone-950 p-4 border-t border-stone-100 dark:border-stone-800 text-center">
+<p class="text-xs text-stone-600 dark:text-stone-400 mb-3">¿No encuentras lo que buscas?</p>
+<a class="inline-flex items-center justify-center gap-2 w-full py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-lg transition-colors shadow-sm hover:shadow-md" href="#">
+<span class="material-symbols-outlined text-base">chat</span>
+                                Consúltanos por WhatsApp
+                            </a>
+</div>
+</div>
+</div>
+<button class="p-2 text-stone-600 hover:text-primary transition-colors rounded-full hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+<button class="md:hidden p-2 text-stone-600 hover:text-primary transition-colors rounded-full hover:bg-stone-200/50 dark:text-stone-300 dark:hover:bg-stone-800">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<section class="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" data-alt="Close up of a sparkling deep purple amethyst geode interior with earthy rock edges" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuvaexz6cWFeoEIiXrrxl3Vf5fSz09A5H_FY55F6YX6F0WO_MBIOZSN26HHID4lM-Tq5stQChs5dOI3eTXAfY90_3KJJO1BVhQm9l0iYJdviHPb0Q1B9w9PVA6ziKm9FnJFGHLBqmqjkqm7XjKupK_i9tiuvhsp3Krmk2iy-74Y4C3mkAB1B2Vfwtyx7u66iplwTxV_6BB-d7TzFi2Yp-fEgnSJFER4m8VtQGQXBsSIYRWVX6LOhWz4Ed8OXp3fyxElgRcuI7iOwjm");'>
+<div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/40 to-transparent"></div>
+</div>
+<div class="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
+<h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-md">
+                Conecta con la <br/><span class="italic text-primary">energía</span> de la tierra
+            </h1>
+<p class="text-stone-200 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
+                Descubre la magia y el misticismo de los cristales uruguayos seleccionados a mano.
+            </p>
+<button class="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-200 bg-primary rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-lg shadow-primary/30 transform hover:-translate-y-1">
+                Explorar Colección
+                <span class="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform text-sm">arrow_forward</span>
+</button>
+</div>
+</section>
+<section class="py-24 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto bg-pattern">
+<div class="text-center mb-16">
+<span class="text-primary font-bold text-sm tracking-widest uppercase mb-2 block">Nuestras Colecciones</span>
+<h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Categorías Destacadas</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<a class="group relative block h-[500px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500" href="#">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Elegant woman wearing a crystal quartz pendant necklace" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuACW_8UzVNwwzd-NBhs4wKGp3oKZh5JbX20gGMA50uaT35jJFH3kFUBPTYsdgV6oi8LqeHkw7VWhQWYCNBi1U8TwmHDIuzltBcSU4cXPEBWof1suEeXka8pjQpdd7T-PpFR4huUTnrXOs3DrMc_hmZL2YogA5vMkUD4fohQ9oiEKc9zcYfRF6qKM8Fim7p4DM9ppLpKtadx8472xeDe7m8s8i_mjgkaELyB1cObiNeg95J-D6O8B265rHsa9HwHP86OwrFmsCAEatWP");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+<h3 class="font-serif text-3xl font-medium text-white mb-2 italic">Collares</h3>
+<p class="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                        Piezas únicas cerca de tu corazón.
+                    </p>
+</div>
+</a>
+<a class="group relative block h-[500px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500" href="#">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Hand wearing a silver ring with a raw amethyst stone" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDunAfeG4gOEYAf5bF9JQCsaA5tUt00xwsJA5-YYixbcQvXfAYIBafqcBWjAu8pCG3ltbA_Dk2ga8YCrfGilnWRYojWB2zessREjK5WQngwswIrshMMvgrS1MDiwiO5oVI6q-yKFS8glxgB3bYe_c3MsXqJ0Pb95DVNIFfFYFtiSn60nTigN3_2ljhf9aXGMQ164IDCIg2OwPLVaF9nTZtoDChRZpATH4wXe0nvRkBb0ADHvYT7tAJbsYhesNpGMkOjUXw9AhHZt9Px");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+<h3 class="font-serif text-3xl font-medium text-white mb-2 italic">Anillos</h3>
+<p class="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                        Detalles de energía en tus manos.
+                    </p>
+</div>
+</a>
+<a class="group relative block h-[500px] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500" href="#">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Cluster of raw shiny black tourmaline stones on a wooden surface" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCokGEHsIJC_xcbvflPZOtfAeSEEMitbkNfnc71YviNSm-5z49bpe5R3P5OCvJ845VtNaXzupwLVWgOux56e2O8romh-515o-8TksxvVlUbKneZYRgQbdfqxTYLTQw2v9iAku_Lxudt6SHB5XJiY-1cg9NOHMAC9ndQjNJgCu8_mZ2ZcPamYa2cuEARozZEYO2wOfg2oAVwry-vIyubIwSdY1Kd9pFLpa9MrlFPdjW1_uhfS5SgA0A9PD7Mb3EYem1RXKzY3rt6ibGq");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 w-full p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+<h3 class="font-serif text-3xl font-medium text-white mb-2 italic">Piedras en Bruto</h3>
+<p class="text-stone-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 transform translate-y-2 group-hover:translate-y-0">
+                        La naturaleza en su estado más puro.
+                    </p>
+</div>
+</a>
+</div>
+</section>
+<section class="py-24 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto border-t border-stone-200 dark:border-stone-800">
+<div class="text-center mb-16">
+<span class="text-primary font-bold text-sm tracking-widest uppercase mb-2 block">Selección del Mes</span>
+<h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Tesoros de Artigas</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+<div class="flex flex-col gap-5">
+<div class="relative aspect-[4/5] rounded-xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuvaexz6cWFeoEIiXrrxl3Vf5fSz09A5H_FY55F6YX6F0WO_MBIOZSN26HHID4lM-Tq5stQChs5dOI3eTXAfY90_3KJJO1BVhQm9l0iYJdviHPb0Q1B9w9PVA6ziKm9FnJFGHLBqmqjkqm7XjKupK_i9tiuvhsp3Krmk2iy-74Y4C3mkAB1B2Vfwtyx7u66iplwTxV_6BB-d7TzFi2Yp-fEgnSJFER4m8VtQGQXBsSIYRWVX6LOhWz4Ed8OXp3fyxElgRcuI7iOwjm");'></div>
+<div class="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/0 transition-colors duration-300"></div>
+</div>
+<div class="text-center px-4">
+<h3 class="font-serif text-2xl font-bold text-stone-900 dark:text-white mb-1">Geoda Catedral</h3>
+<p class="text-stone-500 dark:text-stone-400 text-sm mb-5 font-medium">Amatista Profunda · Calidad Extra</p>
+<button class="w-full md:w-auto px-8 py-3 bg-dried-green hover:bg-stone-600 text-white font-bold rounded-lg transition-colors shadow-sm">
+                        Consultar
+                    </button>
+</div>
+</div>
+<div class="flex flex-col gap-5">
+<div class="relative aspect-[4/5] rounded-xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCokGEHsIJC_xcbvflPZOtfAeSEEMitbkNfnc71YviNSm-5z49bpe5R3P5OCvJ845VtNaXzupwLVWgOux56e2O8romh-515o-8TksxvVlUbKneZYRgQbdfqxTYLTQw2v9iAku_Lxudt6SHB5XJiY-1cg9NOHMAC9ndQjNJgCu8_mZ2ZcPamYa2cuEARozZEYO2wOfg2oAVwry-vIyubIwSdY1Kd9pFLpa9MrlFPdjW1_uhfS5SgA0A9PD7Mb3EYem1RXKzY3rt6ibGq");'></div>
+<div class="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/0 transition-colors duration-300"></div>
+</div>
+<div class="text-center px-4">
+<h3 class="font-serif text-2xl font-bold text-stone-900 dark:text-white mb-1">Turmalina Negra</h3>
+<p class="text-stone-500 dark:text-stone-400 text-sm mb-5 font-medium">Protección · Piezas en Bruto</p>
+<button class="w-full md:w-auto px-8 py-3 bg-dried-green hover:bg-stone-600 text-white font-bold rounded-lg transition-colors shadow-sm">
+                        Consultar
+                    </button>
+</div>
+</div>
+<div class="flex flex-col gap-5">
+<div class="relative aspect-[4/5] rounded-xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDunAfeG4gOEYAf5bF9JQCsaA5tUt00xwsJA5-YYixbcQvXfAYIBafqcBWjAu8pCG3ltbA_Dk2ga8YCrfGilnWRYojWB2zessREjK5WQngwswIrshMMvgrS1MDiwiO5oVI6q-yKFS8glxgB3bYe_c3MsXqJ0Pb95DVNIFfFYFtiSn60nTigN3_2ljhf9aXGMQ164IDCIg2OwPLVaF9nTZtoDChRZpATH4wXe0nvRkBb0ADHvYT7tAJbsYhesNpGMkOjUXw9AhHZt9Px");'></div>
+<div class="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/0 transition-colors duration-300"></div>
+</div>
+<div class="text-center px-4">
+<h3 class="font-serif text-2xl font-bold text-stone-900 dark:text-white mb-1">Joya de Autor</h3>
+<p class="text-stone-500 dark:text-stone-400 text-sm mb-5 font-medium">Plata 925 · Drusa Natural</p>
+<button class="w-full md:w-auto px-8 py-3 bg-dried-green hover:bg-stone-600 text-white font-bold rounded-lg transition-colors shadow-sm">
+                        Consultar
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto bg-stone-50 dark:bg-stone-900/30 rounded-3xl my-8">
+<div class="text-center mb-16">
+<span class="text-dried-green font-bold text-sm tracking-widest uppercase mb-2 block">Blog &amp; Conocimiento</span>
+<h2 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 dark:text-white">Sabiduría de las Piedras</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+<article class="group relative h-80 rounded-xl overflow-hidden cursor-pointer shadow-lg">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDunAfeG4gOEYAf5bF9JQCsaA5tUt00xwsJA5-YYixbcQvXfAYIBafqcBWjAu8pCG3ltbA_Dk2ga8YCrfGilnWRYojWB2zessREjK5WQngwswIrshMMvgrS1MDiwiO5oVI6q-yKFS8glxgB3bYe_c3MsXqJ0Pb95DVNIFfFYFtiSn60nTigN3_2ljhf9aXGMQ164IDCIg2OwPLVaF9nTZtoDChRZpATH4wXe0nvRkBb0ADHvYT7tAJbsYhesNpGMkOjUXw9AhHZt9Px");'></div>
+<div class="absolute inset-0 bg-stone-900/50 group-hover:bg-stone-900/40 transition-colors duration-300"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full">
+<h3 class="font-serif text-2xl font-bold text-white mb-2">Cómo limpiar tu Amatista</h3>
+<div class="w-12 h-0.5 bg-primary mb-3"></div>
+<p class="text-stone-200 text-sm opacity-90">Descubre rituales simples para renovar la energía de tus cristales.</p>
+</div>
+</article>
+<article class="group relative h-80 rounded-xl overflow-hidden cursor-pointer shadow-lg">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuACW_8UzVNwwzd-NBhs4wKGp3oKZh5JbX20gGMA50uaT35jJFH3kFUBPTYsdgV6oi8LqeHkw7VWhQWYCNBi1U8TwmHDIuzltBcSU4cXPEBWof1suEeXka8pjQpdd7T-PpFR4huUTnrXOs3DrMc_hmZL2YogA5vMkUD4fohQ9oiEKc9zcYfRF6qKM8Fim7p4DM9ppLpKtadx8472xeDe7m8s8i_mjgkaELyB1cObiNeg95J-D6O8B265rHsa9HwHP86OwrFmsCAEatWP");'></div>
+<div class="absolute inset-0 bg-stone-900/50 group-hover:bg-stone-900/40 transition-colors duration-300"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full">
+<h3 class="font-serif text-2xl font-bold text-white mb-2">Energía de los Cuarzos</h3>
+<div class="w-12 h-0.5 bg-primary mb-3"></div>
+<p class="text-stone-200 text-sm opacity-90">Propiedades curativas y cómo programar tu cuarzo maestro.</p>
+</div>
+</article>
+</div>
+<div class="text-center">
+<a class="inline-flex items-center gap-2 px-8 py-3 bg-dried-green hover:bg-stone-600 text-white font-bold rounded-full transition-colors shadow-md hover:shadow-lg" href="/tips">
+<span>Ver más tips y consejos</span>
+<span class="material-symbols-outlined text-sm">auto_stories</span>
+</a>
+</div>
+</section>
+<section class="py-16 bg-white dark:bg-stone-900/50 border-t border-stone-200 dark:border-stone-800">
+<div class="max-w-[1100px] mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-6">
+<div class="flex-shrink-0 w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl text-primary">local_shipping</span>
+</div>
+<div>
+<h3 class="font-serif text-xl font-bold text-stone-900 dark:text-white mb-2">Envíos a todo el país</h3>
+<p class="text-stone-600 dark:text-stone-400 text-sm leading-relaxed max-w-sm mx-auto md:mx-0">
+                            Recibe la energía de nuestras geodas en la puerta de tu casa. Empaque seguro y protegido.
+                        </p>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-6 relative md:before:content-[''] md:before:absolute md:before:-left-6 md:before:top-2 md:before:bottom-2 md:before:w-px md:before:bg-stone-200 dark:md:before:bg-stone-800">
+<div class="flex-shrink-0 w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl text-primary">credit_card</span>
+</div>
+<div>
+<h3 class="font-serif text-xl font-bold text-stone-900 dark:text-white mb-3">Medios de Pago</h3>
+<div class="flex items-center justify-center md:justify-start gap-3 flex-wrap">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 shadow-sm">
+<span class="material-symbols-outlined text-stone-700 dark:text-stone-300 text-lg">handshake</span>
+<span class="text-xs font-semibold text-stone-600 dark:text-stone-300">Mercado Pago</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 shadow-sm">
+<span class="material-symbols-outlined text-stone-700 dark:text-stone-300 text-lg">account_balance</span>
+<span class="text-xs font-semibold text-stone-600 dark:text-stone-300">Transferencia</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 shadow-sm">
+<span class="material-symbols-outlined text-stone-700 dark:text-stone-300 text-lg">payments</span>
+<span class="text-xs font-semibold text-stone-600 dark:text-stone-300">Efectivo</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-stone-100 dark:bg-stone-950 pt-16 pb-8 border-t border-stone-200 dark:border-stone-900">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-stone-600 dark:text-stone-400">diamond</span>
+<span class="text-lg font-serif font-bold text-stone-900 dark:text-white">Geodas del Uruguay</span>
+</div>
+<p class="text-stone-500 dark:text-stone-400 text-sm leading-relaxed mb-4">
+                    Conectando corazones con la vibración natural de la tierra desde 2023.
+                </p>
+<p class="text-stone-400 dark:text-stone-500 text-xs italic font-serif">
+                    Desde Montevideo, Uruguay, al mundo.
+                </p>
+</div>
+<div>
+<h4 class="font-bold text-stone-900 dark:text-white mb-4">Tienda</h4>
+<ul class="space-y-2">
+<li><a class="text-stone-600 hover:text-primary dark:text-stone-400 text-sm" href="#">Novedades</a></li>
+<li><a class="text-stone-600 hover:text-primary dark:text-stone-400 text-sm" href="#">Cristales</a></li>
+<li><a class="text-stone-600 hover:text-primary dark:text-stone-400 text-sm" href="#">Hogar</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-stone-900 dark:text-white mb-4">Ayuda</h4>
+<ul class="space-y-2">
+<li><a class="text-stone-600 hover:text-primary dark:text-stone-400 text-sm" href="#">Envíos</a></li>
+<li><a class="text-stone-600 hover:text-primary dark:text-stone-400 text-sm" href="#">Devoluciones</a></li>
+<li><a class="text-stone-600 hover:text-primary dark:text-stone-400 text-sm" href="#">Contacto</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-stone-900 dark:text-white mb-4">Síguenos</h4>
+<div class="flex gap-4">
+<a class="text-stone-500 hover:text-primary dark:text-stone-400 transition-colors" href="#">
+<svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+</a>
+<a class="text-stone-500 hover:text-primary dark:text-stone-400 transition-colors" href="#">
+<svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+<div class="border-t border-stone-200 dark:border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-stone-400 text-sm">© 2023 Geodas del Uruguay. Todos los derechos reservados.</p>
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="flex gap-6">
+<a class="text-stone-400 hover:text-stone-600 text-sm" href="#">Política de Privacidad</a>
+<a class="text-stone-400 hover:text-stone-600 text-sm" href="#">Términos de Servicio</a>
+</div>
+<a class="text-stone-300 hover:text-stone-500 text-xs transition-colors" href="#">Gestión de Staff</a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>

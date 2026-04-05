@@ -1,0 +1,57 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Geodas del Uruguay" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]: Geodas del Uruguay
+      - generic [ref=e9]:
+        - button "Abrir carrito" [ref=e10] [cursor=pointer]:
+          - generic [ref=e11]: shopping_bag
+          - generic [ref=e12]: "1"
+        - button "menu" [ref=e13] [cursor=pointer]:
+          - generic [ref=e14]: menu
+  - contentinfo [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - generic [ref=e22]: diamond
+            - generic [ref=e23]: Geodas del Uruguay
+          - paragraph [ref=e24]: Piedras y cristales naturales seleccionados en Uruguay.
+        - generic [ref=e25]:
+          - heading "Tienda" [level=4] [ref=e26]
+          - list [ref=e27]:
+            - listitem [ref=e28]:
+              - link "Ver todo" [ref=e29] [cursor=pointer]:
+                - /url: /tienda
+            - listitem [ref=e30]:
+              - link "Piedras" [ref=e31] [cursor=pointer]:
+                - /url: /tienda/piedras
+            - listitem [ref=e32]:
+              - link "Collares" [ref=e33] [cursor=pointer]:
+                - /url: /tienda/collares
+        - generic [ref=e34]:
+          - heading "Ayuda" [level=4] [ref=e35]
+          - list [ref=e36]:
+            - listitem [ref=e37]:
+              - link "Contacto" [ref=e38] [cursor=pointer]:
+                - /url: https://wa.me/59891458797
+            - listitem [ref=e39]:
+              - link "Tips & Blog" [ref=e40] [cursor=pointer]:
+                - /url: /tips
+        - generic [ref=e41]:
+          - heading "Seguinos" [level=4] [ref=e42]
+          - generic [ref=e43]:
+            - link "Instagram" [ref=e44] [cursor=pointer]:
+              - /url: https://www.instagram.com/geodasdeluruguay/?hl=es-la
+              - img [ref=e45]
+            - link "WhatsApp" [ref=e47] [cursor=pointer]:
+              - /url: https://wa.me/59891458797
+              - img [ref=e48]
+      - generic [ref=e50]:
+        - paragraph [ref=e51]: © 2026 Geodas del Uruguay
+        - generic [ref=e52]:
+          - link "Privacidad" [ref=e53] [cursor=pointer]:
+            - /url: "#"
+          - link "Términos" [ref=e54] [cursor=pointer]:
+            - /url: "#"
