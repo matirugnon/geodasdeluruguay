@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { createWhatsAppLink } from '../config/site';
 
 export const CartDrawer: React.FC = () => {
     const navigate = useNavigate();
-    const { items, isOpen, subtotal, removeItem, updateQty, closeCart } = useCart();
+    const { items, isOpen, itemCount, subtotal, removeItem, updateQty, closeCart } = useCart();
+    const checkoutSupportLink = createWhatsAppLink('Hola! Tengo una consulta antes de finalizar mi compra en Geodas del Uruguay.');
 
     // Lock body scroll when drawer is open
     useEffect(() => {
@@ -41,9 +43,16 @@ export const CartDrawer: React.FC = () => {
                 <div className="flex items-center justify-between px-6 py-5 border-b border-stone-100">
                     <div className="flex items-center gap-2.5">
                         <span className="material-symbols-outlined text-[#8C7E60] !text-[22px]">shopping_bag</span>
-                        <h2 className="text-base font-serif font-semibold text-stone-800">
-                            Tu Carrito
-                        </h2>
+                        <div>
+                            <h2 className="text-base font-serif font-semibold text-stone-800">
+                                Tu Carrito
+                            </h2>
+                            {items.length > 0 && (
+                                <p className="text-[11px] uppercase tracking-[0.16em] text-stone-400 mt-1">
+                                    {itemCount} {itemCount === 1 ? 'pieza seleccionada' : 'piezas seleccionadas'}
+                                </p>
+                            )}
+                        </div>
                     </div>
                     <button
                         onClick={closeCart}
@@ -144,23 +153,49 @@ export const CartDrawer: React.FC = () => {
                 {/* Footer */}
                 {items.length > 0 && (
                     <div className="px-6 py-5 border-t border-stone-100 bg-[#FAFAF8]">
-                        <div className="flex items-center justify-between mb-1 text-sm text-stone-500">
-                            <span>Subtotal</span>
-                            <span>$ {subtotal.toLocaleString('es-UY')}</span>
-                        </div>
-                        <div className="flex items-center justify-between mb-5">
-                            <span className="font-semibold text-stone-800 text-base">Total</span>
-                            <span className="font-semibold text-stone-800 text-base">
-                                $ {subtotal.toLocaleString('es-UY')}
-                            </span>
+                        <div className="rounded-md border border-stone-200 bg-white p-4 mb-4">
+                            <div className="flex items-center justify-between gap-3 text-sm text-stone-500">
+                                <span>Subtotal actual</span>
+                                <span className="font-medium text-stone-700">$ {subtotal.toLocaleString('es-UY')}</span>
+                            </div>
+                            <p className="mt-3 text-xs text-stone-500 leading-relaxed">
+                                En el checkout elegís entrega y medio de pago. Si preferís transferencia, el descuento se aplica en ese paso.
+                            </p>
+                            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-stone-500">
+                                <Link
+                                    to="/envios"
+                                    onClick={closeCart}
+                                    className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                                >
+                                    Ver envíos
+                                </Link>
+                                <Link
+                                    to="/devoluciones"
+                                    onClick={closeCart}
+                                    className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                                >
+                                    Devoluciones
+                                </Link>
+                                <a
+                                    href={checkoutSupportLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                                >
+                                    Consultar antes de pagar
+                                </a>
+                            </div>
                         </div>
                         <button
                             onClick={handleCheckout}
                             className="w-full py-3.5 bg-[#8C7E60] hover:bg-[#756A50] text-white font-medium text-sm rounded transition-colors duration-200 flex items-center justify-center gap-2"
                         >
                             <span className="material-symbols-outlined !text-[16px]">lock</span>
-                            Ir al Checkout
+                            Continuar al checkout
                         </button>
+                        <p className="mt-3 text-center text-[11px] text-stone-500 leading-relaxed">
+                            Revisás envío, forma de pago y confirmás el pedido antes de finalizar.
+                        </p>
                         <button
                             onClick={closeCart}
                             className="w-full mt-2.5 text-center text-xs text-stone-400 hover:text-stone-600 underline underline-offset-2 transition-colors duration-150"

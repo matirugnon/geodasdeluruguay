@@ -170,6 +170,7 @@ const CheckoutOptionCard: React.FC<CheckoutOptionCardProps> = ({
 export const Checkout: React.FC = () => {
     const navigate = useNavigate();
     const { items, subtotal, clearCart } = useCart();
+    const checkoutSupportLink = createWhatsAppLink('Hola! Tengo una consulta antes de finalizar mi compra en Geodas del Uruguay.');
 
     // Estado del método de entrega
     const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'delivery'>('pickup');
@@ -809,6 +810,9 @@ export const Checkout: React.FC = () => {
                     {/* ── Right: Order Summary ─────────────────────────────────────── */}
                     <aside className="bg-white rounded-md border border-stone-200 p-6 sticky top-24">
                         <h3 className="font-medium font-serif text-stone-900 mb-5 text-lg">Resumen del pedido</h3>
+                        <p className="text-xs text-stone-400 leading-relaxed mb-5">
+                            Revisá tu pedido con calma. El total se actualiza según entrega y forma de pago.
+                        </p>
 
                         <ul className="flex flex-col gap-4 mb-5">
                             {items.map(item => (
@@ -871,6 +875,35 @@ export const Checkout: React.FC = () => {
                                     Pagando por transferencia ahorrás $ {Math.round(subtotalWithShipping * 0.05).toLocaleString('es-UY')}
                                 </p>
                             )}
+                        </div>
+
+                        <div className="mt-5 rounded-md border border-stone-200 bg-[#FAFAF8] p-4">
+                            <p className="text-sm font-medium text-stone-800 mb-1">Antes de pagar</p>
+                            <p className="text-xs text-stone-500 leading-relaxed">
+                                Si querés confirmar envío, devoluciones o un detalle del pedido, podés revisarlo ahora sin salir del proceso.
+                            </p>
+                            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-stone-500">
+                                <Link
+                                    to="/envios"
+                                    className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                                >
+                                    Ver envíos
+                                </Link>
+                                <Link
+                                    to="/devoluciones"
+                                    className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                                >
+                                    Devoluciones
+                                </Link>
+                                <a
+                                    href={checkoutSupportLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                                >
+                                    Consultar por WhatsApp
+                                </a>
+                            </div>
                         </div>
                     </aside>
                 </div>
