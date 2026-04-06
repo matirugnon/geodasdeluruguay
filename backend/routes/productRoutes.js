@@ -4,6 +4,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 const {
     getProducts,
     getAdminProducts,
+    getAdminProductById,
     getProductById,
     createProduct,
     updateProduct,
@@ -17,6 +18,10 @@ router.get('/', getProducts);
 // @desc    Fetch all products (Admin - includes hidden)
 // @route   GET /api/products/admin
 router.get('/admin', protect, admin, getAdminProducts);
+
+// @desc    Fetch single product (Admin - includes hidden)
+// @route   GET /api/products/admin/:id
+router.get('/admin/:id', protect, admin, getAdminProductById);
 
 // @desc    Fetch single product
 // @route   GET /api/products/:id

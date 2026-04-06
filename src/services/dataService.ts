@@ -77,7 +77,11 @@ export const dataService = {
 
   async getProductById(id: string): Promise<Product | undefined> {
     try {
-      const response = await fetch(`${API_URL}/products/${id}`);
+      const token = getAuthToken();
+      const url = token ? `${API_URL}/products/admin/${id}` : `${API_URL}/products/${id}`;
+      const response = token
+        ? await fetchWithAuth(url)
+        : await fetch(url);
       if (!response.ok) return undefined;
       const product = await response.json();
       return mapProductFromApi(product);
@@ -91,12 +95,15 @@ export const dataService = {
   async getProductBySlug(slug: string): Promise<Product | undefined> {
     try {
       const response = await fetch(`${API_URL}/products/${slug}`);
-      if (!response.ok) return undefined;
+      if (response.status === 404) return undefined;
+      if (!response.ok) {
+        throw new Error(`Failed to fetch product by slug: ${response.status}`);
+      }
       const product = await response.json();
       return mapProductFromApi(product);
     } catch (error) {
       console.error('Error fetching product by slug:', error);
-      return undefined;
+      throw error;
     }
   },
 

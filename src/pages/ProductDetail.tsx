@@ -6,41 +6,177 @@ import { useCart } from '../context/CartContext';
 import { SEOHead } from '../components/SEOHead';
 import { productUrl, SITE_URL } from '../utils/slugify';
 
+type ProductDetailStatus = 'loading' | 'success' | 'notFound' | 'error';
+
 export const ProductDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
+  const [status, setStatus] = useState<ProductDetailStatus>('loading');
+  const [errorMessage, setErrorMessage] = useState('');
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [activeImage, setActiveImage] = useState(0);
   const [addedFeedback, setAddedFeedback] = useState(false);
+  const [retryNonce, setRetryNonce] = useState(0);
   const { addItem } = useCart();
 
   useEffect(() => {
+    let cancelled = false;
+
     const load = async () => {
-      if (!slug) return;
+      setStatus('loading');
+      setErrorMessage('');
+      setProduct(null);
+      setRelatedProducts([]);
       setActiveImage(0);
 
-      const p = await dataService.getProductBySlug(slug);
-      if (!p) { setProduct(null); return; }
-
-      if (slug !== p.slug) {
-        navigate(productUrl(p.slug), { replace: true });
+      if (!slug) {
+        if (!cancelled) {
+          setStatus('notFound');
+        }
         return;
       }
 
-      setProduct(p);
-      const all = await dataService.getVisibleProducts();
-      setRelatedProducts(all.filter(item => item.id !== p.id).slice(0, 6));
-    };
-    load();
-  }, [slug, navigate]);
+      try {
+        const loadedProduct = await dataService.getProductBySlug(slug);
+        if (cancelled) return;
 
-  if (!product) {
+        if (!loadedProduct) {
+          setStatus('notFound');
+          return;
+        }
+
+        if (slug !== loadedProduct.slug) {
+          navigate(productUrl(loadedProduct.slug), { replace: true });
+          return;
+        }
+
+        setProduct(loadedProduct);
+        setStatus('success');
+
+        try {
+          const allProducts = await dataService.getVisibleProducts();
+          if (cancelled) return;
+          setRelatedProducts(allProducts.filter((item) => item.id !== loadedProduct.id).slice(0, 6));
+        } catch (relatedError) {
+          console.error('Error loading related products:', relatedError);
+          if (!cancelled) {
+            setRelatedProducts([]);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading product detail:', error);
+        if (!cancelled) {
+          setErrorMessage('No pudimos cargar este producto en este momento. Probá de nuevo o volvé a la tienda.');
+          setStatus('error');
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [slug, navigate, retryNonce]);
+
+  const requestedCanonicalUrl = slug ? `${SITE_URL}/producto/${slug}` : `${SITE_URL}/tienda`;
+
+  if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="w-7 h-7 border-2 border-stone-200 border-t-[#8C7E60] rounded-full animate-spin" />
+      <div className="min-h-screen bg-white">
+        <SEOHead
+          title="Cargando producto"
+          description="Estamos cargando la ficha del producto."
+          canonical={requestedCanonicalUrl}
+          noindex
+        />
+        <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-6 text-center">
+          <div className="w-7 h-7 border-2 border-stone-200 border-t-[#8C7E60] rounded-full animate-spin" />
+          <p className="text-sm text-stone-500">Cargando producto...</p>
+        </div>
       </div>
     );
+  }
+
+  if (status === 'notFound') {
+    return (
+      <div className="min-h-screen bg-white">
+        <SEOHead
+          title="Producto no encontrado"
+          description="La pieza que buscás no está disponible o la URL es incorrecta."
+          canonical={requestedCanonicalUrl}
+          noindex
+        />
+        <div className="min-h-screen flex items-center justify-center px-6 py-20">
+          <div className="w-full max-w-lg border border-stone-200 rounded-md bg-white p-8 sm:p-10 text-center">
+            <div className="w-16 h-16 rounded-full bg-stone-100 text-stone-300 flex items-center justify-center mx-auto mb-5">
+              <span className="material-symbols-outlined !text-[30px]">search_off</span>
+            </div>
+            <h1 className="font-serif text-2xl text-stone-900 mb-3">Producto no encontrado</h1>
+            <p className="text-sm text-stone-500 leading-relaxed mb-8">
+              La pieza que intentaste abrir ya no está disponible o el enlace no es correcto.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                to="/tienda"
+                className="px-6 py-3 bg-[#8C7E60] text-white rounded text-sm font-medium hover:bg-[#756A50] transition-colors duration-200"
+              >
+                Volver a la tienda
+              </Link>
+              <Link
+                to="/"
+                className="px-6 py-3 border border-stone-300 text-stone-700 rounded text-sm font-medium hover:bg-stone-50 transition-colors duration-200"
+              >
+                Ir al inicio
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="min-h-screen bg-white">
+        <SEOHead
+          title="Error al cargar producto"
+          description="No pudimos cargar esta ficha en este momento."
+          canonical={requestedCanonicalUrl}
+          noindex
+        />
+        <div className="min-h-screen flex items-center justify-center px-6 py-20">
+          <div className="w-full max-w-lg border border-stone-200 rounded-md bg-white p-8 sm:p-10 text-center">
+            <div className="w-16 h-16 rounded-full bg-stone-100 text-stone-300 flex items-center justify-center mx-auto mb-5">
+              <span className="material-symbols-outlined !text-[30px]">error</span>
+            </div>
+            <h1 className="font-serif text-2xl text-stone-900 mb-3">No pudimos cargar este producto</h1>
+            <p className="text-sm text-stone-500 leading-relaxed mb-8">
+              {errorMessage || 'Hubo un problema al cargar la ficha. Probá de nuevo o volvé a la tienda.'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => setRetryNonce((value) => value + 1)}
+                className="px-6 py-3 bg-[#8C7E60] text-white rounded text-sm font-medium hover:bg-[#756A50] transition-colors duration-200"
+              >
+                Reintentar
+              </button>
+              <Link
+                to="/tienda"
+                className="px-6 py-3 border border-stone-300 text-stone-700 rounded text-sm font-medium hover:bg-stone-50 transition-colors duration-200"
+              >
+                Volver a la tienda
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return null;
   }
 
   const whatsappNumber = '59894899544';
@@ -78,7 +214,9 @@ export const ProductDetail: React.FC = () => {
         : 'https://schema.org/OutOfStock',
       seller: { '@type': 'Organization', name: 'Geodas del Uruguay' },
     },
-    ...(product.specs?.weight && { weight: { '@type': 'QuantitativeValue', value: product.specs.weight, unitCode: 'GRM' } }),
+    ...(product.specs?.weight && {
+      weight: { '@type': 'QuantitativeValue', value: product.specs.weight, unitCode: 'GRM' }
+    }),
   };
 
   const breadcrumbJsonLd = {
@@ -88,7 +226,8 @@ export const ProductDetail: React.FC = () => {
       { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Tienda', item: `${SITE_URL}/tienda` },
       ...(product.category ? [{
-        '@type': 'ListItem', position: 3,
+        '@type': 'ListItem',
+        position: 3,
         name: product.category,
         item: `${SITE_URL}/tienda/${product.category.toLowerCase()}`
       }] : []),
@@ -163,8 +302,8 @@ export const ProductDetail: React.FC = () => {
                     key={idx}
                     onClick={() => setActiveImage(idx)}
                     className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden transition-all duration-200 ${activeImage === idx
-                        ? 'ring-2 ring-[#8C7E60] ring-offset-1'
-                        : 'opacity-50 hover:opacity-80'
+                      ? 'ring-2 ring-[#8C7E60] ring-offset-1'
+                      : 'opacity-50 hover:opacity-80'
                       }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
@@ -234,7 +373,7 @@ export const ProductDetail: React.FC = () => {
             {/* Tags */}
             {product.tags?.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {product.tags.map(tag => (
+                {product.tags.map((tag) => (
                   <span
                     key={tag}
                     className="text-[10px] uppercase tracking-wider text-stone-400 border border-stone-200 px-2.5 py-1 rounded"
@@ -250,8 +389,8 @@ export const ProductDetail: React.FC = () => {
               <button
                 onClick={handleAddToCart}
                 className={`w-full py-3.5 rounded flex items-center justify-center gap-2 text-sm font-medium transition-colors duration-200 ${addedFeedback
-                    ? 'bg-stone-800 text-white'
-                    : 'bg-[#8C7E60] hover:bg-[#756A50] text-white'
+                  ? 'bg-stone-800 text-white'
+                  : 'bg-[#8C7E60] hover:bg-[#756A50] text-white'
                   }`}
               >
                 <span
@@ -314,26 +453,26 @@ export const ProductDetail: React.FC = () => {
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {relatedProducts.map(r => (
+              {relatedProducts.map((relatedProduct) => (
                 <Link
-                  key={r.id}
-                  to={productUrl(r.slug)}
+                  key={relatedProduct.id}
+                  to={productUrl(relatedProduct.slug)}
                   className="group flex flex-col gap-2"
                 >
                   <div className="aspect-square rounded-md overflow-hidden bg-[#F5F3EF]">
-                    {r.images?.[0] && (
+                    {relatedProduct.images?.[0] && (
                       <img
-                        src={r.images[0]}
-                        alt={r.title}
+                        src={relatedProduct.images[0]}
+                        alt={relatedProduct.title}
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     )}
                   </div>
                   <p className="text-xs font-medium text-stone-700 truncate group-hover:text-[#8C7E60] transition-colors duration-150">
-                    {r.title}
+                    {relatedProduct.title}
                   </p>
-                  <p className="text-xs text-stone-400">$ {r.price.toLocaleString('es-UY')}</p>
+                  <p className="text-xs text-stone-400">$ {relatedProduct.price.toLocaleString('es-UY')}</p>
                 </Link>
               ))}
             </div>

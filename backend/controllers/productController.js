@@ -1,4 +1,8 @@
 const Product = require('../models/Product');
+const {
+    isPublicCatalogProduct,
+    enforceSafePublicVisibility,
+} = require('../utils/publicProductRules');
 
 function normalizeProductPayload(payload = {}) {
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
@@ -14,6 +18,16 @@ function normalizeProductPayload(payload = {}) {
     delete normalizedPayload.isNew;
 
     return normalizedPayload;
+}
+
+async function findProductByIdentifier(identifier) {
+    let product = await Product.findOne({ slug: identifier });
+
+    if (!product && identifier.match(/^[0-9a-fA-F]{24}$/)) {
+        product = await Product.findById(identifier);
+    }
+
+    return product;
 }
 
 // @desc    Fetch all visible products (Public) — supports pagination
@@ -41,18 +55,18 @@ const getProducts = async (req, res) => {
             ];
         }
 
+        const allVisibleProducts = await Product.find(filters).sort({ createdAt: -1 });
+        const publicProducts = allVisibleProducts.filter(isPublicCatalogProduct);
+
         // Pagination params
         const page = parseInt(req.query.page) || 0;   // 0 = return all (backward compat)
         const limit = parseInt(req.query.limit) || 0;  // 0 = return all
 
         if (page > 0 && limit > 0) {
             const skip = (page - 1) * limit;
-            const totalProducts = await Product.countDocuments(filters);
+            const totalProducts = publicProducts.length;
             const totalPages = Math.ceil(totalProducts / limit);
-            const products = await Product.find(filters)
-                .sort({ createdAt: -1 })
-                .skip(skip)
-                .limit(limit);
+            const products = publicProducts.slice(skip, skip + limit);
 
             return res.json({
                 products,
@@ -63,8 +77,7 @@ const getProducts = async (req, res) => {
         }
 
         // No pagination — return all (backward compatibility)
-        const products = await Product.find(filters).sort({ createdAt: -1 });
-        res.json(products);
+        res.json(publicProducts);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -85,21 +98,33 @@ const getAdminProducts = async (req, res) => {
     }
 };
 
+// @desc    Fetch single product for Admin (includes hidden)
+// @route   GET /api/products/admin/:id
+const getAdminProductById = async (req, res) => {
+    try {
+        const product = await findProductByIdentifier(req.params.id);
+
+        if (product) {
+            res.json(product);
+        } else {
+            res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching admin product:', error);
+        res.status(400).json({
+            message: 'Error al obtener el producto',
+            error: error.message
+        });
+    }
+};
+
 // @desc    Fetch single product by slug or ID
 // @route   GET /api/products/:slugOrId
 const getProductById = async (req, res) => {
     try {
-        const param = req.params.id;
+        const product = await findProductByIdentifier(req.params.id);
 
-        // Try finding by slug first
-        let product = await Product.findOne({ slug: param });
-
-        // Fallback: if param looks like a valid ObjectId, search by _id
-        if (!product && param.match(/^[0-9a-fA-F]{24}$/)) {
-            product = await Product.findById(param);
-        }
-
-        if (product) {
+        if (product && isPublicCatalogProduct(product)) {
             res.json(product);
         } else {
             res.status(404).json({ message: 'Product not found' });
@@ -121,6 +146,7 @@ const createProduct = async (req, res) => {
 
     try {
         const productPayload = normalizeProductPayload(req.body);
+        enforceSafePublicVisibility(productPayload);
         const product = new Product(productPayload);
         console.log('Product Instance created, attempting save...');
 
@@ -154,6 +180,7 @@ const updateProduct = async (req, res) => {
         if (product) {
             const productPayload = normalizeProductPayload(req.body);
             Object.assign(product, productPayload);
+            enforceSafePublicVisibility(product);
             const updatedProduct = await product.save();
             res.json(updatedProduct);
         } else {
@@ -193,6 +220,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
     getProducts,
     getAdminProducts,
+    getAdminProductById,
     getProductById,
     createProduct,
     updateProduct,
