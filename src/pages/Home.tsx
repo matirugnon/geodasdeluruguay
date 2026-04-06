@@ -5,6 +5,7 @@ import { Product, Tip } from '../types';
 import { useCart } from '../context/CartContext';
 import { productUrl, tipUrl } from '../utils/slugify';
 import { SEOHead } from '../components/SEOHead';
+import { WHATSAPP_URL } from '../config/site';
 
 import { motion } from 'framer-motion';
 
@@ -45,64 +46,51 @@ export const Home: React.FC = () => {
          />
 
          {/* ── Hero Section ─────────────────────────────────────── */}
-         <section className="relative h-[calc(100vh-5rem)] min-h-[700px] flex items-center justify-center bg-[#F5F5F0]">
+         <section className="bg-[#F5F5F0] px-4 sm:px-6 lg:px-10 py-4 md:py-6 lg:py-8">
 
             <motion.div
-               initial={{ opacity: 0, y: 20 }}
+               initial={{ opacity: 0, y: 12 }}
                animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.8, ease: "easeOut" }}
-               className="relative w-full h-[85vh] min-h-[500px] bg-white shadow-xl overflow-hidden flex flex-col lg:flex-row"
+               transition={{ duration: 0.45, ease: "easeOut" }}
+               className="relative w-full max-w-[1280px] mx-auto min-h-[430px] md:min-h-[480px] lg:min-h-[500px] bg-white shadow-lg overflow-hidden flex flex-col lg:flex-row"
             >
                {/* Left Content */}
-               <div className="flex-1 p-8 md:p-12 lg:p-24 flex flex-col justify-center relative z-10 bg-white">
-                  <motion.h1
-                     initial={{ opacity: 0, x: -20 }}
-                     animate={{ opacity: 1, x: 0 }}
-                     transition={{ delay: 0.3, duration: 0.8 }}
-                     className="font-serif text-5xl md:text-6xl lg:text-7xl text-[#8C7E60] leading-[0.9] mb-6"
-                  >
+               <div className="flex-1 p-8 md:p-9 lg:px-14 lg:py-12 flex flex-col justify-center relative z-10 bg-white">
+                  <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#8C7E60] leading-[0.92] mb-5">
                      GEODAS DEL <br /> URUGUAY
-                  </motion.h1>
+                  </h1>
 
-                  <motion.p
-                     initial={{ opacity: 0 }}
-                     animate={{ opacity: 1 }}
-                     transition={{ delay: 0.5, duration: 0.8 }}
-                     className="text-lg text-[#8C8C8C] font-light tracking-wide mb-8 font-sans"
-                  >
+                  <p className="max-w-xl text-base md:text-lg text-[#7A7467] font-light tracking-wide mb-6 font-sans">
                      Conectá con la energía de la tierra
-                  </motion.p>
+                  </p>
 
-                  <motion.div
-                     initial={{ scaleX: 0 }}
-                     animate={{ scaleX: 1 }}
-                     transition={{ delay: 0.6, duration: 0.8 }}
-                     className="w-24 h-[1px] bg-[#D4C4A8] mb-10 origin-left"
-                  ></motion.div>
+                  <div className="w-20 h-[1px] bg-[#D4C4A8] mb-7"></div>
 
-                  <motion.div
-                     whileHover={{ scale: 1.05 }}
-                     whileTap={{ scale: 0.95 }}
-                     className="w-fit"
-                  >
+                  <div className="w-fit">
                      <button
                         onClick={scrollToShop}
                         className="inline-block px-8 py-3 border border-[#8C7E60] rounded-full text-[#8C7E60] text-sm tracking-widest hover:bg-[#8C7E60] hover:text-white transition-all duration-300 uppercase font-sans"
                      >
                         Ver Tienda
                      </button>
-                  </motion.div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-[11px] md:text-xs uppercase tracking-[0.16em] text-stone-500 font-medium">
+                     <span>Envíos a todo el país</span>
+                     <span className="hidden sm:inline">Piezas naturales</span>
+                     <span className="hidden lg:inline">Compra simple y atención directa</span>
+                  </div>
                </div>
 
                {/* Right Image Area */}
-               <div className="hidden lg:block flex-1 relative h-[400px] lg:h-auto bg-white overflow-hidden">
+               <div className="hidden lg:block flex-1 relative min-h-[320px] bg-white overflow-hidden">
                   {/* Gradient Overlay to blend image with white background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent z-10 w-1/3"></div>
 
                   <motion.div
-                     initial={{ opacity: 0, scale: 1.1 }}
+                     initial={{ opacity: 0, scale: 1.03 }}
                      animate={{ opacity: 1, scale: 1 }}
-                     transition={{ delay: 0.4, duration: 1.2 }}
+                     transition={{ delay: 0.1, duration: 0.55 }}
                      className="w-full h-full flex items-center justify-center bg-white"
                   >
                      <img
@@ -116,10 +104,37 @@ export const Home: React.FC = () => {
          </section>
 
          {/* ── Nuestra Colección ─────────────────────────────── */}
-         <section id="shop" className="py-20 md:py-28 px-6 md:px-12 max-w-[1280px] mx-auto">
+         <section id="shop" className="py-14 md:py-16 px-6 md:px-12 max-w-[1280px] mx-auto">
             <div className="text-center mb-14">
                <h2 className="font-serif text-3xl md:text-4xl text-stone-900 mb-3 font-medium">Nuestra Colección</h2>
                <p className="text-stone-500 font-sans text-base font-light">Piezas seleccionadas con cuidado para vos</p>
+               <div className="mt-5 flex flex-wrap justify-center gap-x-4 gap-y-2 text-[11px] md:text-xs uppercase tracking-[0.16em] text-stone-500 font-medium">
+                  <span>Pago online o transferencia</span>
+                  <span>Envíos coordinados</span>
+                  <span>Piezas naturales</span>
+               </div>
+               <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-stone-500">
+                  <Link
+                     to="/envios"
+                     className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                  >
+                     Ver envíos
+                  </Link>
+                  <Link
+                     to="/devoluciones"
+                     className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                  >
+                     Devoluciones
+                  </Link>
+                  <a
+                     href={WHATSAPP_URL}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                  >
+                     Consultar por WhatsApp
+                  </a>
+               </div>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -129,10 +144,14 @@ export const Home: React.FC = () => {
                   featured.map((product) => (
                      <div
                         key={product.id}
-                        className="group cursor-pointer flex flex-col"
+                        className="group flex flex-col"
                      >
                         <div className="relative aspect-[3/4] overflow-hidden bg-[#F5F3EF] mb-4 rounded-md">
-                           <Link to={productUrl(product.slug)}>
+                           <Link
+                              to={productUrl(product.slug)}
+                              className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C7E60] focus-visible:ring-offset-2"
+                              aria-label={`Ver detalle de ${product.title}`}
+                           >
                               <img
                                  src={product.images[0]}
                                  alt={product.title}
@@ -147,11 +166,15 @@ export const Home: React.FC = () => {
                                  addItem(product);
                               }}
                               className="absolute bottom-3 right-3 bg-white p-2.5 rounded shadow-sm opacity-0 md:opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-200 hover:bg-[#8C7E60] hover:text-white text-stone-700 z-10"
+                              aria-label={`Agregar ${product.title} al carrito`}
                            >
                               <span className="material-symbols-outlined !text-[18px]">shopping_bag</span>
                            </button>
                         </div>
-                        <Link to={productUrl(product.slug)} className="px-0.5">
+                        <Link
+                           to={productUrl(product.slug)}
+                           className="px-0.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C7E60] focus-visible:ring-offset-2"
+                        >
                            <h3 className="font-serif text-sm md:text-base text-stone-800 mb-1 group-hover:text-[#8C7E60] transition-colors duration-200 line-clamp-2 leading-snug">{product.title}</h3>
                            <p className="text-stone-900 font-semibold text-base md:text-lg">$ {product.price.toLocaleString('es-UY')}</p>
                         </Link>

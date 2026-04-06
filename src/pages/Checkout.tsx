@@ -106,6 +106,65 @@ const Field: React.FC<FieldProps> = ({ label, value, onChange, error, placeholde
     </div>
 );
 
+interface CheckoutOptionCardProps {
+    id: string;
+    name: string;
+    checked: boolean;
+    onChange: () => void;
+    title: string;
+    description: React.ReactNode;
+    badge?: React.ReactNode;
+    footer?: React.ReactNode;
+    panelClassName?: string;
+}
+
+const CheckoutOptionCard: React.FC<CheckoutOptionCardProps> = ({
+    id,
+    name,
+    checked,
+    onChange,
+    title,
+    description,
+    badge,
+    footer,
+    panelClassName = 'p-4',
+}) => (
+    <label
+        htmlFor={id}
+        className={`relative block rounded-md border transition-colors duration-200 cursor-pointer ${
+            checked ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'
+        }`}
+    >
+        <input
+            id={id}
+            name={name}
+            type="radio"
+            checked={checked}
+            onChange={onChange}
+            className="peer sr-only"
+        />
+        <div className={`pointer-events-none rounded-md peer-focus-visible:ring-2 peer-focus-visible:ring-[#8C7E60] peer-focus-visible:ring-offset-2 ${panelClassName}`}>
+            {badge}
+            <div className="flex items-center gap-3 mb-1">
+                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                    checked ? 'border-[#8C7E60]' : 'border-stone-300'
+                }`}>
+                    {checked && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
+                </div>
+                <h4 className="font-medium text-sm text-stone-800">{title}</h4>
+            </div>
+            <div className="text-xs text-stone-500 pl-7">
+                {description}
+            </div>
+            {footer && (
+                <div className="pl-7 mt-3 flex items-center gap-2">
+                    {footer}
+                </div>
+            )}
+        </div>
+    </label>
+);
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export const Checkout: React.FC = () => {
@@ -533,40 +592,30 @@ export const Checkout: React.FC = () => {
                                 <h2 className="text-2xl font-medium font-serif text-stone-900">Datos personales & envío</h2>
 
                                 {/* Delivery Method Selector - FIRST so fields adapt */}
-                                <div className="flex flex-col gap-3">
-                                    <label className="text-xs font-medium text-stone-500">
+                                <fieldset className="flex flex-col gap-3">
+                                    <legend className="text-xs font-medium text-stone-500">
                                         Método de entrega
-                                    </label>
+                                    </legend>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <div
-                                            onClick={() => setDeliveryMethod('pickup')}
-                                            className={`p-4 rounded-md border cursor-pointer transition-colors duration-200 ${deliveryMethod === 'pickup' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
-                                        >
-                                            <div className="flex items-center gap-3 mb-1">
-                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'pickup' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
-                                                    {deliveryMethod === 'pickup' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
-                                                </div>
-                                                <h4 className="font-medium text-sm text-stone-800">Retiro en Prado</h4>
-                                            </div>
-                                            <p className="text-xs text-stone-500 pl-7">A coordinar (Sin costo extra)</p>
-                                        </div>
+                                        <CheckoutOptionCard
+                                            id="delivery-pickup"
+                                            name="delivery-method"
+                                            checked={deliveryMethod === 'pickup'}
+                                            onChange={() => setDeliveryMethod('pickup')}
+                                            title="Retiro en Prado"
+                                            description="A coordinar (Sin costo extra)"
+                                        />
 
-                                        <div
-                                            onClick={() => setDeliveryMethod('delivery')}
-                                            className={`p-4 rounded-md border cursor-pointer transition-colors duration-200 ${deliveryMethod === 'delivery' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
-                                        >
-                                            <div className="flex items-center gap-3 mb-1">
-                                                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${deliveryMethod === 'delivery' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
-                                                    {deliveryMethod === 'delivery' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
-                                                </div>
-                                                <h4 className="font-medium text-sm text-stone-800">Envío a domicilio</h4>
-                                            </div>
-                                            <p className="text-xs text-stone-500 pl-7">
-                                                {isFreeShippingEligible ? 'Gratis' : '+ $ 100 extra'}
-                                            </p>
-                                        </div>
+                                        <CheckoutOptionCard
+                                            id="delivery-home"
+                                            name="delivery-method"
+                                            checked={deliveryMethod === 'delivery'}
+                                            onChange={() => setDeliveryMethod('delivery')}
+                                            title="Envío a domicilio"
+                                            description={isFreeShippingEligible ? 'Gratis' : '+ $ 100 extra'}
+                                        />
                                     </div>
-                                </div>
+                                </fieldset>
 
                                 {/* Form fields */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -610,47 +659,47 @@ export const Checkout: React.FC = () => {
                                 </div>
 
                                 {/* Payment Method Selector */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {/* Mercado Pago */}
-                                    <div
-                                        onClick={() => setPaymentMethod('mercadopago')}
-                                        className={`p-5 rounded-md border cursor-pointer transition-colors duration-200 ${paymentMethod === 'mercadopago' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
-                                    >
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'mercadopago' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
-                                                {paymentMethod === 'mercadopago' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
-                                            </div>
-                                            <h4 className="font-medium text-sm text-stone-800">Mercado Pago</h4>
-                                        </div>
-                                        <p className="text-xs text-stone-500 pl-7">Tarjeta, débito, crédito y más</p>
-                                        <div className="pl-7 mt-3 flex items-center gap-2">
-                                            <span className="material-symbols-outlined !text-[20px] text-blue-500">credit_card</span>
-                                            <span className="material-symbols-outlined !text-[20px] text-stone-400">lock</span>
-                                        </div>
-                                    </div>
+                                <fieldset className="flex flex-col gap-3">
+                                    <legend className="sr-only">Elegí cómo querés pagar tu pedido</legend>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <CheckoutOptionCard
+                                            id="payment-mercadopago"
+                                            name="payment-method"
+                                            checked={paymentMethod === 'mercadopago'}
+                                            onChange={() => setPaymentMethod('mercadopago')}
+                                            title="Mercado Pago"
+                                            description="Tarjeta, débito, crédito y más"
+                                            panelClassName="p-5"
+                                            footer={(
+                                                <>
+                                                    <span className="material-symbols-outlined !text-[20px] text-blue-500">credit_card</span>
+                                                    <span className="material-symbols-outlined !text-[20px] text-stone-400">lock</span>
+                                                </>
+                                            )}
+                                        />
 
-                                    {/* Transferencia */}
-                                    <div
-                                        onClick={() => setPaymentMethod('transfer')}
-                                        className={`p-5 rounded-md border cursor-pointer transition-colors duration-200 relative overflow-hidden ${paymentMethod === 'transfer' ? 'border-[#8C7E60] bg-[#8C7E60]/5' : 'border-stone-200 hover:border-stone-300'}`}
-                                    >
-                                        {/* Badge 5% off */}
-                                        <div className="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded-bl-md">
-                                            5% OFF
-                                        </div>
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-[#8C7E60]' : 'border-stone-300'}`}>
-                                                {paymentMethod === 'transfer' && <div className="w-2 h-2 rounded-full bg-[#8C7E60]" />}
-                                            </div>
-                                            <h4 className="font-medium text-sm text-stone-800">Transferencia bancaria</h4>
-                                        </div>
-                                        <p className="text-xs text-stone-500 pl-7">Transferí y enviá el comprobante</p>
-                                        <div className="pl-7 mt-3 flex items-center gap-2">
-                                            <span className="material-symbols-outlined !text-[20px] text-green-500">account_balance</span>
-                                            <span className="text-xs text-green-600 font-semibold">¡Ahorrá un 5%!</span>
-                                        </div>
+                                        <CheckoutOptionCard
+                                            id="payment-transfer"
+                                            name="payment-method"
+                                            checked={paymentMethod === 'transfer'}
+                                            onChange={() => setPaymentMethod('transfer')}
+                                            title="Transferencia bancaria"
+                                            description="Transferí y enviá el comprobante"
+                                            panelClassName="p-5"
+                                            badge={(
+                                                <div className="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded-bl-md">
+                                                    5% OFF
+                                                </div>
+                                            )}
+                                            footer={(
+                                                <>
+                                                    <span className="material-symbols-outlined !text-[20px] text-green-500">account_balance</span>
+                                                    <span className="text-xs text-green-600 font-semibold">¡Ahorrá un 5%!</span>
+                                                </>
+                                            )}
+                                        />
                                     </div>
-                                </div>
+                                </fieldset>
 
                                 {/* Payment details area */}
                                 {paymentMethod === 'mercadopago' && (

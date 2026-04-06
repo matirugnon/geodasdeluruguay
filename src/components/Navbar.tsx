@@ -83,24 +83,26 @@ export const Navbar: React.FC = () => {
           {/* Actions */}
           <div className="flex items-center gap-2">
             {/* Search */}
-            <div className="hidden md:flex items-center relative" ref={searchRef}>
-              <div className="flex items-center rounded-md transition-all duration-200 border border-transparent focus-within:border-stone-200 focus-within:bg-stone-50">
+            <div
+              className="hidden md:flex items-center relative"
+              ref={searchRef}
+              role="search"
+              aria-label="Buscar productos"
+            >
+              <div className="flex items-center rounded-full border border-stone-200 bg-stone-50/80 px-3 py-2 shadow-sm transition-all duration-200 focus-within:border-[#8C7E60]/40 focus-within:bg-white focus-within:shadow-md">
+                <span className="material-symbols-outlined !text-[20px] text-stone-400" aria-hidden="true">
+                  search
+                </span>
                 <input
                   ref={searchInputRef}
-                  className="w-0 focus:w-44 transition-all duration-300 ease-out bg-transparent border-none focus:ring-0 p-0 pl-3 py-2 text-sm text-stone-700 placeholder-stone-400 opacity-0 focus:opacity-100 cursor-pointer focus:cursor-text outline-none"
-                  placeholder="Buscar..."
+                  className="w-36 lg:w-44 xl:w-52 bg-transparent border-none focus:ring-0 pl-2 pr-1 text-sm text-stone-700 placeholder-stone-400 outline-none"
+                  placeholder="Buscar productos"
+                  aria-label="Buscar productos"
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onFocus={() => searchTerm.length > 2 && setShowResults(true)}
                 />
-                <button
-                  onClick={() => searchInputRef.current?.focus()}
-                  className="p-2 text-stone-500 hover:text-[#8C7E60] transition-colors duration-200"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined !text-[22px]">search</span>
-                </button>
               </div>
 
               {/* Results Dropdown */}

@@ -422,19 +422,53 @@ export const ProductDetail: React.FC = () => {
               </button>
             </div>
 
-            {/* Trust strip */}
-            <div className="flex flex-wrap items-center gap-5 pt-4 border-t border-stone-100">
-              <div className="flex items-center gap-1.5 text-stone-400">
-                <span className="material-symbols-outlined !text-[15px]">verified</span>
-                <span className="text-[10px] uppercase tracking-wider">Auténtica</span>
+            {/* Purchase support */}
+            <div className="rounded-md border border-stone-200 bg-stone-50/70 p-4 sm:p-5">
+              <h2 className="text-[11px] uppercase tracking-[0.18em] text-stone-400 font-medium mb-4">
+                Compra con tranquilidad
+              </h2>
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium text-stone-800">Envío o retiro a coordinar</span>
+                  <p className="text-sm text-stone-500 leading-relaxed">
+                    Confirmamos contigo la modalidad de entrega y los tiempos estimados antes de cerrar el envío.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium text-stone-800">Pago online o por transferencia</span>
+                  <p className="text-sm text-stone-500 leading-relaxed">
+                    Podés comprar con Mercado Pago o coordinar transferencia bancaria según te quede mejor.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium text-stone-800">Pieza natural y única</span>
+                  <p className="text-sm text-stone-500 leading-relaxed">
+                    Los tonos, vetas y detalles pueden variar naturalmente entre piezas del mismo tipo.
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 text-stone-400">
-                <span className="material-symbols-outlined !text-[15px]">local_shipping</span>
-                <span className="text-[10px] uppercase tracking-wider">Envío disponible</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-stone-400">
-                <span className="material-symbols-outlined !text-[15px]">auto_awesome</span>
-                <span className="text-[10px] uppercase tracking-wider">Origen natural</span>
+
+              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-stone-500">
+                <Link
+                  to="/envios"
+                  className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                >
+                  Ver envíos
+                </Link>
+                <Link
+                  to="/devoluciones"
+                  className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                >
+                  Devoluciones
+                </Link>
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#8C7E60] underline underline-offset-4 transition-colors duration-150"
+                >
+                  Consultar esta pieza
+                </a>
               </div>
             </div>
           </div>
