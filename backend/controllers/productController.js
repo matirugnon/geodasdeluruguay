@@ -1,5 +1,21 @@
 const Product = require('../models/Product');
 
+function normalizeProductPayload(payload = {}) {
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+        return payload;
+    }
+
+    const normalizedPayload = { ...payload };
+
+    if (typeof normalizedPayload.isNew === 'boolean') {
+        normalizedPayload.isNewProduct = normalizedPayload.isNew;
+    }
+
+    delete normalizedPayload.isNew;
+
+    return normalizedPayload;
+}
+
 // @desc    Fetch all visible products (Public) — supports pagination
 // @route   GET /api/products
 // @route   GET /api/products?category=collares&page=1&limit=12
@@ -104,7 +120,8 @@ const createProduct = async (req, res) => {
     console.log('Request Body:', JSON.stringify(req.body, null, 2));
 
     try {
-        const product = new Product(req.body);
+        const productPayload = normalizeProductPayload(req.body);
+        const product = new Product(productPayload);
         console.log('Product Instance created, attempting save...');
 
         const createdProduct = await product.save();
@@ -135,7 +152,8 @@ const updateProduct = async (req, res) => {
         const product = await Product.findById(req.params.id);
 
         if (product) {
-            Object.assign(product, req.body);
+            const productPayload = normalizeProductPayload(req.body);
+            Object.assign(product, productPayload);
             const updatedProduct = await product.save();
             res.json(updatedProduct);
         } else {

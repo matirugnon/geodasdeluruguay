@@ -1,0 +1,80 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Geodas del Uruguay" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]: Geodas del Uruguay
+      - navigation [ref=e9]:
+        - link "Inicio" [ref=e10] [cursor=pointer]:
+          - /url: /
+        - link "Tienda" [ref=e11] [cursor=pointer]:
+          - /url: /tienda
+      - generic [ref=e12]:
+        - generic [ref=e14]:
+          - textbox "Buscar..." [ref=e15] [cursor=pointer]
+          - button "search" [ref=e16] [cursor=pointer]:
+            - generic [ref=e17]: search
+        - link "Contactar por WhatsApp" [ref=e18] [cursor=pointer]:
+          - /url: https://wa.me/59891458797
+          - img [ref=e19]
+        - button "Abrir carrito" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: shopping_bag
+  - generic [ref=e63]:
+    - banner [ref=e64]:
+      - heading "Nuestra Tienda" [level=1] [ref=e65]
+      - paragraph [ref=e66]: Piezas únicas formadas por la naturaleza, curadas con elegancia para tu hogar.
+    - generic [ref=e68]:
+      - generic [ref=e69]:
+        - button "tune Filtrar" [ref=e70] [cursor=pointer]:
+          - generic [ref=e71]: tune
+          - text: Filtrar
+        - paragraph [ref=e72]: 0 productos
+      - main [ref=e73]:
+        - generic [ref=e74]:
+          - paragraph [ref=e75]: No encontramos productos en esta categoría.
+          - button "Ver todo el catálogo" [ref=e76] [cursor=pointer]
+  - contentinfo [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]: diamond
+            - generic [ref=e31]: Geodas del Uruguay
+          - paragraph [ref=e32]: Piedras y cristales naturales seleccionados en Uruguay.
+        - generic [ref=e33]:
+          - heading "Tienda" [level=4] [ref=e34]
+          - list [ref=e35]:
+            - listitem [ref=e36]:
+              - link "Ver todo" [ref=e37] [cursor=pointer]:
+                - /url: /tienda
+            - listitem [ref=e38]:
+              - link "Piedras" [ref=e39] [cursor=pointer]:
+                - /url: /tienda/piedras
+            - listitem [ref=e40]:
+              - link "Collares" [ref=e41] [cursor=pointer]:
+                - /url: /tienda/collares
+        - generic [ref=e42]:
+          - heading "Ayuda" [level=4] [ref=e43]
+          - list [ref=e44]:
+            - listitem [ref=e45]:
+              - link "Contacto" [ref=e46] [cursor=pointer]:
+                - /url: https://wa.me/59891458797
+            - listitem [ref=e47]:
+              - link "Tips & Blog" [ref=e48] [cursor=pointer]:
+                - /url: /tips
+        - generic [ref=e49]:
+          - heading "Seguinos" [level=4] [ref=e50]
+          - generic [ref=e51]:
+            - link "Instagram" [ref=e52] [cursor=pointer]:
+              - /url: https://www.instagram.com/geodasdeluruguay/?hl=es-la
+              - img [ref=e53]
+            - link "WhatsApp" [ref=e55] [cursor=pointer]:
+              - /url: https://wa.me/59891458797
+              - img [ref=e56]
+      - generic [ref=e58]:
+        - paragraph [ref=e59]: © 2026 Geodas del Uruguay
+        - generic [ref=e60]:
+          - link "Privacidad" [ref=e61] [cursor=pointer]:
+            - /url: "#"
+          - link "Términos" [ref=e62] [cursor=pointer]:
+            - /url: "#"

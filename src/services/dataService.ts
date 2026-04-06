@@ -28,6 +28,32 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   return fetch(url, { ...options, headers });
 };
 
+function mapProductFromApi(rawProduct: any): Product {
+  const { _id, isNewProduct, ...rest } = rawProduct;
+
+  return {
+    ...rest,
+    id: _id || rawProduct.id,
+    slug: rawProduct.slug || _id || rawProduct.id,
+    isNew: typeof rawProduct.isNew === 'boolean'
+      ? rawProduct.isNew
+      : Boolean(isNewProduct),
+  };
+}
+
+function mapProductToApi(product: Product): Record<string, unknown> {
+  const productData: Record<string, unknown> = { ...product };
+
+  if ('isNew' in productData) {
+    productData.isNewProduct = Boolean(productData.isNew);
+  }
+
+  delete productData.isNew;
+  delete productData._id;
+
+  return productData;
+}
+
 export const dataService = {
   // --- Products ---
 
@@ -42,8 +68,7 @@ export const dataService = {
       }
 
       const products = await response.json();
-      // Mapear _id de MongoDB a id para el frontend
-      return products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
+      return products.map(mapProductFromApi);
     } catch (error) {
       console.error('Error fetching products:', error);
       return [];
@@ -55,8 +80,7 @@ export const dataService = {
       const response = await fetch(`${API_URL}/products/${id}`);
       if (!response.ok) return undefined;
       const product = await response.json();
-      // Mapear _id de MongoDB a id para el frontend
-      return { ...product, id: product._id, slug: product.slug || product._id };
+      return mapProductFromApi(product);
     } catch (error) {
       console.error('Error fetching product:', error);
       return undefined;
@@ -69,7 +93,7 @@ export const dataService = {
       const response = await fetch(`${API_URL}/products/${slug}`);
       if (!response.ok) return undefined;
       const product = await response.json();
-      return { ...product, id: product._id, slug: product.slug || product._id };
+      return mapProductFromApi(product);
     } catch (error) {
       console.error('Error fetching product by slug:', error);
       return undefined;
@@ -86,7 +110,7 @@ export const dataService = {
       }
 
       const products = await response.json();
-      return products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
+      return products.map(mapProductFromApi);
     } catch (error) {
       console.error('Error fetching visible products:', error);
       return [];
@@ -112,7 +136,7 @@ export const dataService = {
       // New backend returns { products, currentPage, totalPages, totalProducts }
       if (data.products && Array.isArray(data.products)) {
         return {
-          products: data.products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id })),
+          products: data.products.map(mapProductFromApi),
           currentPage: data.currentPage,
           totalPages: data.totalPages,
           totalProducts: data.totalProducts
@@ -120,7 +144,7 @@ export const dataService = {
       }
 
       // Old backend returns flat array — paginate client-side
-      const allProducts: Product[] = (Array.isArray(data) ? data : []).map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
+      const allProducts: Product[] = (Array.isArray(data) ? data : []).map(mapProductFromApi);
       const total = allProducts.length;
       const totalPages = Math.max(1, Math.ceil(total / limit));
       const start = (page - 1) * limit;
@@ -143,9 +167,8 @@ export const dataService = {
       if (!response.ok) return [];
 
       const products = await response.json();
-      // Mapear _id de MongoDB a id para el frontend
       return products
-        .map((p: any) => ({ ...p, id: p._id }))
+        .map(mapProductFromApi)
         .filter((p: Product) =>
           p.category.toLowerCase() === category.toLowerCase() && p.visible
         );
@@ -167,8 +190,8 @@ export const dataService = {
 
       const method = isUpdate ? 'PUT' : 'POST';
 
-      // Crear una copia del producto sin el campo 'id' para creación
-      const productData = { ...product };
+      // Unificar el contrato frontend `isNew` con el backend `isNewProduct`.
+      const productData = mapProductToApi(product);
       if (!isUpdate) {
         delete productData.id; // MongoDB genera su propio _id
       }
@@ -228,8 +251,7 @@ export const dataService = {
       const data = await response.json();
       // Handle both flat array and paginated { products: [...] } response
       const products = Array.isArray(data) ? data : (data.products || []);
-      // Mapear _id de MongoDB a id para el frontend
-      return products.map((p: any) => ({ ...p, id: p._id, slug: p.slug || p._id }));
+      return products.map(mapProductFromApi);
     } catch (error) {
       console.error('Error searching products:', error);
       return [];

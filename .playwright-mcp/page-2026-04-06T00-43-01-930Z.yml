@@ -1,0 +1,151 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Geodas del Uruguay" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]: Geodas del Uruguay
+      - navigation [ref=e9]:
+        - link "Inicio" [ref=e10] [cursor=pointer]:
+          - /url: /
+        - link "Tienda" [ref=e11] [cursor=pointer]:
+          - /url: /tienda
+      - generic [ref=e12]:
+        - generic [ref=e14]:
+          - textbox "Buscar..." [ref=e15] [cursor=pointer]
+          - button "search" [ref=e16] [cursor=pointer]:
+            - generic [ref=e17]: search
+        - link "Contactar por WhatsApp" [ref=e18] [cursor=pointer]:
+          - /url: https://wa.me/59891458797
+          - img [ref=e19]
+        - button "Abrir carrito" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: shopping_bag
+  - generic [ref=e63]:
+    - navigation [ref=e65]:
+      - link "Inicio" [ref=e66] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e67]: /
+      - link "Tienda" [ref=e68] [cursor=pointer]:
+        - /url: /tienda
+      - generic [ref=e69]: /
+      - link "Collares" [ref=e70] [cursor=pointer]:
+        - /url: /tienda/collares
+      - generic [ref=e71]: /
+      - generic [ref=e72]: Cristal de Prueba
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - generic [ref=e76]:
+          - img "Cristal de Prueba" [ref=e77]
+          - generic [ref=e78]: Nuevo
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - generic [ref=e81]: Collares
+            - generic [ref=e82]: /
+            - generic [ref=e83]: Pieza
+          - heading "Cristal de Prueba" [level=1] [ref=e84]
+          - paragraph [ref=e85]: $ 67
+          - paragraph [ref=e87]: ……
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]: Origen
+              - generic [ref=e91]: Artigas, Uruguay
+            - text: "0"
+          - generic [ref=e92]:
+            - button "shopping_bag Agregar al carrito" [ref=e93] [cursor=pointer]:
+              - generic [ref=e94]: shopping_bag
+              - text: Agregar al carrito
+            - link "Consultar por WhatsApp" [ref=e95] [cursor=pointer]:
+              - /url: https://wa.me/59894899544?text=Hola!%20Me%20interesa%20el%20producto%3A%20*Cristal%20de%20Prueba*%0A%C2%BFEst%C3%A1%20disponible%3F
+              - img [ref=e96]
+              - text: Consultar por WhatsApp
+            - button "← Volver" [ref=e98] [cursor=pointer]
+          - generic [ref=e99]:
+            - generic [ref=e100]:
+              - generic [ref=e101]: verified
+              - generic [ref=e102]: Auténtica
+            - generic [ref=e103]:
+              - generic [ref=e104]: local_shipping
+              - generic [ref=e105]: Envío disponible
+            - generic [ref=e106]:
+              - generic [ref=e107]: auto_awesome
+              - generic [ref=e108]: Origen natural
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - heading "Otras piezas" [level=2] [ref=e111]
+          - link "Ver todas" [ref=e112] [cursor=pointer]:
+            - /url: /tienda
+        - generic [ref=e113]:
+          - link "Collar de amatista geoda - Violeta Collar de amatista geoda - Violeta $ 25" [ref=e114] [cursor=pointer]:
+            - /url: /producto/collar-de-amatista-geoda-violeta
+            - generic:
+              - img "Collar de amatista geoda - Violeta"
+            - paragraph [ref=e115]: Collar de amatista geoda - Violeta
+            - paragraph [ref=e116]: $ 25
+          - link "aaaaaaa aaaaaaa $ 1.111" [ref=e117] [cursor=pointer]:
+            - /url: /producto/aaaaaaa
+            - generic:
+              - img "aaaaaaa"
+            - paragraph [ref=e118]: aaaaaaa
+            - paragraph [ref=e119]: $ 1.111
+          - link "prueba external prueba external $ 3" [ref=e120] [cursor=pointer]:
+            - /url: /producto/prueba-external
+            - generic:
+              - img "prueba external"
+            - paragraph [ref=e121]: prueba external
+            - paragraph [ref=e122]: $ 3
+          - link "prueba slug prueba slug $ 11.111" [ref=e123] [cursor=pointer]:
+            - /url: /producto/prueba-slug
+            - generic:
+              - img "prueba slug"
+            - paragraph [ref=e124]: prueba slug
+            - paragraph [ref=e125]: $ 11.111
+          - link "collar 1 collar 1 $ 1" [ref=e126] [cursor=pointer]:
+            - /url: /producto/collar-1
+            - generic:
+              - img "collar 1"
+            - paragraph [ref=e127]: collar 1
+            - paragraph [ref=e128]: $ 1
+  - contentinfo [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]: diamond
+            - generic [ref=e31]: Geodas del Uruguay
+          - paragraph [ref=e32]: Piedras y cristales naturales seleccionados en Uruguay.
+        - generic [ref=e33]:
+          - heading "Tienda" [level=4] [ref=e34]
+          - list [ref=e35]:
+            - listitem [ref=e36]:
+              - link "Ver todo" [ref=e37] [cursor=pointer]:
+                - /url: /tienda
+            - listitem [ref=e38]:
+              - link "Piedras" [ref=e39] [cursor=pointer]:
+                - /url: /tienda/piedras
+            - listitem [ref=e40]:
+              - link "Collares" [ref=e41] [cursor=pointer]:
+                - /url: /tienda/collares
+        - generic [ref=e42]:
+          - heading "Ayuda" [level=4] [ref=e43]
+          - list [ref=e44]:
+            - listitem [ref=e45]:
+              - link "Contacto" [ref=e46] [cursor=pointer]:
+                - /url: https://wa.me/59891458797
+            - listitem [ref=e47]:
+              - link "Tips & Blog" [ref=e48] [cursor=pointer]:
+                - /url: /tips
+        - generic [ref=e49]:
+          - heading "Seguinos" [level=4] [ref=e50]
+          - generic [ref=e51]:
+            - link "Instagram" [ref=e52] [cursor=pointer]:
+              - /url: https://www.instagram.com/geodasdeluruguay/?hl=es-la
+              - img [ref=e53]
+            - link "WhatsApp" [ref=e55] [cursor=pointer]:
+              - /url: https://wa.me/59891458797
+              - img [ref=e56]
+      - generic [ref=e58]:
+        - paragraph [ref=e59]: © 2026 Geodas del Uruguay
+        - generic [ref=e60]:
+          - link "Privacidad" [ref=e61] [cursor=pointer]:
+            - /url: "#"
+          - link "Términos" [ref=e62] [cursor=pointer]:
+            - /url: "#"

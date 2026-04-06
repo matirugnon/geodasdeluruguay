@@ -1,0 +1,154 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Geodas del Uruguay" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]: Geodas del Uruguay
+      - navigation [ref=e9]:
+        - link "Inicio" [ref=e10] [cursor=pointer]:
+          - /url: /
+        - link "Tienda" [ref=e11] [cursor=pointer]:
+          - /url: /tienda
+      - generic [ref=e12]:
+        - generic [ref=e14]:
+          - textbox "Buscar..." [ref=e15] [cursor=pointer]
+          - button "search" [ref=e16] [cursor=pointer]:
+            - generic [ref=e17]: search
+        - link "Contactar por WhatsApp" [ref=e18] [cursor=pointer]:
+          - /url: https://wa.me/59891458797
+          - img [ref=e19]
+        - button "Abrir carrito" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: shopping_bag
+  - generic [ref=e63]:
+    - banner [ref=e64]:
+      - heading "Nuestra Tienda" [level=1] [ref=e65]
+      - paragraph [ref=e66]: Piezas únicas formadas por la naturaleza, curadas con elegancia para tu hogar.
+    - generic [ref=e68]:
+      - generic [ref=e69]:
+        - button "tune Filtrar" [ref=e70] [cursor=pointer]:
+          - generic [ref=e71]: tune
+          - text: Filtrar
+        - paragraph [ref=e72]: 6 productos
+      - main [ref=e73]:
+        - generic [ref=e74]:
+          - button "Ver detalle de Collar de amatista geoda - Violeta" [ref=e76] [cursor=pointer]:
+            - generic [ref=e77]:
+              - generic [ref=e79]: Nuevo
+              - button "Agregar al carrito" [ref=e80]:
+                - generic [ref=e81]: shopping_bag
+                - text: Agregar
+            - generic [ref=e82]:
+              - generic [ref=e83]: Pieza
+              - heading "Collar de amatista geoda - Violeta" [level=3] [ref=e84]
+              - generic [ref=e85]:
+                - generic [ref=e86]: $ 25
+                - generic [ref=e87]:
+                  - text: Ver Detalle
+                  - generic [ref=e88]: arrow_forward
+          - button "Ver detalle de Cristal de Prueba" [ref=e90] [cursor=pointer]:
+            - generic [ref=e91]:
+              - generic [ref=e93]: Nuevo
+              - button "Agregar al carrito" [ref=e94]:
+                - generic [ref=e95]: shopping_bag
+                - text: Agregar
+            - generic [ref=e96]:
+              - generic [ref=e97]: Pieza
+              - heading "Cristal de Prueba" [level=3] [ref=e98]
+              - generic [ref=e99]:
+                - generic [ref=e100]: $ 67
+                - generic [ref=e101]:
+                  - text: Ver Detalle
+                  - generic [ref=e102]: arrow_forward
+          - button "Ver detalle de aaaaaaa" [ref=e104] [cursor=pointer]:
+            - button "Agregar al carrito" [ref=e107]:
+              - generic [ref=e108]: shopping_bag
+              - text: Agregar
+            - generic [ref=e109]:
+              - generic [ref=e110]: Pieza
+              - heading "aaaaaaa" [level=3] [ref=e111]
+              - generic [ref=e112]:
+                - generic [ref=e113]: $ 1.111
+                - generic [ref=e114]:
+                  - text: Ver Detalle
+                  - generic [ref=e115]: arrow_forward
+          - button "Ver detalle de prueba external" [ref=e117] [cursor=pointer]:
+            - button "Agregar al carrito" [ref=e120]:
+              - generic [ref=e121]: shopping_bag
+              - text: Agregar
+            - generic [ref=e122]:
+              - generic [ref=e123]: Pieza
+              - heading "prueba external" [level=3] [ref=e124]
+              - generic [ref=e125]:
+                - generic [ref=e126]: $ 3
+                - generic [ref=e127]:
+                  - text: Ver Detalle
+                  - generic [ref=e128]: arrow_forward
+          - button "Ver detalle de prueba slug" [ref=e130] [cursor=pointer]:
+            - button "Agregar al carrito" [ref=e133]:
+              - generic [ref=e134]: shopping_bag
+              - text: Agregar
+            - generic [ref=e135]:
+              - generic [ref=e136]: Pieza
+              - heading "prueba slug" [level=3] [ref=e137]
+              - generic [ref=e138]:
+                - generic [ref=e139]: $ 11.111
+                - generic [ref=e140]:
+                  - text: Ver Detalle
+                  - generic [ref=e141]: arrow_forward
+          - button "Ver detalle de collar 1" [ref=e143] [cursor=pointer]:
+            - button "Agregar al carrito" [ref=e146]:
+              - generic [ref=e147]: shopping_bag
+              - text: Agregar
+            - generic [ref=e148]:
+              - generic [ref=e149]: Pieza
+              - heading "collar 1" [level=3] [ref=e150]
+              - generic [ref=e151]:
+                - generic [ref=e152]: $ 1
+                - generic [ref=e153]:
+                  - text: Ver Detalle
+                  - generic [ref=e154]: arrow_forward
+  - contentinfo [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]: diamond
+            - generic [ref=e31]: Geodas del Uruguay
+          - paragraph [ref=e32]: Piedras y cristales naturales seleccionados en Uruguay.
+        - generic [ref=e33]:
+          - heading "Tienda" [level=4] [ref=e34]
+          - list [ref=e35]:
+            - listitem [ref=e36]:
+              - link "Ver todo" [ref=e37] [cursor=pointer]:
+                - /url: /tienda
+            - listitem [ref=e38]:
+              - link "Piedras" [ref=e39] [cursor=pointer]:
+                - /url: /tienda/piedras
+            - listitem [ref=e40]:
+              - link "Collares" [ref=e41] [cursor=pointer]:
+                - /url: /tienda/collares
+        - generic [ref=e42]:
+          - heading "Ayuda" [level=4] [ref=e43]
+          - list [ref=e44]:
+            - listitem [ref=e45]:
+              - link "Contacto" [ref=e46] [cursor=pointer]:
+                - /url: https://wa.me/59891458797
+            - listitem [ref=e47]:
+              - link "Tips & Blog" [ref=e48] [cursor=pointer]:
+                - /url: /tips
+        - generic [ref=e49]:
+          - heading "Seguinos" [level=4] [ref=e50]
+          - generic [ref=e51]:
+            - link "Instagram" [ref=e52] [cursor=pointer]:
+              - /url: https://www.instagram.com/geodasdeluruguay/?hl=es-la
+              - img [ref=e53]
+            - link "WhatsApp" [ref=e55] [cursor=pointer]:
+              - /url: https://wa.me/59891458797
+              - img [ref=e56]
+      - generic [ref=e58]:
+        - paragraph [ref=e59]: © 2026 Geodas del Uruguay
+        - generic [ref=e60]:
+          - link "Privacidad" [ref=e61] [cursor=pointer]:
+            - /url: "#"
+          - link "Términos" [ref=e62] [cursor=pointer]:
+            - /url: "#"
