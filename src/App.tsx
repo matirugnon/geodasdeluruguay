@@ -14,6 +14,10 @@ const Tips = lazy(() => import('./pages/Tips').then(m => ({ default: m.Tips })))
 const TipDetail = lazy(() => import('./pages/TipDetail').then(m => ({ default: m.TipDetail })));
 const Shop = lazy(() => import('./pages/Shop').then(m => ({ default: m.Shop })));
 const Checkout = lazy(() => import('./pages/Checkout').then(m => ({ default: m.Checkout })));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const ShippingPage = lazy(() => import('./pages/ShippingPage'));
+const ReturnsPage = lazy(() => import('./pages/ReturnsPage'));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -60,6 +64,11 @@ const AppLayout: React.FC = () => {
           {/* Shop Routes */}
           <Route path="/tienda" element={<Shop />} />
           <Route path="/tienda/:categorySlug" element={<Shop />} />
+          {/* Legal / Info */}
+          <Route path="/privacidad" element={<PrivacyPage />} />
+          <Route path="/terminos" element={<TermsPage />} />
+          <Route path="/envios" element={<ShippingPage />} />
+          <Route path="/devoluciones" element={<ReturnsPage />} />
           {/* Checkout */}
           <Route path="/checkout" element={<Checkout />} />
           {/* Catch-all → home */}

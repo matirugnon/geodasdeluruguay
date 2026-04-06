@@ -5,6 +5,7 @@ import { Product } from '../types';
 import { useCart } from '../context/CartContext';
 import { SEOHead } from '../components/SEOHead';
 import { productUrl, SITE_URL } from '../utils/slugify';
+import { createWhatsAppLink } from '../config/site';
 
 type ProductDetailStatus = 'loading' | 'success' | 'notFound' | 'error';
 
@@ -179,9 +180,8 @@ export const ProductDetail: React.FC = () => {
     return null;
   }
 
-  const whatsappNumber = '59894899544';
   const whatsappMessage = `Hola! Me interesa el producto: *${product.title}*\n¿Está disponible?`;
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappLink = createWhatsAppLink(whatsappMessage);
 
   const handleAddToCart = () => {
     addItem(product);
@@ -479,11 +479,6 @@ export const ProductDetail: React.FC = () => {
           </section>
         )}
       </div>
-
-      <style>{`
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { dataService } from '../services/dataService';
 import { Tip } from '../types';
 import { tipUrl } from '../utils/slugify';
 import { SEOHead } from '../components/SEOHead';
+import { SITE_URL } from '../config/site';
 
 export const Tips: React.FC = () => {
   const [tips, setTips] = useState<Tip[]>([]);
@@ -28,7 +29,7 @@ export const Tips: React.FC = () => {
       <SEOHead
         title="Tips & Guías — Cristales y Geodas"
         description="Aprendé a cuidar, limpiar y potenciar tus geodas y cristales. Guías, rituales y sabiduría natural."
-        canonical="https://geodasdeluruguay.vercel.app/tips"
+        canonical={`${SITE_URL}/tips`}
         type="website"
       />
 

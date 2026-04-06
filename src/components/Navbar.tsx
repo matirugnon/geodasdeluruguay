@@ -4,6 +4,7 @@ import { dataService } from '../services/dataService';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
 import { productUrl } from '../utils/slugify';
+import { WHATSAPP_URL } from '../config/site';
 
 export const Navbar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -133,7 +134,7 @@ export const Navbar: React.FC = () => {
 
             {/* WhatsApp - discreet */}
             <a
-              href="https://wa.me/59891458797"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:flex p-2 text-stone-500 hover:text-[#25D366] transition-colors duration-200"
@@ -197,7 +198,7 @@ export const Navbar: React.FC = () => {
                 Tips
               </Link>
               <a
-                href="https://wa.me/59891458797"
+                href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}

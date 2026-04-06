@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { createWhatsAppLink } from '../config/site';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -25,7 +26,6 @@ function generateOrderId(): string {
     return 'GDU-' + Math.random().toString(36).toUpperCase().slice(2, 8);
 }
 
-const WHATSAPP_NUMBER = '59891458797';
 const TRANSFER_ACCOUNT = {
     banco: 'Banco Itaú',
     tipo: 'Caja de Ahorro',
@@ -248,19 +248,18 @@ export const Checkout: React.FC = () => {
                 const productList = secureItems
                     .map((item: { title: string; quantity: number; price: number }) => `• ${item.title} x${item.quantity} — $${(item.price * item.quantity).toLocaleString('es-UY')}`)
                     .join('\n');
-                const whatsappMsg = encodeURIComponent(
+                const whatsappMsg =
                     `¡Hola! Acabo de hacer un pedido en Geodas del Uruguay 💎\n\n` +
                     `📦 Pedido: ${data.orderId}\n` +
                     `📋 Productos:\n${productList}\n\n` +
                     `💰 Total transferido: $${secureTotal.toLocaleString('es-UY')}` +
                     (secureDiscount > 0 ? ` (dto. 5% incluido)` : '') + `\n` +
                     `🏦 Transferencia a ${TRANSFER_ACCOUNT.banco} — Cuenta ${TRANSFER_ACCOUNT.cuenta}\n\n` +
-                    `Te envío el comprobante 👇`
-                );
+                    `Te envío el comprobante 👇`;
 
                 clearCart();
                 // Redirect to WhatsApp
-                window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMsg}`, '_blank');
+                window.open(createWhatsAppLink(whatsappMsg), '_blank');
                 setStep('transfer-success');
             } catch (error) {
                 console.error(error);
@@ -350,10 +349,10 @@ export const Checkout: React.FC = () => {
     // ── Transfer Success screen ───────────────────────────────────────────────
 
     if (step === 'transfer-success') {
-        const whatsappMessage = encodeURIComponent(
+        const whatsappMessage =
             `¡Hola! Acabo de hacer un pedido en Geodas del Uruguay 💎\n\nPedido: ${transferOrderId}\nTotal: $${finalTotal.toLocaleString('es-UY')}\n\nTe envío el comprobante de la transferencia 👇`
-        );
-        const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
+        ;
+        const whatsappLink = createWhatsAppLink(whatsappMessage);
 
         return (
             <div className="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center text-center px-6 py-20 gap-6">

@@ -1,3 +1,5 @@
+export { SITE_NAME, SITE_URL } from '../config/site';
+
 /**
  * Genera un slug URL-safe a partir de un texto.
  * "Geoda de Amatista Grande" → "geoda-de-amatista-grande"
@@ -33,6 +35,3 @@ export function tipUrl(slug: string): string {
   return `/tips/${slug}`;
 }
 
-/** Dominio canónico del sitio */
-export const SITE_URL = 'https://geodasdeluruguay.vercel.app';
-export const SITE_NAME = 'Geodas del Uruguay';

@@ -8,89 +8,12 @@
     <meta name="description" content="Cristales, geodas y piedras naturales de Uruguay. Amatistas, cuarzos, ágatas y accesorios energéticos. Envío a todo el país." />
     <meta name="theme-color" content="#c5a059" />
     <link rel="icon" type="image/ico" href="favicon.ico" />
-    <link rel="canonical" href="https://geodasdeluruguay.vercel.app" />
 
     <!-- Open Graph defaults (overridden by react-helmet-async per page) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Geodas del Uruguay" />
     <meta property="og:locale" content="es_UY" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        // Home / Global Gold Theme
-                        "primary": "#c5a059",
-                        "primary-dark": "#b08d4b",
-                        "background-light": "#fafaf9",
-                        "background-dark": "#1c1917",
-                        "stone-dark": "#292524",
-                        "dried-green": "#7c8057",
-
-                        // Tips / Mystic Journal Theme
-                        "olive": {
-                            DEFAULT: '#556B2F',
-                            light: '#768d4d',
-                            dark: '#3b4d1e',
-                        },
-                        "gold": {
-                            DEFAULT: '#C5A059',
-                            dim: '#a38346',
-                        },
-                        "paper": '#fdfbf7',
-
-                        // Product Detail Green Theme
-                        "primary-green": "#93d411",
-                        "olive-dark": "#3f4a2c",
-                        "olive-light": "#7c8961",
-                        "amethyst-light": "#f4effa",
-                        "amethyst-border": "#e0d6e8",
-                        "amethyst-text": "#5e4b75",
-                        "product-bg-light": "#f7f8f6",
-                        "product-bg-dark": "#1c2210",
-
-                        // Admin Theme
-                        "admin-primary": "#a4d411",
-                        "admin-primary-dark": "#8cb60e",
-                        "admin-olive": "#4a5d23",
-                        "text-main": "#161811",
-                        "text-secondary": "#5c6645",
-
-                        // Shop / Stitch Theme Colors
-                        "accent-stone": "#57534e",
-                        "soft-stone": "#e7e5e4",
-                        "text-main-light": "#161811",
-                        "text-main-dark": "#f3f4f0",
-                        "text-secondary-light": "#7c8961",
-                        "text-secondary-dark": "#aab396",
-                        "surface-light": "#f3f4f0",
-                        "surface-dark": "#2c3320",
-                    },
-                    fontFamily: {
-                        "display": ["Manrope", "sans-serif"],
-                        "serif": ["Playfair Display", "serif", "ui-serif", "Georgia"],
-                        "sans": ["Montserrat", "ui-sans-serif", "system-ui", "sans-serif"],
-                        "newsreader": ["Newsreader", "serif"],
-                        "noto-sans": ["Noto Sans", "sans-serif"],
-                        "noto-serif": ["Noto Serif", "serif"],
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "2xl": "2rem",
-                        "full": "9999px"
-                    },
-                    backgroundImage: {
-                        'paper-texture': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
-                    }
-                },
-            },
-        }
-    </script>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
@@ -104,42 +27,6 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-
-        .bg-pattern {
-            background-color: #fafaf9;
-            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC9iKrOV4KRp9PnCpj136EXPMs5QmHH5R9fs28ZatkHd7yYiZI66lMtfxWFhSUn9Xk_Bp7DGP_HmpZeVC04kUowdJQGo-7dEI810o3d3cr89FfZvNm6KA_WuF5NrD3V13peO2D0oOhceeA6X_ffEBsB91mQDTBpBg0mWVkzJoBaM9ZUswdcM58I-SJmaFOIdF6AASv2r3wWtoKNJbdzqjbr9a0wX-ANQOdBIx-IAJPF4R6EXm1WvQH2hgSwedlKR-yghB1W9M_NB3sa)
-        }
-
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Tips Page Custom Shapes */
-        .blob-shape-1 {
-            border-radius: 64% 36% 24% 76%/59% 34% 66% 41%
-        }
-
-        .blob-shape-2 {
-            border-radius: 35% 65% 68% 32%/45% 73% 27% 55%
-        }
-
-        .blob-shape-3 {
-            border-radius: 71% 29% 31% 69%/37% 65% 35% 63%
-        }
-
-        .texture-overlay {
-            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBvfIYrrpM65_Hld1IZ7d9NCsTH3KepULPD3DfmKG1sV_f9Aic4CpOLCsQu95vz98TJxC9DpXuD4BGXS0LpYDTBkcmEVvpEGRxe9cjf0rst6MZL4IXVoGSAzGe7J2szNGXXAq9JP0VLC4UexLh2ClfdsiWKTP8cybG9bvV2EigIfRG17ndujQLVQvm5u7blFW-GfgBmM1MzpjA9cF-Viwl6rTHfytFM1k8tzc3f2MfBWc-3F6bQxoWaEW224UPfdOJtTOWz6QtVmNBW)
-        }
-    </style>
     <script type="importmap">
     {
       "imports": {

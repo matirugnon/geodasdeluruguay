@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-const whatsappNumber = '59891458797';
-const whatsappLink = `https://wa.me/${whatsappNumber}`;
+import { WHATSAPP_URL } from '../config/site';
 
 export const Footer: React.FC = () => {
   return (
@@ -34,7 +32,9 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-[11px] font-semibold text-stone-400 uppercase tracking-[0.15em] mb-4">Ayuda</h4>
             <ul className="space-y-2.5">
-              <li><a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="text-stone-600 hover:text-[#8C7E60] text-sm transition-colors duration-150">Contacto</a></li>
+              <li><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-stone-600 hover:text-[#8C7E60] text-sm transition-colors duration-150">Contacto</a></li>
+              <li><Link to="/envios" className="text-stone-600 hover:text-[#8C7E60] text-sm transition-colors duration-150">Envíos</Link></li>
+              <li><Link to="/devoluciones" className="text-stone-600 hover:text-[#8C7E60] text-sm transition-colors duration-150">Devoluciones</Link></li>
               <li><Link to="/tips" className="text-stone-600 hover:text-[#8C7E60] text-sm transition-colors duration-150">Tips & Blog</Link></li>
             </ul>
           </div>
@@ -54,7 +54,7 @@ export const Footer: React.FC = () => {
               </a>
               <a
                 className="w-9 h-9 rounded border border-stone-200 flex items-center justify-center text-stone-500 hover:text-[#25D366] hover:border-[#25D366] transition-colors duration-150"
-                href={whatsappLink}
+                href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -69,8 +69,8 @@ export const Footer: React.FC = () => {
         <div className="border-t border-stone-200 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
           <p className="text-stone-400 text-xs">&copy; {new Date().getFullYear()} Geodas del Uruguay</p>
           <div className="flex gap-5">
-            <a className="text-stone-400 hover:text-stone-600 text-xs transition-colors duration-150" href="#">Privacidad</a>
-            <a className="text-stone-400 hover:text-stone-600 text-xs transition-colors duration-150" href="#">Términos</a>
+            <Link to="/privacidad" className="text-stone-400 hover:text-stone-600 text-xs transition-colors duration-150">Privacidad</Link>
+            <Link to="/terminos" className="text-stone-400 hover:text-stone-600 text-xs transition-colors duration-150">Términos</Link>
           </div>
         </div>
       </div>

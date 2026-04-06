@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const Tip = require('../models/Tip');
+const publicSiteConfig = require('../../site.public.json');
 
-const SITE_URL = process.env.STOREFRONT_URL || process.env.FRONTEND_URL || 'https://geodasdeluruguay.vercel.app';
+const SITE_URL = publicSiteConfig.siteUrl;
 
 // ─── robots.txt ────────────────────────────────────────────────────────────────
 router.get('/robots.txt', (req, res) => {
