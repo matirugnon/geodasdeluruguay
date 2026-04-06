@@ -34,6 +34,19 @@ const TRANSFER_ACCOUNT = {
     titular: 'Matias Rugnon',
 };
 
+async function readErrorMessage(response: Response, fallback: string): Promise<string> {
+    try {
+        const data = await response.json();
+        if (typeof data?.message === 'string' && data.message.trim()) {
+            return data.message;
+        }
+    } catch {
+        // Si la respuesta no es JSON, mantenemos el fallback.
+    }
+
+    return fallback;
+}
+
 
 
 // ─── Validation ───────────────────────────────────────────────────────────────
@@ -220,19 +233,27 @@ export const Checkout: React.FC = () => {
                     body: JSON.stringify({ items, shipping, deliveryMethod }),
                 });
 
-                if (!response.ok) throw new Error('Error al crear orden');
+                if (!response.ok) {
+                    const message = await readErrorMessage(response, 'Error al crear la orden');
+                    throw new Error(message);
+                }
 
                 const data = await response.json();
                 setTransferOrderId(data.orderId);
 
                 // Build WhatsApp message with product details
-                const productList = items.map(i => `• ${i.title} x${i.quantity} — $${(i.price * i.quantity).toLocaleString('es-UY')}`).join('\n');
+                const secureItems = Array.isArray(data.items) && data.items.length > 0 ? data.items : items;
+                const secureTotal = typeof data.total === 'number' ? data.total : finalTotal;
+                const secureDiscount = typeof data.discount === 'number' ? data.discount : transferDiscount;
+                const productList = secureItems
+                    .map((item: { title: string; quantity: number; price: number }) => `• ${item.title} x${item.quantity} — $${(item.price * item.quantity).toLocaleString('es-UY')}`)
+                    .join('\n');
                 const whatsappMsg = encodeURIComponent(
                     `¡Hola! Acabo de hacer un pedido en Geodas del Uruguay 💎\n\n` +
                     `📦 Pedido: ${data.orderId}\n` +
                     `📋 Productos:\n${productList}\n\n` +
-                    `💰 Total transferido: $${finalTotal.toLocaleString('es-UY')}` +
-                    (transferDiscount > 0 ? ` (dto. 5% incluido)` : '') + `\n` +
+                    `💰 Total transferido: $${secureTotal.toLocaleString('es-UY')}` +
+                    (secureDiscount > 0 ? ` (dto. 5% incluido)` : '') + `\n` +
                     `🏦 Transferencia a ${TRANSFER_ACCOUNT.banco} — Cuenta ${TRANSFER_ACCOUNT.cuenta}\n\n` +
                     `Te envío el comprobante 👇`
                 );
@@ -243,7 +264,7 @@ export const Checkout: React.FC = () => {
                 setStep('transfer-success');
             } catch (error) {
                 console.error(error);
-                alert('Hubo un error al crear la orden. Intentá de nuevo.');
+                alert(error instanceof Error ? error.message : 'Hubo un error al crear la orden. Intentá de nuevo.');
                 setProcessing(false);
             }
             return;
@@ -257,13 +278,16 @@ export const Checkout: React.FC = () => {
                 body: JSON.stringify({ items, shipping, deliveryMethod }),
             });
 
-            if (!response.ok) throw new Error('Error al crear preferencia');
+            if (!response.ok) {
+                const message = await readErrorMessage(response, 'Error al crear preferencia');
+                throw new Error(message);
+            }
 
             const data = await response.json();
             window.location.href = data.checkout_url;
         } catch (error) {
             console.error(error);
-            alert("Hubo un error al conectarse con Mercado Pago. Intentá de nuevo más tarde.");
+            alert(error instanceof Error ? error.message : "Hubo un error al conectarse con Mercado Pago. Intentá de nuevo más tarde.");
             setProcessing(false);
         }
     };

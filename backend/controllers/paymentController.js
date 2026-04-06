@@ -1,68 +1,83 @@
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 const crypto = require('crypto');
 const Order = require('../models/Order');
+const { buildSecureOrderPricing, OrderPricingError } = require('../services/orderPricingService');
 const { sendOrderConfirmationEmail, sendOwnerNotificationEmail } = require('../utils/mailer');
 
 const accessToken = process.env.MP_ACCESS_TOKEN;
+
+// Mapeo de categorías locales a category_id de MercadoPago Uruguay (MLU)
+const getCategoryId = (category) => {
+    const categoryMap = {
+        'Accesorios': 'MLU1168',
+        'Anillos': 'MLU1168',
+        'Collares': 'MLU1168',
+        'Pulseras': 'MLU1168',
+        'Amatistas': 'MLU1168',
+        'Agatas': 'MLU1168',
+        'Cuarzos': 'MLU1168',
+        'Geodas': 'MLU1168',
+    };
+
+    return categoryMap[category] || 'MLU1000';
+};
+
+const handleOrderPricingError = (res, error, logLabel, fallbackMessage) => {
+    if (error instanceof OrderPricingError) {
+        return res.status(error.statusCode).json({
+            message: error.message,
+            code: error.code,
+            details: error.details,
+        });
+    }
+
+    console.error(logLabel, error);
+    return res.status(500).json({ message: fallbackMessage });
+};
 
 // Crear preferencia
 const createPreference = async (req, res) => {
     try {
         const { items, shipping, deliveryMethod } = req.body;
 
-        // Mapeo de categorías locales a category_id de MercadoPago Uruguay (MLU)
-        const getCategoryId = (category) => {
-            const categoryMap = {
-                'Accesorios': 'MLU1168',  // Joyas y Relojes
-                'Anillos': 'MLU1168',     // Joyas y Relojes
-                'Collares': 'MLU1168',    // Joyas y Relojes
-                'Pulseras': 'MLU1168',    // Joyas y Relojes
-                'Amatistas': 'MLU1168',   // Joyas y Relojes
-                'Agatas': 'MLU1168',      // Joyas y Relojes
-                'Cuarzos': 'MLU1168',     // Joyas y Relojes
-                'Geodas': 'MLU1168',      // Joyas y Relojes
-            };
-            return categoryMap[category] || 'MLU1000'; // MLU1000 = Otros
-        };
+        const secureOrder = await buildSecureOrderPricing({
+            items,
+            shipping,
+            deliveryMethod,
+            paymentMethod: 'mercadopago',
+        });
 
-        const mpItems = items.map(item => ({
-            id: item.id || item._id,
+        const mpItems = secureOrder.catalogItems.map((item) => ({
+            id: item.id,
             title: item.title,
-            description: item.description || item.title,  // Descripción del item
-            category_id: getCategoryId(item.category),    // Categoría de MercadoPago
-            unit_price: Number(item.price),
-            quantity: Number(item.quantity),
+            description: item.description,
+            category_id: getCategoryId(item.category),
+            unit_price: item.price,
+            quantity: item.quantity,
             currency_id: 'UYU'
         }));
 
-        // Recálculo estricto de subtotales en el servidor como única fuente de verdad
-        const subtotal = items.reduce((acc, item) => acc + (Number(item.price) * Number(item.quantity)), 0);
-
-        let shippingCost = 0;
-        // Si hay envío a domicilio seleccionado, se calcula un costo extra fijo
-        if (deliveryMethod === 'delivery') {
-            shippingCost = 100;
+        if (secureOrder.shippingCost > 0) {
             mpItems.push({
                 id: 'shipping',
                 title: 'Costo de envío a domicilio',
                 description: 'Servicio de envío a domicilio en Uruguay',
-                category_id: 'MLU1000', // Otros/Servicios
-                unit_price: shippingCost,
+                category_id: 'MLU1000',
+                unit_price: secureOrder.shippingCost,
                 quantity: 1,
                 currency_id: 'UYU'
             });
         }
 
-        const finalTotal = subtotal + shippingCost;
-
         // 1. Guardar la orden inicial como pendiente en MongoDB para tracking seguro
         const order = new Order({
-            items,
-            subtotal,
-            shippingCost,
-            total: finalTotal,
-            shipping,
-            deliveryMethod,
+            items: secureOrder.orderItems,
+            subtotal: secureOrder.subtotal,
+            shippingCost: secureOrder.shippingCost,
+            total: secureOrder.total,
+            shipping: secureOrder.shipping,
+            deliveryMethod: secureOrder.deliveryMethod,
+            paymentMethod: 'mercadopago',
             status: 'pending'
         });
         await order.save();
@@ -85,15 +100,15 @@ const createPreference = async (req, res) => {
             items: mpItems,
             statement_descriptor: 'GEODAS URUGUAY',
             payer: {
-                name: shipping.nombre,
-                email: shipping.email,
+                name: secureOrder.shipping.nombre,
+                email: secureOrder.shipping.email,
                 phone: {
                     area_code: "598",
-                    number: shipping.telefono.replace(/\D/g, '').slice(-8)
+                    number: secureOrder.shipping.telefono.replace(/\D/g, '').slice(-8)
                 },
                 address: {
-                    street_name: shipping.direccion,
-                    zip_code: shipping.codigoPostal || ''
+                    street_name: secureOrder.shipping.direccion,
+                    zip_code: secureOrder.shipping.codigoPostal || ''
                 }
             },
             back_urls: {
@@ -107,9 +122,9 @@ const createPreference = async (req, res) => {
             external_reference: order._id.toString(), // Referencia estricta mapeada a Mongo
             metadata: {
                 order_id: order._id.toString(),
-                delivery_method: deliveryMethod,
-                customer_name: shipping.nombre,
-                items_count: items.length,
+                delivery_method: secureOrder.deliveryMethod,
+                customer_name: secureOrder.shipping.nombre,
+                items_count: secureOrder.itemsCount,
             }
         };
 
@@ -126,8 +141,12 @@ const createPreference = async (req, res) => {
             checkout_url: checkoutUrl,
         });
     } catch (error) {
-        console.error('Error al crear preferencia de Mercado Pago:', error);
-        res.status(500).json({ message: 'Error al procesar el pago' });
+        return handleOrderPricingError(
+            res,
+            error,
+            'Error al crear preferencia de Mercado Pago:',
+            'Error al procesar el pago'
+        );
     }
 };
 
@@ -195,27 +214,21 @@ const webhook = async (req, res) => {
 const createTransferOrder = async (req, res) => {
     try {
         const { items, shipping, deliveryMethod } = req.body;
-
-        const subtotal = items.reduce((acc, item) => acc + (Number(item.price) * Number(item.quantity)), 0);
-
-        let shippingCost = 0;
-        if (deliveryMethod === 'delivery') {
-            shippingCost = subtotal >= 5000 ? 0 : 100;
-        }
-
-        const subtotalWithShipping = subtotal + shippingCost;
-        // 5% descuento por transferencia
-        const discount = Math.round(subtotalWithShipping * 0.05);
-        const finalTotal = subtotalWithShipping - discount;
-
-        const order = new Order({
+        const secureOrder = await buildSecureOrderPricing({
             items,
-            subtotal,
-            shippingCost,
-            discount,
-            total: finalTotal,
             shipping,
             deliveryMethod,
+            paymentMethod: 'transfer',
+        });
+
+        const order = new Order({
+            items: secureOrder.orderItems,
+            subtotal: secureOrder.subtotal,
+            shippingCost: secureOrder.shippingCost,
+            discount: secureOrder.discount,
+            total: secureOrder.total,
+            shipping: secureOrder.shipping,
+            deliveryMethod: secureOrder.deliveryMethod,
             paymentMethod: 'transfer',
             status: 'awaiting_transfer'
         });
@@ -223,13 +236,20 @@ const createTransferOrder = async (req, res) => {
 
         res.json({
             orderId: order._id.toString(),
-            total: finalTotal,
-            discount,
+            total: secureOrder.total,
+            subtotal: secureOrder.subtotal,
+            shippingCost: secureOrder.shippingCost,
+            discount: secureOrder.discount,
+            items: secureOrder.orderItems,
             message: 'Orden creada. Esperando transferencia.'
         });
     } catch (error) {
-        console.error('Error al crear orden por transferencia:', error);
-        res.status(500).json({ message: 'Error al crear la orden' });
+        return handleOrderPricingError(
+            res,
+            error,
+            'Error al crear orden por transferencia:',
+            'Error al crear la orden'
+        );
     }
 };
 
@@ -255,19 +275,49 @@ const verifyPayment = async (req, res) => {
 
         if (paymentInfo.status === 'approved') {
             const orderId = paymentInfo.external_reference;
+            if (!orderId) {
+                return res.json({
+                    verified: false,
+                    status: paymentInfo.status,
+                    message: 'No se pudo validar la referencia de la orden.',
+                });
+            }
 
-            if (orderId) {
-                const order = await Order.findById(orderId);
-                if (order && order.status !== 'paid') {
-                    order.status = 'paid';
-                    order.paymentId = payment_id;
-                    await order.save();
-                    console.log('✅ Orden confirmada por verify-payment:', orderId);
+            const order = await Order.findById(orderId);
+            if (!order) {
+                console.error('Orden no encontrada al verificar pago:', orderId);
+                return res.json({
+                    verified: false,
+                    status: paymentInfo.status,
+                    order_id: orderId,
+                    message: 'No se encontró la orden asociada al pago.',
+                });
+            }
 
-                    // Enviar emails de confirmación
-                    sendOrderConfirmationEmail(order).catch(e => console.error('Email error:', e));
-                    sendOwnerNotificationEmail(order).catch(e => console.error('Owner email error:', e));
-                }
+            if (paymentInfo.transaction_amount !== order.total) {
+                console.error('Monto inconsistente detectado en verify-payment:', {
+                    mpAmount: paymentInfo.transaction_amount,
+                    dbAmount: order.total,
+                    orderId,
+                });
+                return res.json({
+                    verified: false,
+                    status: paymentInfo.status,
+                    order_id: orderId,
+                    amount: paymentInfo.transaction_amount,
+                    message: 'El monto pagado no coincide con la orden registrada.',
+                });
+            }
+
+            if (order.status !== 'paid') {
+                order.status = 'paid';
+                order.paymentId = payment_id;
+                await order.save();
+                console.log('✅ Orden confirmada por verify-payment:', orderId);
+
+                // Enviar emails de confirmación
+                sendOrderConfirmationEmail(order).catch(e => console.error('Email error:', e));
+                sendOwnerNotificationEmail(order).catch(e => console.error('Owner email error:', e));
             }
 
             return res.json({
